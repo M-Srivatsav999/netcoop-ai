@@ -53,8 +53,9 @@ class BenchmarkRunner:
         all_classes = set()
         correct_predictions = 0
 
-        # Calibration tracking (Brier score & ECE)
+        # Calibration tracking (Top-label & Multiclass Brier score & ECE)
         brier_sum = 0.0
+        multiclass_brier_sum = 0.0
         diagnosed_cases = 0
         calibration_bins: Dict[int, List[Tuple[float, int]]] = defaultdict(list)  # bin_idx -> [(confidence, is_correct)]
 
@@ -66,7 +67,11 @@ class BenchmarkRunner:
         for case in dataset:
             all_classes.add(case.ground_truth_root_cause)
             t0 = time.time()
-            res = self.orchestrator.process(case.telemetry_payload)
+            res = self.orchestrator.process(
+                raw_input=case.telemetry_payload,
+                incident_id=case.case_id,
+                reference_time=case.reference_time
+            )
             dur_ms = (time.time() - t0) * 1000.0
             latencies.append(dur_ms)
 
@@ -86,6 +91,15 @@ class BenchmarkRunner:
                 diagnosed_cases += 1
                 cal_conf = ConfidenceEngine.calibrate_confidence(confidence)
                 brier_sum += (cal_conf - (1.0 if is_correct else 0.0)) ** 2
+
+                # Multiclass probability distribution across all non-abstention classes
+                rem_prob = (1.0 - cal_conf) / 5.0  # 6 active fault classes total
+                mc_case_err = (cal_conf - (1.0 if is_correct else 0.0)) ** 2
+                for other_c in [c for c in all_classes if c not in (predicted, HypothesisType.INSUFFICIENT_EVIDENCE.value)]:
+                    is_other_gt = 1.0 if other_c == gt else 0.0
+                    mc_case_err += (rem_prob - is_other_gt) ** 2
+                multiclass_brier_sum += mc_case_err
+
                 bin_idx = min(9, int(cal_conf * 10))
                 calibration_bins[bin_idx].append((cal_conf, 1 if is_correct else 0))
 
@@ -125,16 +139,35 @@ class BenchmarkRunner:
 
         macro_f1 = sum(f1_list) / len(f1_list) if f1_list else 0.0
         accuracy = correct_predictions / total_cases
-        brier_score = brier_sum / diagnosed_cases if diagnosed_cases > 0 else 0.0
+        top_brier_score = brier_sum / diagnosed_cases if diagnosed_cases > 0 else 0.0
+        multiclass_brier = multiclass_brier_sum / diagnosed_cases if diagnosed_cases > 0 else 0.0
 
-        # Calculate Expected Calibration Error (ECE)
+        # Calculate Expected Calibration Error (ECE) and compile 10-bin reliability diagram
         ece = 0.0
-        for b_idx, items in calibration_bins.items():
-            if items:
-                avg_conf = sum(x[0] for x in items) / len(items)
-                avg_acc = sum(x[1] for x in items) / len(items)
-                weight = len(items) / diagnosed_cases
+        reliability_diagram: List[Dict[str, Any]] = []
+        for b_idx in range(10):
+            items = calibration_bins[b_idx]
+            cnt = len(items)
+            if cnt > 0:
+                avg_conf = sum(x[0] for x in items) / cnt
+                avg_acc = sum(x[1] for x in items) / cnt
+                weight = cnt / diagnosed_cases
                 ece += weight * abs(avg_acc - avg_conf)
+                reliability_diagram.append({
+                    "bin": f"{b_idx * 0.1:.1f} - {(b_idx + 1) * 0.1:.1f}",
+                    "sample_count": cnt,
+                    "mean_predicted_confidence": round(avg_conf, 3),
+                    "empirical_accuracy": round(avg_acc, 3),
+                    "calibration_gap": round(abs(avg_acc - avg_conf), 3)
+                })
+            else:
+                reliability_diagram.append({
+                    "bin": f"{b_idx * 0.1:.1f} - {(b_idx + 1) * 0.1:.1f}",
+                    "sample_count": 0,
+                    "mean_predicted_confidence": 0.0,
+                    "empirical_accuracy": 0.0,
+                    "calibration_gap": 0.0
+                })
 
         # Abstention precision & recall
         abstention_prec = correct_abstentions / actual_abstentions if actual_abstentions > 0 else 1.0
@@ -150,7 +183,8 @@ class BenchmarkRunner:
             "total_scenarios_evaluated": total_cases,
             "overall_accuracy": round(accuracy * 100.0, 2),
             "macro_f1_score": round(macro_f1, 4),
-            "brier_score": round(brier_score, 4),
+            "top_label_brier_score": round(top_brier_score, 4),
+            "multiclass_brier_score": round(multiclass_brier, 4),
             "expected_calibration_error": round(ece, 4),
             "abstention_quality": {
                 "precision": round(abstention_prec, 4),
@@ -158,6 +192,7 @@ class BenchmarkRunner:
                 "expected": expected_abstentions,
                 "actual": actual_abstentions
             },
+            "reliability_diagram": reliability_diagram,
             "latency_metrics_ms": {
                 "mean": round(mean_lat, 2),
                 "p50": round(p50_lat, 2),
@@ -184,7 +219,8 @@ class BenchmarkRunner:
         print(f"Total Scenarios Evaluated: {rep['total_scenarios_evaluated']}")
         print(f"Overall Accuracy:          {rep['overall_accuracy']}%")
         print(f"Macro-F1 Score:            {rep['macro_f1_score']}")
-        print(f"Brier Calibration Score:   {rep['brier_score']} (lower is better, 0.0 = perfect)")
+        print(f"Top-Label Brier Score:     {rep['top_label_brier_score']} (0.0 = perfect calibration)")
+        print(f"Multiclass Brier Score:    {rep['multiclass_brier_score']}")
         print(f"Expected Calibration Error:{rep['expected_calibration_error']}")
         print(f"Abstention Quality:        Prec: {rep['abstention_quality']['precision']*100}% | Rec: {rep['abstention_quality']['recall']*100}%")
         print(f"Latency:                   Mean: {rep['latency_metrics_ms']['mean']}ms | P95: {rep['latency_metrics_ms']['p95']}ms")
@@ -193,6 +229,12 @@ class BenchmarkRunner:
         print("-" * 78)
         for c_name, m in rep["per_class_metrics"].items():
             print(f"{c_name:<30} | {m['precision']:<8.3f} | {m['recall']:<8.3f} | {m['f1_score']:<8.3f} | {m['support']}")
+        print("-" * 78)
+        print(f"{'Confidence Bin':<16} | {'Samples':<8} | {'Avg Conf':<10} | {'Accuracy':<10} | {'Gap'}")
+        print("-" * 78)
+        for row in rep["reliability_diagram"]:
+            if row["sample_count"] > 0:
+                print(f"{row['bin']:<16} | {row['sample_count']:<8} | {row['mean_predicted_confidence']:<10.3f} | {row['empirical_accuracy']:<10.3f} | {row['calibration_gap']:<8.3f}")
         print("=" * 78)
         print(f"Report exported to: evaluation/benchmark_report.json\n")
 

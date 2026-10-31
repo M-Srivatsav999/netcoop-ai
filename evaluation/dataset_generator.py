@@ -21,16 +21,20 @@ from typing import Any, Dict, List, NamedTuple, Tuple
 from protocol.models import HypothesisType, SchemaVersion
 
 
+FIXED_BENCHMARK_REFERENCE_TIME = datetime(2026, 10, 31, 12, 0, 0, tzinfo=timezone.utc)
+
+
 class BenchmarkCase(NamedTuple):
     case_id: str
     ground_truth_root_cause: str
     telemetry_payload: List[Dict[str, Any]]
     schema_version: SchemaVersion
     expected_abstention: bool
+    reference_time: datetime = FIXED_BENCHMARK_REFERENCE_TIME
 
 
 class DatasetGenerator:
-    """Independent procedural dataset generator with deterministic random seeding."""
+    """Independent procedural dataset generator with deterministic random seeding and fixed reference time."""
 
     CAMPUS_DEVICES = [
         "IITBBS-CORE-SW-01", "DIST-SW-NORTH", "DIST-SW-SOUTH",
@@ -39,8 +43,9 @@ class DatasetGenerator:
         "SRV-DNS-01", "SRV-DHCP-01", "CLIENT-HA-101", "LAB-PC-ENG-01"
     ]
 
-    def __init__(self, seed: int = 42) -> None:
+    def __init__(self, seed: int = 42, reference_time: Optional[datetime] = None) -> None:
         self.rng = random.Random(seed)
+        self.reference_time = reference_time or FIXED_BENCHMARK_REFERENCE_TIME
 
     def generate_full_benchmark_suite(self, cases_per_class: int = 100) -> List[BenchmarkCase]:
         """Generate complete 700-case evaluation corpus."""
@@ -65,7 +70,8 @@ class DatasetGenerator:
                     ground_truth_root_cause=cause_name,
                     telemetry_payload=payload,
                     schema_version=schema,
-                    expected_abstention=abstention
+                    expected_abstention=abstention,
+                    reference_time=self.reference_time
                 ))
 
         return dataset
@@ -77,8 +83,8 @@ class DatasetGenerator:
         schema: SchemaVersion,
         status: str = "WARNING"
     ) -> Dict[str, Any]:
-        """Format metrics dict into specific schema format."""
-        now_dt = datetime.now(timezone.utc)
+        """Format metrics dict into specific schema format with deterministic timestamp."""
+        now_dt = self.reference_time
         ts_iso = now_dt.isoformat()
         ts_epoch = int(now_dt.timestamp())
 

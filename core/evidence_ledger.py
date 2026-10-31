@@ -51,21 +51,21 @@ class LedgerEntry(BaseModel):
     ) -> LedgerEntry:
         """Construct a cryptographically signed immutable ledger entry."""
         rec_time = recorded_at or datetime.now(timezone.utc).isoformat()
-        # Compute canonical hash payload
+        # Compute canonical hash payload preserving native JSON typing
         canonical_dict = {
             "correlation_id": correlation_id,
             "prev_hash": prev_hash,
             "agent_id": agent_id,
             "device_id": device_id,
             "metric_name": metric_name,
-            "observed_value": str(observed_value),
+            "observed_value": observed_value,
             "finding_summary": finding_summary,
             "polarity": polarity,
             "target_hypothesis": target_hypothesis,
             "weight": weight,
             "recorded_at": rec_time
         }
-        canonical_str = json.dumps(canonical_dict, sort_keys=True, separators=(',', ':'))
+        canonical_str = json.dumps(canonical_dict, sort_keys=True, separators=(',', ':'), default=str)
         computed_hash = hashlib.sha256(canonical_str.encode("utf-8")).hexdigest()
 
         return cls(
@@ -133,6 +133,37 @@ class EvidenceLedger:
                 added += 1
         return added
 
+    def append_entry(
+        self,
+        correlation_id: str,
+        agent_id: str,
+        device_id: str,
+        metric_name: str,
+        observed_value: Any,
+        finding_summary: str,
+        polarity: str,
+        target_hypothesis: str,
+        weight: float = 1.0,
+        recorded_at: Optional[str] = None
+    ) -> LedgerEntry:
+        """Manually append a single validated entry to the ledger hash chain."""
+        entry = LedgerEntry.create(
+            correlation_id=correlation_id or self.correlation_id,
+            prev_hash=self._last_hash,
+            agent_id=agent_id,
+            device_id=device_id,
+            metric_name=metric_name,
+            observed_value=observed_value,
+            finding_summary=finding_summary,
+            polarity=polarity,
+            target_hypothesis=target_hypothesis,
+            weight=weight,
+            recorded_at=recorded_at
+        )
+        self.entries.append(entry)
+        self._last_hash = entry.entry_hash
+        return entry
+
     def verify_chain_integrity(self) -> Tuple[bool, Optional[str]]:
         """Verify the cryptographic hash chain across all entries in the ledger.
         
@@ -152,14 +183,14 @@ class EvidenceLedger:
                 "agent_id": entry.agent_id,
                 "device_id": entry.device_id,
                 "metric_name": entry.metric_name,
-                "observed_value": str(entry.observed_value),
+                "observed_value": entry.observed_value,
                 "finding_summary": entry.finding_summary,
                 "polarity": entry.polarity,
                 "target_hypothesis": entry.target_hypothesis,
                 "weight": entry.weight,
                 "recorded_at": entry.recorded_at
             }
-            canonical_str = json.dumps(canonical_dict, sort_keys=True, separators=(',', ':'))
+            canonical_str = json.dumps(canonical_dict, sort_keys=True, separators=(',', ':'), default=str)
             computed = hashlib.sha256(canonical_str.encode("utf-8")).hexdigest()
             if computed != entry.entry_hash:
                 return False, f"Tampered entry detected at index {idx} ({entry.entry_id}): signature mismatch."

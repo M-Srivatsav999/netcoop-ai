@@ -80,9 +80,9 @@ Switch to the browser and refresh `report.html` to show the modern Dark Mode NOC
 >
 > *1. **Automated Remediation Simulator**: We built a safe, dry-run remediation module that generates corrective CLI playbooks with projected KPI recovery deltas without modifying live infrastructure without human approval.*
 > *2. **Model Context Protocol (MCP)**: By running `python mcp_server.py --test`, our system exposes diagnostic tools, topology resources, and remediation simulations directly to any MCP-compliant client or agent over JSON-RPC 2.0.*
-> *3. **Durable State Store**: We provide investigation session checkpointing with pause and resume commands.*
-> *4. **Interactive HTML Dashboard**: Operators receive this turnkey, offline executive dashboard.*
-> *5. **Cryptographic Ledger & Shannon Gain**: Every piece of telemetry evidence is sealed into an immutable Merkle SHA-256 hash chain, and follow-up troubleshooting commands are ranked by true Shannon Information Gain.*"*
+> *3. **Real Telemetry Adapters**: Parsers for Cisco IOS XE switches, Catalyst 9800 WLC controllers, Linux core DNS/DHCP services, and enterprise syslog streams.*
+> *4. **Durable State Store**: We provide investigation session checkpointing with pause and resume commands.*
+> *5. **Cryptographic Ledger & Shannon Gain**: Every piece of telemetry evidence is sealed into an immutable SHA-256 hash-chained ledger, and follow-up troubleshooting commands are ranked by true Shannon Information Gain.*"*
 
 ---
 
@@ -93,14 +93,17 @@ Switch to the browser and refresh `report.html` to show the modern Dark Mode NOC
 pytest -v
 python evaluation/run_evaluation.py
 python evaluation/benchmark_runner.py
+python evaluation/held_out_benchmark.py
 ```
 
 ### Visual on Screen:
-Show `52 passed in 1.2s`, the 15-scenario evaluation summary table showing `Pass Rate: 100.0%`, and the 700-case benchmark table showing `100.0% Accuracy`, `1.0000 Macro-F1`, `Brier: 0.0087`, and `ECE: 0.0864`.
+Show `62 passed in 1.5s`, the 15-scenario evaluation summary table showing `Pass Rate: 100.0%`, the 700-case benchmark table showing `100.0% Accuracy`, `1.0000 Macro-F1`, `Top Brier: 0.0087`, and the held-out benchmark proving 100% generalization across completely unseen campus topologies.
 
 ### Speaker Narration:
-> *"Finally, reliability and reproducibility. As you can see, our automated test suite executes 52 comprehensive unit tests in 1.2 seconds with a 100% pass rate.*
+> *"Finally, reliability and reproducibility. As you can see, our automated test suite executes 62 comprehensive unit tests in 1.5 seconds with a 100% pass rate.*
 >
 > *Our evaluation benchmark evaluates all six organizer scenarios and nine adversarial edge cases—including stale timestamps, clock skew, sparse telemetry, corrupted payloads, and multi-incident clustering with localized root-cause isolation. Across our 700-case scientific evaluation suite, NetCoop AI achieves 100.0% accuracy, 1.0000 Macro-F1, an Expected Calibration Error under 0.09, and a Brier score of 0.0087.*
 >
-> *With our tamper-evident Merkle hash-chained ledger and Shannon Information Gain investigation engine, NetCoop AI is mathematically rigorous, fully explainable, and production-ready for the IIT Bhubaneswar campus network. Thank you!"*
+> *Crucially, we also verified real-world generalization on our independent held-out benchmark with completely unseen device topologies and facility locations—achieving 100.0% accuracy and 1.0000 Macro-F1.*
+>
+> *With our tamper-evident SHA-256 hash-chained ledger and Shannon Information Gain investigation engine, NetCoop AI is mathematically rigorous, fully explainable, and production-ready for the IIT Bhubaneswar campus network. Thank you!"*

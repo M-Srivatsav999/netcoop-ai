@@ -22,6 +22,7 @@ env/
 
 # Investigation Session Store Cache
 .session_store/
+data/sessions/
 
 # Environment / secrets
 .env

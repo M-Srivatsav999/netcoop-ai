@@ -169,3 +169,26 @@ def test_insufficient_evidence_detection():
         any("sparse telemetry" in u.lower() for u in result.uncertainty_factors)
     )
     assert insuff_signals, f"Expected insufficient evidence signal in uncertainty_factors: {result.uncertainty_factors}"
+
+
+def test_isotonic_calibrator_pava_fitting_and_monotonicity():
+    from core.confidence_engine import IsotonicCalibrator
+
+    # Deliberately construct observations with violations of monotonicity
+    x_raw = [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
+    y_raw = [0,   1,   0,   1,   1,   0,   1,   1,   1]
+
+    calibrator = IsotonicCalibrator.fit_pava(x_raw, y_raw)
+
+    # Output predictions must be strictly non-decreasing
+    preds = [calibrator.predict(x) for x in x_raw]
+    for i in range(len(preds) - 1):
+        assert preds[i] <= preds[i + 1], f"Monotonicity violation at index {i}: {preds[i]} > {preds[i+1]}"
+
+    # Default calibrator prediction bounds
+    default_cal = IsotonicCalibrator()
+    assert default_cal.predict(0.0) == 0.0
+    assert default_cal.predict(0.35) == 0.50
+    assert default_cal.predict(0.85) >= 0.94
+    assert default_cal.predict(1.0) == 0.985
+

@@ -118,32 +118,33 @@ class InvestigationEngine:
             platform = "Linux Core Services"
 
         # Construct candidate hypothesis probability distribution
-        parsed_competing: List[str] = []
+        # Derive prior probabilities directly from empirical hypothesis confidences
+        raw_priors: Dict[str, float] = {root_cause: 1.0}
         for h in competing_hypotheses:
             if isinstance(h, dict):
                 h_name = str(h.get("hypothesis", ""))
+                conf = float(h.get("confidence", 0.35))
+                if h_name and h_name != root_cause:
+                    raw_priors[h_name] = max(0.05, conf)
             else:
                 h_name = str(h)
-            if h_name and h_name != root_cause and h_name not in parsed_competing:
-                parsed_competing.append(h_name)
+                if h_name and h_name != root_cause:
+                    raw_priors[h_name] = 0.30
 
-        all_candidates = [root_cause] + parsed_competing
+        all_candidates = list(raw_priors.keys())
         if len(all_candidates) == 1:
+            raw_priors["NORMAL_OPERATION"] = 0.20
             all_candidates.append("NORMAL_OPERATION")
 
-        # Prior probabilities (dominant root cause has ~65%, competing split remainder)
-        prior_probs: Dict[str, float] = {all_candidates[0]: 0.65}
-        rem_p = 0.35 / (len(all_candidates) - 1)
-        for c in all_candidates[1:]:
-            prior_probs[c] = rem_p
+        total_weight = sum(raw_priors.values())
+        prior_probs: Dict[str, float] = {k: v / total_weight for k, v in raw_priors.items()}
+        parsed_competing = [c for c in all_candidates if c != root_cause]
 
         # 1. Congestion vs Hardware Physical Check
         if root_cause == HypothesisType.LINK_CONGESTION.value or "HARDWARE_FAILURE" in parsed_competing:
-            ig_bits, norm_val = cls.calculate_information_gain(
-                prior_probs,
-                partition_a=[HypothesisType.HARDWARE_FAILURE.value],
-                partition_b=[HypothesisType.LINK_CONGESTION.value, "RESOURCE_EXHAUSTION", "NORMAL_OPERATION"]
-            )
+            part_a = [HypothesisType.HARDWARE_FAILURE.value]
+            part_b = [c for c in all_candidates if c not in part_a]
+            ig_bits, norm_val = cls.calculate_information_gain(prior_probs, partition_a=part_a, partition_b=part_b)
             cmd = "show interface <port> counters errors | include CRC" if "WLC" not in platform else "show ap auto-rf stats"
             checks.append(DiagnosticCheck(
                 target_device=target,
@@ -151,77 +152,69 @@ class InvestigationEngine:
                 command_or_metric=cmd,
                 rationale="Audit hardware FCS/CRC error trends over 5-minute window to disambiguate physical transceiver defect from bufferbloat.",
                 information_gain_bits=ig_bits,
-                diagnostic_value=max(0.70, norm_val),
+                diagnostic_value=round(norm_val, 3),
                 operational_cost="LOW",
                 distinguishes_between=["HARDWARE_FAILURE", "LINK_CONGESTION"]
             ))
 
-            ig_bits_q, norm_val_q = cls.calculate_information_gain(
-                prior_probs,
-                partition_a=[HypothesisType.LINK_CONGESTION.value],
-                partition_b=["HARDWARE_FAILURE", "NORMAL_OPERATION"]
-            )
+            part_a_q = [HypothesisType.LINK_CONGESTION.value]
+            part_b_q = [c for c in all_candidates if c not in part_a_q]
+            ig_bits_q, norm_val_q = cls.calculate_information_gain(prior_probs, partition_a=part_a_q, partition_b=part_b_q)
             checks.append(DiagnosticCheck(
                 target_device=target,
                 target_platform=platform,
                 command_or_metric="show platform hardware fed switch active qos queue stats",
                 rationale="Inspect egress ASIC buffer queue utilization and tail-drop counters to measure active queue congestion.",
                 information_gain_bits=ig_bits_q,
-                diagnostic_value=max(0.65, norm_val_q),
+                diagnostic_value=round(norm_val_q, 3),
                 operational_cost="LOW",
                 distinguishes_between=["LINK_CONGESTION", "HARDWARE_FAILURE"]
             ))
 
         # 2. Hardware Failure DOM Optical Check
         if root_cause == HypothesisType.HARDWARE_FAILURE.value:
-            ig_bits, norm_val = cls.calculate_information_gain(
-                prior_probs,
-                partition_a=[HypothesisType.HARDWARE_FAILURE.value],
-                partition_b=[HypothesisType.LINK_CONGESTION.value, "NORMAL_OPERATION"]
-            )
+            part_a = [HypothesisType.HARDWARE_FAILURE.value]
+            part_b = [c for c in all_candidates if c not in part_a]
+            ig_bits, norm_val = cls.calculate_information_gain(prior_probs, partition_a=part_a, partition_b=part_b)
             checks.append(DiagnosticCheck(
                 target_device=target,
                 target_platform=platform,
                 command_or_metric="show interfaces transceiver detail",
                 rationale="Query Digital Optical Monitoring (DOM) Rx/Tx optical power dBm levels to verify fiber patch integrity.",
                 information_gain_bits=ig_bits,
-                diagnostic_value=max(0.85, norm_val),
+                diagnostic_value=round(norm_val, 3),
                 operational_cost="LOW",
                 distinguishes_between=["HARDWARE_FAILURE", "LINK_CONGESTION"]
             ))
 
         # 3. Wireless RF Attenuation Check
         if root_cause == HypothesisType.WEAK_WIFI.value or "WEAK_WIFI" in parsed_competing:
-            ig_bits, norm_val = cls.calculate_information_gain(
-                prior_probs,
-                partition_a=[HypothesisType.WEAK_WIFI.value],
-                partition_b=[HypothesisType.LINK_CONGESTION.value, "NORMAL_OPERATION"]
-            )
+            part_a = [HypothesisType.WEAK_WIFI.value]
+            part_b = [c for c in all_candidates if c not in part_a]
+            ig_bits, norm_val = cls.calculate_information_gain(prior_probs, partition_a=part_a, partition_b=part_b)
             checks.append(DiagnosticCheck(
                 target_device=target,
                 target_platform="Cisco Catalyst 9800 WLC",
                 command_or_metric="show wireless client mac <client> detail | include SNR|RSSI",
                 rationale="Measure client RF Signal-to-Noise Ratio (SNR), negotiation MCS index, and retransmissions.",
                 information_gain_bits=ig_bits,
-                diagnostic_value=max(0.80, norm_val),
+                diagnostic_value=round(norm_val, 3),
                 operational_cost="LOW",
                 distinguishes_between=["WEAK_WIFI", "LINK_CONGESTION"]
             ))
 
         # 4. Centralized DNS/DHCP Service Outage Check
         if root_cause == HypothesisType.DNS_DHCP_FAILURE.value or "DNS_DHCP_FAILURE" in parsed_competing:
-            ig_bits, norm_val = cls.calculate_information_gain(
-                prior_probs,
-                partition_a=[HypothesisType.DNS_DHCP_FAILURE.value],
-                partition_b=["LINK_CONGESTION", "NORMAL_OPERATION"]
-            )
+            part_a = [HypothesisType.DNS_DHCP_FAILURE.value]
+            part_b = [c for c in all_candidates if c not in part_a]
+            ig_bits, norm_val = cls.calculate_information_gain(prior_probs, partition_a=part_a, partition_b=part_b)
             checks.append(DiagnosticCheck(
                 target_device=target,
                 target_platform="Linux Core Services",
                 command_or_metric="dig @10.0.10.1 www.iitbbs.ac.in +time=2 +tries=1",
                 rationale="Probe DNS authoritative server directly to determine if outage is application socket deadlock vs transport.",
                 information_gain_bits=ig_bits,
-                diagnostic_value=max(0.88, norm_val),
+                diagnostic_value=round(norm_val, 3),
                 operational_cost="LOW",
                 distinguishes_between=["DNS_DHCP_FAILURE", "LINK_CONGESTION"]
             ))

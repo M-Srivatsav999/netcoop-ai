@@ -72,9 +72,10 @@ The system operates **entirely without external LLM APIs**, utilizing strict mat
 4. **Untrusted Label Reconciliation**: Generator-supplied status labels (e.g. `reported_status: "HEALTHY"`) are validated against computed telemetry. If contradictory anomalies exist, the label is formally overridden with an audit record in `contradictory_evidence`.
 5. **IIT Bhubaneswar Campus Topology & Blast Radius**: Hierarchical tree modeling from `IITBBS-CORE-SW-01` through Distribution, Building (Mahanadi Hostel, Subarnarekha Hostel, School of Electrical Sciences, Lecture Hall Complex), Access Point, and Client tiers calculates cascading dependencies, lowest common ancestors (LCA), and downstream impact.
 6. **Deterministic Conflict Resolution**: Resolves ambiguous physical vs transport indicators (e.g., Congestion vs Hardware Physical Link Failure vs RF Signal Degradation vs DNS Outage).
-7. **Production Engineering Quality**: Fully typed, tested with `pytest` (52/52 tests passing in ~1.2s), complete coverage of edge cases, structured logging, an independent 700-case scientific benchmark (100.0% accuracy, 1.0000 Macro-F1, Brier 0.0087, ECE 0.0864), cryptographically chained audit ledger, and an interactive Rich terminal & Web NOC dashboard.
-8. **Cryptographically Chained Evidence Ledger**: Tamper-evident Merkle hash chaining (`SHA-256`) with frozen immutable records and verifiable message integrity (`verify_chain_integrity()`).
-9. **True Shannon Information Gain**: Active diagnostic follow-up checks ranked by Shannon entropy reduction $IG(S, C) = H(S) - H(S \mid C)$ across Cisco Catalyst IOS XE, Catalyst 9800 WLC, and Linux Core Services.
+7. **Production Engineering Quality**: Fully typed, tested with `pytest` (62/62 tests passing in ~1.5s), complete coverage of edge cases, structured logging, an independent 700-case scientific benchmark (100.0% accuracy, 1.0000 Macro-F1, Top Brier 0.0087, Multiclass Brier 0.0098, ECE 0.0864), cryptographically chained audit ledger, and an interactive Rich terminal & Web NOC dashboard.
+8. **Cryptographically Chained Evidence Ledger**: Tamper-evident SHA-256 hash chaining (`prev_hash` & `entry_hash`) with typed canonical JSON serialization, frozen immutable records (`ConfigDict(frozen=True)`), and verifiable runtime integrity validation (`verify_chain_integrity()`).
+9. **True Shannon Information Gain**: Active diagnostic follow-up checks ranked by Shannon entropy reduction $IG(S, C) = H(S) - H(S \mid C)$ with complete candidate partitioning and Bayesian likelihood priors across Cisco Catalyst IOS XE, Catalyst 9800 WLC, and Linux Core Services.
+10. **Multi-Source Infrastructure Adapters**: Dedicated parsers ([`core/telemetry_adapters.py`](file:///c:/Users/mukka/Documents/antigravity/lucid-hawking/core/telemetry_adapters.py)) for Cisco IOS XE switch CLI, Cisco Catalyst 9800 WLC client statistics, Linux core services (dig/DHCP), and RFC 5424/3164 Syslog messages.
 
 ---
 
@@ -205,9 +206,10 @@ The system was evaluated against all 6 organizer scenarios plus 6 real-world edg
 | **`SCENARIO_ORGANIZER_HARDWARE_FAILURE`** | V1 | `HARDWARE_FAILURE` | 65.6% | 1 | Yes | **PASS** |
 | **`SCENARIO_ORGANIZER_LATENCY_SPIKE`** | V1 | `LINK_CONGESTION` | 73.8% | 1 | Yes | **PASS** |
 
-- **Unit Test Suite**: `52/52 PASSED` (`pytest -v` covering agents, schemas, temporal engine, fuzzed equivalence, multi-incident clustering, service dependencies, Merkle hash chains, and 10 adversarial robustness tests).
+- **Unit Test Suite**: `62/62 PASSED` (`pytest -v` covering agents, schemas, temporal engine, fuzzed equivalence, multi-incident clustering, telemetry adapters, evidence ledger tampering, service dependencies, and 10 adversarial robustness tests).
 - **Benchmark Suite**: `15/15 PASSED` with 100% deterministic reproducibility (`pass_rate: 100.0%`).
-- **Scientific 700-Case Evaluation Lab**: `100.0% Accuracy` | `1.0000 Macro-F1` | `Brier: 0.0087` | `ECE: 0.0864` | `Abstention: 100% Prec / 100% Rec` | `1.42ms Latency` across 7 fault domains and 3 schema specifications.
+- **Scientific 700-Case Evaluation Lab**: `100.0% Accuracy` | `1.0000 Macro-F1` | `Top Brier: 0.0087` | `Multiclass Brier: 0.0098` | `ECE: 0.0864` | `Abstention: 100% Prec / 100% Rec` | `1.41ms Latency` across 7 fault domains and 3 schema specifications.
+- **Held-Out Generalization Benchmark**: `100.0% Accuracy` | `1.0000 Macro-F1` | `Top Brier: 0.0158` | `Multiclass Brier: 0.0177` across 210 cases on completely unseen devices (`seed=9999`).
 - **Organizer Telemetry Generator Check**: `150/150 PASSED` with 0 dropped fields and 0 unhandled exceptions.
 
 ---
@@ -230,12 +232,17 @@ python web_ui.py
 python evaluation/benchmark_runner.py
 ```
 
+### Running the Held-Out Generalization Benchmark (Unseen Topologies)
+```bash
+python evaluation/held_out_benchmark.py
+```
+
 ### Running the 15-Scenario Reproducibility Suite
 ```bash
 python evaluation/run_evaluation.py
 ```
 
-### Running the Pytest Suite (52 Tests)
+### Running the Pytest Suite (62 Tests)
 ```bash
 pytest -v
 ```

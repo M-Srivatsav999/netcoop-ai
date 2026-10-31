@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-10-31 18:38:51 UTC",
+  "held_out_scenarios_evaluated": 210,
+  "overall_accuracy": 100.0,
+  "macro_f1_score": 1.0,
+  "top_label_brier_score": 0.0158,
+  "multiclass_brier_score": 0.0177,
+  "expected_calibration_error": 0.1127,
+  "abstention_quality": {
+    "precision": 1.0,
+    "recall": 1.0,
+    "expected": 30,
+    "actual": 30
+  },
+  "per_class_metrics": {
+    "DNS_DHCP_FAILURE": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "support": 30
+    },
+    "HARDWARE_FAILURE": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "support": 30
+    },
+    "INSUFFICIENT_EVIDENCE": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "support": 30
+    },
+    "LINK_CONGESTION": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "support": 30
+    },
+    "NORMAL_OPERATION": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "support": 30
+    },
+    "RESOURCE_EXHAUSTION": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "support": 30
+    },
+    "WEAK_WIFI": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "f1_score": 1.0,
+      "support": 30
+    }
+  },
+  "latency_mean_ms": 1.87
+}
