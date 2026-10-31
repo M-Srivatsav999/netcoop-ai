@@ -1,0 +1,19 @@
+{
+  "scenario_id": "SCENARIO_ORGANIZER_HARDWARE_FAILURE",
+  "description": "Colab generator organizer-format telemetry with high interface errors, extreme CPU saturation, and 100% link utilization.",
+  "telemetry": [
+    {
+      "timestamp": "2026-10-31T12:00:00Z",
+      "device_id": "SW_CAMPUS_8",
+      "status": "Critical",
+      "metrics": {
+        "cpu_utilization_pct": 99.9,
+        "link_utilization_pct": 100.0,
+        "packet_loss_pct": 22.4,
+        "latency_ms": 780.0,
+        "queue_drops": 9200,
+        "interface_errors": 340
+      }
+    }
+  ]
+}

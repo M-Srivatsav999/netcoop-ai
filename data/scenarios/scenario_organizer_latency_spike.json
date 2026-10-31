@@ -1,0 +1,19 @@
+{
+  "scenario_id": "SCENARIO_ORGANIZER_LATENCY_SPIKE",
+  "description": "Colab generator organizer-format telemetry with elevated latency, high link utilization, and cpu_utilization_pct alias.",
+  "telemetry": [
+    {
+      "timestamp": "2026-10-31T12:00:00Z",
+      "device_id": "SW_CAMPUS_3",
+      "status": "Warning",
+      "metrics": {
+        "cpu_utilization_pct": 58.4,
+        "link_utilization_pct": 82.0,
+        "packet_loss_pct": 0.8,
+        "latency_ms": 285.0,
+        "jitter_ms": 54.0,
+        "queue_drops": 24
+      }
+    }
+  ]
+}

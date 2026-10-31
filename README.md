@@ -316,3 +316,12 @@ Every execution produces output compliant with Page 5 of the problem statement:
   ]
 }
 ```
+
+---
+
+## 9. Known Limitations & Engineering Honesty
+
+In alignment with production incident post-mortem standards and hackathon judging criteria:
+1. **Single-Snapshot vs. Continuous Time-Series**: Current diagnosis operates on discrete telemetry snapshots. Transient micro-bursts and intermittent link flapping are evaluated through aggregate counters (e.g., cumulative CRC errors, queue drops) rather than sliding time-window regressions.
+2. **Multi-Incident Reporting Boundary**: When multiple concurrent, independent faults happen simultaneously across disconnected buildings (e.g. concurrent Wi-Fi attenuation in Hostel B and buffer congestion in Engineering), the central arbiter isolates the dominant incident as `suspected_root_cause` with full blast-radius scoping, while preserving secondary candidate incidents in `alternative_causes`. Full subtree graph clustering for independent concurrent incident ticket emission is documented as a post-hackathon enhancement.
+3. **Standalone / Unmapped Campus Devices**: Devices outside the IIT Bhubaneswar 5-tier topology (e.g. `SW_CAMPUS_1..10`) degrade gracefully to empirical threshold diagnostics without triggering false topology cascade penalties.
