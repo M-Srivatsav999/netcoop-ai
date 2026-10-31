@@ -1,0 +1,37 @@
+{
+  "scenario_id": "SCENARIO_3_HARDWARE_FAILURE",
+  "description": "Physical link degradation and cable/transceiver corruption with false HEALTHY generator label.",
+  "telemetry": [
+    {
+      "device_id": "BLDG-SW-HOSTEL-A",
+      "timestamp": "2026-10-31T12:00:00Z",
+      "status": "HEALTHY",
+      "metrics": {
+        "latency_ms": 19.5,
+        "jitter_ms": 2.2,
+        "packet_loss_pct": 14.2,
+        "throughput_mbps": 8.5,
+        "cpu_pct": 32.0,
+        "memory_pct": 44.0,
+        "queue_drops": 0,
+        "interface_errors": 740
+      }
+    },
+    {
+      "device_id": "AP-HOSTEL-A1",
+      "timestamp": "2026-10-31T12:00:00Z",
+      "status": "HEALTHY",
+      "metrics": {
+        "latency_ms": 22.0,
+        "jitter_ms": 3.0,
+        "packet_loss_pct": 12.8,
+        "throughput_mbps": 4.2,
+        "cpu_pct": 28.0,
+        "memory_pct": 46.0,
+        "queue_drops": 0,
+        "interface_errors": 18,
+        "signal_strength_dbm": -59.0
+      }
+    }
+  ]
+}

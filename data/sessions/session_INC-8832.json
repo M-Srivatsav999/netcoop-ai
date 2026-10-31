@@ -1,0 +1,73 @@
+{
+  "session_id": "INC-8832",
+  "phase": "PAUSED_FOR_OPERATOR_REVIEW",
+  "created_at": "2026-10-31T11:03:45.402155+00:00",
+  "is_paused": true,
+  "telemetry_count": 0,
+  "findings_count": 0,
+  "arbitration_decision": null,
+  "state_payload": {
+    "incident_id": "SCENARIO_3_HARDWARE_FAILURE",
+    "diagnosed_root_cause": "HARDWARE_FAILURE",
+    "confidence": 0.948,
+    "affected_devices": [
+      "AP-HOSTEL-A1",
+      "BLDG-SW-HOSTEL-A"
+    ],
+    "report": {
+      "incident_id": "SCENARIO_3_HARDWARE_FAILURE",
+      "status": "diagnosed",
+      "suspected_root_cause": "HARDWARE_FAILURE",
+      "confidence": 0.948,
+      "affected_devices": [
+        "AP-HOSTEL-A1",
+        "BLDG-SW-HOSTEL-A"
+      ],
+      "supporting_evidence": [
+        {
+          "metric": "interface_errors",
+          "value": 740,
+          "interpretation": "Physical layer errors (740) detected on switchport interface for BLDG-SW-HOSTEL-A."
+        },
+        {
+          "metric": "interface_errors",
+          "value": 18,
+          "interpretation": "Physical layer errors (18) detected on switchport interface for AP-HOSTEL-A1."
+        },
+        {
+          "metric": "interface_errors_and_loss",
+          "value": {
+            "errors": 740,
+            "loss_pct": 14.2
+          },
+          "interpretation": "High physical interface errors (740) correlated with packet loss (14.2%) indicates physical layer / transceiver degradation."
+        },
+        {
+          "metric": "interface_errors_and_loss",
+          "value": {
+            "errors": 18,
+            "loss_pct": 12.8
+          },
+          "interpretation": "High physical interface errors (18) correlated with packet loss (12.8%) indicates physical layer / transceiver degradation."
+        }
+      ],
+      "alternative_causes": [
+        "Possible upstream switch failure",
+        "Possible link congestion"
+      ],
+      "recommended_actions": [
+        "Dispatch field technician to inspect physical cable, transceiver, and optical power levels on AP-HOSTEL-A1, BLDG-SW-HOSTEL-A.",
+        "Review interface FCS, CRC error counters, and runt/giant packet statistics on switch ports.",
+        "Execute clean cable swap or migrate uplink to alternate transceiver/port pair.",
+        "Verify switch backplane error logs and run self-diagnostic test suite (POST/BIST)."
+      ],
+      "evidence_sources": [
+        "evidenceengine",
+        "infrastructure_agent"
+      ],
+      "limitations": [
+        "Topological context: Upstream node BLDG-SW-HOSTEL-A (bldg_switch) is itself anomalous, explaining all downstream failures."
+      ]
+    }
+  }
+}

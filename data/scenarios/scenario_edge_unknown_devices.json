@@ -1,0 +1,26 @@
+{
+  "scenario_id": "SCENARIO_EDGE_UNKNOWN_DEVICES",
+  "description": "Telemetry from unregistered and synthesized devices to verify robust graph handling and lack of runtime crashes.",
+  "telemetry": [
+    {
+      "device_id": "ROGUE-ACCESS-POINT-99",
+      "timestamp": "2026-10-31T12:00:00Z",
+      "status": "WARNING",
+      "metrics": {
+        "latency_ms": 115.0,
+        "packet_loss_pct": 8.0,
+        "signal_strength_dbm": -82.0
+      }
+    },
+    {
+      "device_id": "UNKNOWN-SWITCH-OMEGA",
+      "timestamp": "2026-10-31T12:00:00Z",
+      "status": "HEALTHY",
+      "metrics": {
+        "latency_ms": 12.0,
+        "packet_loss_pct": 0.0,
+        "interface_errors": 0
+      }
+    }
+  ]
+}

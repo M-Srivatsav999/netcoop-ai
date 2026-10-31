@@ -1,0 +1,31 @@
+{
+  "scenario_id": "SCENARIO_EDGE_MULTIPLE_INCIDENTS",
+  "description": "Simultaneous incidents across distinct campus zones: Link congestion in Engineering and Weak RF in Hostel B.",
+  "telemetry": [
+    {
+      "device_id": "BLDG-SW-ENG",
+      "timestamp": "2026-10-31T12:00:00Z",
+      "status": "CRITICAL",
+      "metrics": {
+        "latency_ms": 195.0,
+        "jitter_ms": 32.0,
+        "packet_loss_pct": 7.5,
+        "throughput_mbps": 980.0,
+        "cpu_pct": 72.0,
+        "queue_drops": 190,
+        "interface_errors": 0
+      }
+    },
+    {
+      "device_id": "AP-HOSTEL-B1",
+      "timestamp": "2026-10-31T12:00:00Z",
+      "status": "WARNING",
+      "metrics": {
+        "latency_ms": 45.0,
+        "packet_loss_pct": 4.0,
+        "signal_strength_dbm": -84.0,
+        "interface_errors": 0
+      }
+    }
+  ]
+}

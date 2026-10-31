@@ -1,0 +1,14 @@
+{
+  "scenario_id": "SCENARIO_EDGE_MISSING_TELEMETRY",
+  "description": "Extremely sparse telemetry where 80%+ of metrics are unpopulated to verify non-fabrication and insufficient evidence safeguards.",
+  "telemetry": [
+    {
+      "device_id": "BLDG-SW-SCI",
+      "timestamp": "2026-10-31T12:00:00Z",
+      "status": "UNKNOWN",
+      "metrics": {
+        "latency_ms": 28.0
+      }
+    }
+  ]
+}

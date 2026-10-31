@@ -1,0 +1,18 @@
+{
+  "scenario_id": "SCENARIO_EDGE_CONFLICTING_LABELS",
+  "description": "Untrusted generator reports status HEALTHY while device has critical packet loss and physical errors.",
+  "telemetry": [
+    {
+      "device_id": "DIST-SW-SOUTH",
+      "timestamp": "2026-10-31T12:00:00Z",
+      "status": "HEALTHY",
+      "metrics": {
+        "latency_ms": 12.0,
+        "packet_loss_pct": 28.5,
+        "interface_errors": 1250,
+        "cpu_pct": 35.0,
+        "queue_drops": 0
+      }
+    }
+  ]
+}

@@ -1,0 +1,268 @@
+{
+  "network_name": "IIT Bhubaneswar Campus Network (NetCoop AI)",
+  "version": "2.0",
+  "campus_context": "IIT Bhubaneswar Academic & Residential Infrastructure",
+  "nodes": [
+    {
+      "id": "CORE-SW-01",
+      "type": "core_switch",
+      "name": "Central Core Switch",
+      "location": "Datacenter Rack A1",
+      "ip": "10.0.0.1",
+      "capacity_gbps": 100,
+      "parent": null
+    },
+    {
+      "id": "IITBBS-CORE-SW-01",
+      "type": "core_switch",
+      "name": "IIT Bhubaneswar Datacenter Core",
+      "location": "Central IT Services Rack 1",
+      "ip": "10.10.0.1",
+      "capacity_gbps": 100,
+      "parent": null
+    },
+    {
+      "id": "DIST-SW-NORTH",
+      "type": "dist_switch",
+      "name": "Distribution Switch North Campus",
+      "location": "Academic Complex Comms Room",
+      "ip": "10.0.1.1",
+      "capacity_gbps": 40,
+      "parent": "CORE-SW-01"
+    },
+    {
+      "id": "DIST-SW-SOUTH",
+      "type": "dist_switch",
+      "name": "Distribution Switch South Campus",
+      "location": "Residential Zone Comms Room",
+      "ip": "10.0.2.1",
+      "capacity_gbps": 40,
+      "parent": "CORE-SW-01"
+    },
+    {
+      "id": "IITBBS-DIST-ACADEMIC",
+      "type": "dist_switch",
+      "name": "IITBBS Academic Complex Distribution",
+      "location": "Academic Complex Main IDF",
+      "ip": "10.10.1.1",
+      "capacity_gbps": 40,
+      "parent": "IITBBS-CORE-SW-01"
+    },
+    {
+      "id": "IITBBS-DIST-HOSTELS",
+      "type": "dist_switch",
+      "name": "IITBBS Hostel Zone Distribution",
+      "location": "Hostel Zone Network Node",
+      "ip": "10.10.2.1",
+      "capacity_gbps": 40,
+      "parent": "IITBBS-CORE-SW-01"
+    },
+    {
+      "id": "BLDG-SW-ENG",
+      "type": "bldg_switch",
+      "name": "Engineering Building Switch",
+      "location": "Engineering Block Floor 1",
+      "ip": "10.1.1.1",
+      "capacity_gbps": 10,
+      "parent": "DIST-SW-NORTH"
+    },
+    {
+      "id": "BLDG-SW-SCI",
+      "type": "bldg_switch",
+      "name": "Science Complex Switch",
+      "location": "Science Block Floor 1",
+      "ip": "10.1.2.1",
+      "capacity_gbps": 10,
+      "parent": "DIST-SW-NORTH"
+    },
+    {
+      "id": "BLDG-SW-HOSTEL-A",
+      "type": "bldg_switch",
+      "name": "Hostel Block A Switch",
+      "location": "Hostel A Basement IDF",
+      "ip": "10.2.1.1",
+      "capacity_gbps": 10,
+      "parent": "DIST-SW-SOUTH"
+    },
+    {
+      "id": "BLDG-SW-HOSTEL-B",
+      "type": "bldg_switch",
+      "name": "Hostel Block B Switch",
+      "location": "Hostel B Basement IDF",
+      "ip": "10.2.2.1",
+      "capacity_gbps": 10,
+      "parent": "DIST-SW-SOUTH"
+    },
+    {
+      "id": "IITBBS-SW-MHR",
+      "type": "bldg_switch",
+      "name": "Mahanadi Hall of Residence Switch",
+      "location": "MHR Block A Basement IDF",
+      "ip": "10.10.21.1",
+      "capacity_gbps": 10,
+      "parent": "IITBBS-DIST-HOSTELS"
+    },
+    {
+      "id": "IITBBS-SW-SHR",
+      "type": "bldg_switch",
+      "name": "Subarnarekha Hall of Residence Switch",
+      "location": "SHR Block B Basement IDF",
+      "ip": "10.10.22.1",
+      "capacity_gbps": 10,
+      "parent": "IITBBS-DIST-HOSTELS"
+    },
+    {
+      "id": "IITBBS-SW-SES",
+      "type": "bldg_switch",
+      "name": "School of Electrical Sciences Switch",
+      "location": "SES Block Floor 1",
+      "ip": "10.10.11.1",
+      "capacity_gbps": 10,
+      "parent": "IITBBS-DIST-ACADEMIC"
+    },
+    {
+      "id": "IITBBS-SW-LHC",
+      "type": "bldg_switch",
+      "name": "Lecture Hall Complex Switch",
+      "location": "LHC Central Comms Room",
+      "ip": "10.10.12.1",
+      "capacity_gbps": 10,
+      "parent": "IITBBS-DIST-ACADEMIC"
+    },
+    {
+      "id": "SRV-DNS-01",
+      "type": "server",
+      "name": "Primary Campus DNS Resolver",
+      "location": "Datacenter Rack C3",
+      "ip": "10.0.0.53",
+      "capacity_gbps": 10,
+      "parent": "CORE-SW-01"
+    },
+    {
+      "id": "SRV-DHCP-01",
+      "type": "server",
+      "name": "Campus DHCP Server",
+      "location": "Datacenter Rack C4",
+      "ip": "10.0.0.67",
+      "capacity_gbps": 10,
+      "parent": "CORE-SW-01"
+    },
+    {
+      "id": "AP-HOSTEL-A1",
+      "type": "access_point",
+      "name": "Hostel A Floor 1 AP",
+      "location": "Hostel A Wing 1",
+      "ip": "10.2.1.101",
+      "capacity_gbps": 1,
+      "parent": "BLDG-SW-HOSTEL-A"
+    },
+    {
+      "id": "AP-HOSTEL-A2",
+      "type": "access_point",
+      "name": "Hostel A Floor 2 AP",
+      "location": "Hostel A Wing 2",
+      "ip": "10.2.1.102",
+      "capacity_gbps": 1,
+      "parent": "BLDG-SW-HOSTEL-A"
+    },
+    {
+      "id": "AP-HOSTEL-B1",
+      "type": "access_point",
+      "name": "Hostel B Floor 1 AP",
+      "location": "Hostel B Wing 1",
+      "ip": "10.2.2.101",
+      "capacity_gbps": 1,
+      "parent": "BLDG-SW-HOSTEL-B"
+    },
+    {
+      "id": "AP-HOSTEL-B2",
+      "type": "access_point",
+      "name": "Hostel B Floor 2 AP",
+      "location": "Hostel B Wing 2",
+      "ip": "10.2.2.102",
+      "capacity_gbps": 1,
+      "parent": "BLDG-SW-HOSTEL-B"
+    },
+    {
+      "id": "AP-MHR-W1",
+      "type": "access_point",
+      "name": "Mahanadi Hostel Wing 1 AP",
+      "location": "MHR Wing 1 Corridor",
+      "ip": "10.10.21.101",
+      "capacity_gbps": 1,
+      "parent": "IITBBS-SW-MHR"
+    },
+    {
+      "id": "AP-SHR-W1",
+      "type": "access_point",
+      "name": "Subarnarekha Hostel Wing 1 AP",
+      "location": "SHR Wing 1 Corridor",
+      "ip": "10.10.22.101",
+      "capacity_gbps": 1,
+      "parent": "IITBBS-SW-SHR"
+    },
+    {
+      "id": "AP-ENG-01",
+      "type": "access_point",
+      "name": "Engineering Lecture Hall AP",
+      "location": "Eng Block Hall A",
+      "ip": "10.1.1.101",
+      "capacity_gbps": 1,
+      "parent": "BLDG-SW-ENG"
+    },
+    {
+      "id": "AP-SCI-01",
+      "type": "access_point",
+      "name": "Science Lab AP",
+      "location": "Science Block Lab 2",
+      "ip": "10.1.2.101",
+      "capacity_gbps": 1,
+      "parent": "BLDG-SW-SCI"
+    },
+    {
+      "id": "CLIENT-HA-101",
+      "type": "end_device",
+      "name": "Student Laptop Hostel A-101",
+      "location": "Hostel A Room 101",
+      "ip": "10.2.1.201",
+      "capacity_gbps": 0.3,
+      "parent": "AP-HOSTEL-A1"
+    },
+    {
+      "id": "CLIENT-HA-102",
+      "type": "end_device",
+      "name": "Student Phone Hostel A-102",
+      "location": "Hostel A Room 102",
+      "ip": "10.2.1.202",
+      "capacity_gbps": 0.15,
+      "parent": "AP-HOSTEL-A1"
+    },
+    {
+      "id": "CLIENT-HB-201",
+      "type": "end_device",
+      "name": "Student Tablet Hostel B-201",
+      "location": "Hostel B Room 201",
+      "ip": "10.2.2.201",
+      "capacity_gbps": 0.2,
+      "parent": "AP-HOSTEL-B1"
+    },
+    {
+      "id": "CLIENT-MHR-101",
+      "type": "end_device",
+      "name": "Student Laptop MHR-101",
+      "location": "Mahanadi Hostel Room 101",
+      "ip": "10.10.21.201",
+      "capacity_gbps": 0.3,
+      "parent": "AP-MHR-W1"
+    },
+    {
+      "id": "LAB-PC-ENG-01",
+      "type": "end_device",
+      "name": "Engineering CAD Workstation",
+      "location": "Eng Block Lab 104",
+      "ip": "10.1.1.51",
+      "capacity_gbps": 1,
+      "parent": "BLDG-SW-ENG"
+    }
+  ]
+}

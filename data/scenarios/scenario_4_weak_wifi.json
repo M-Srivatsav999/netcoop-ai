@@ -1,0 +1,46 @@
+{
+  "scenario_id": "SCENARIO_4_WEAK_WIFI",
+  "description": "V3 Schema payload: Severe RF signal attenuation and co-channel interference on hostel access point.",
+  "telemetry": [
+    {
+      "device": "AP-HOSTEL-B2",
+      "status": "DEGRADED",
+      "metrics": {
+        "latency_ms": "92.4 ms",
+        "jitter_ms": "18.2 ms",
+        "packet_loss": "11.5%",
+        "throughput": "3.5 Mbps",
+        "cpu": "34.0%",
+        "memory": "49.0%",
+        "queue_drops": "0",
+        "interface_errors": "0",
+        "signal": "-86.5 dBm"
+      }
+    },
+    {
+      "device": "CLIENT-HB-201",
+      "status": "DEGRADED",
+      "metrics": {
+        "latency_ms": "98.0 ms",
+        "jitter_ms": "22.5 ms",
+        "packet_loss": "14.0%",
+        "throughput": "1.8 Mbps",
+        "signal": "-89.0 dBm"
+      }
+    },
+    {
+      "device": "BLDG-SW-HOSTEL-B",
+      "status": "HEALTHY",
+      "metrics": {
+        "latency_ms": "10.5 ms",
+        "jitter_ms": "1.2 ms",
+        "packet_loss": "0.0%",
+        "throughput": "450 Mbps",
+        "cpu": "25.0%",
+        "memory": "38.0%",
+        "queue_drops": "0",
+        "interface_errors": "0"
+      }
+    }
+  ]
+}

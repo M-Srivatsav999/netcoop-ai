@@ -1,0 +1,33 @@
+{
+  "scenario_id": "SCENARIO_6_SCHEMA_INTEROP_FAILURE",
+  "description": "Severe multi-version interoperability schema mismatch: unparsed string metrics, missing timestamps, unit variations, and corrupted values.",
+  "telemetry": [
+    {
+      "device": "DIST-SW-SOUTH",
+      "status": "UNKNOWN",
+      "metrics": {
+        "latency": "142.5 ms",
+        "jitter": "28.4 ms",
+        "loss": "8.5%",
+        "bandwidth": "12.4 Mbps",
+        "cpu": "92.0%",
+        "mem": "88.5%",
+        "queue_drops": "85",
+        "errors": "NaN"
+      }
+    },
+    {
+      "device": "BLDG-SW-HOSTEL-A",
+      "status": "OK",
+      "metrics": {
+        "latency": "0.150 s",
+        "jitter": "0.025 s",
+        "packet_loss": "0.075",
+        "throughput": "15000000 bps",
+        "cpu_usage": "0.85",
+        "drops": "65",
+        "errors": "corrupt_int"
+      }
+    }
+  ]
+}

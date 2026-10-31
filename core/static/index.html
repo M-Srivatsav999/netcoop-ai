@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetCoop AI — IIT Bhubaneswar Multi-Agent Network Intelligence</title>
+    <style>
+        :root {
+            --bg: #070b14;
+            --surface: #0e1726;
+            --surface-hover: #152238;
+            --border: #1e2c47;
+            --border-highlight: #3b82f6;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --accent-blue: #38bdf8;
+            --accent-green: #10b981;
+            --accent-yellow: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-purple: #818cf8;
+            --font-mono: 'Consolas', 'Courier New', monospace;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            background: var(--bg);
+            color: var(--text-primary);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Top Navigation Bar */
+        .navbar {
+            background: rgba(14, 23, 38, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            padding: 12px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .nav-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .brand-logo {
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #0284c7, #38bdf8);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+        .brand-title {
+            font-weight: 800;
+            font-size: 1.15rem;
+            letter-spacing: -0.5px;
+            background: linear-gradient(90deg, #38bdf8, #818cf8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .brand-subtitle {
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .nav-badges {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        /* Main Workspace Layout */
+        .workspace {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            flex: 1;
+            height: calc(100vh - 61px);
+            overflow: hidden;
+        }
+
+        /* Left Sidebar: Controls & Telemetry */
+        .sidebar {
+            background: var(--surface);
+            border-right: 1px solid var(--border);
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+        }
+        .section-title {
+            font-size: 0.78rem;
+            text-transform: uppercase;
+            letter-spacing: 0.6px;
+            color: var(--text-secondary);
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        select, textarea, input {
+            background: #080d1a;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: var(--text-primary);
+            padding: 9px 12px;
+            font-size: 0.85rem;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        select:focus, textarea:focus, input:focus {
+            border-color: var(--border-highlight);
+        }
+        textarea {
+            font-family: var(--font-mono);
+            font-size: 0.8rem;
+            resize: vertical;
+            height: 220px;
+            line-height: 1.4;
+        }
+
+        .btn {
+            background: #1e3a8a;
+            border: 1px solid #3b82f6;
+            color: #fff;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        .btn:hover {
+            background: #2563eb;
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #0284c7, #2563eb);
+            border: none;
+            padding: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #0369a1, #1d4ed8);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.5);
+        }
+        .btn-secondary {
+            background: #1e293b;
+            border: 1px solid var(--border);
+            color: var(--text-secondary);
+        }
+        .btn-secondary:hover {
+            background: #334155;
+            color: #fff;
+        }
+
+        /* Right Content Area: Results & Tabs */
+        .content {
+            padding: 24px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Top Metric Highlights */
+        .metric-cards {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 14px;
+        }
+        .m-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .m-card-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--text-secondary);
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+        .m-card-val {
+            font-size: 1.35rem;
+            font-weight: 800;
+        }
+
+        /* Badges */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-green { background: #064e3b; color: #34d399; border: 1px solid #059669; }
+        .badge-yellow { background: #78350f; color: #fde68a; border: 1px solid #d97706; }
+        .badge-red { background: #7f1d1d; color: #fca5a5; border: 1px solid #dc2626; }
+        .badge-blue { background: #1e3a8a; color: #93c5fd; border: 1px solid #2563eb; }
+
+        /* Tabs Header */
+        .tabs-header {
+            display: flex;
+            gap: 4px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 2px;
+        }
+        .tab-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            padding: 10px 16px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: all 0.15s;
+        }
+        .tab-btn:hover {
+            color: #fff;
+        }
+        .tab-btn.active {
+            color: var(--accent-blue);
+            border-bottom-color: var(--accent-blue);
+        }
+
+        /* Tab Content Panel */
+        .tab-panel {
+            display: none;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+        }
+        .tab-panel.active {
+            display: block;
+        }
+
+        /* Evidence Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+        th, td {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+        th {
+            background: #080d1a;
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .code-cell {
+            font-family: var(--font-mono);
+            color: var(--accent-blue);
+        }
+
+        /* Pipeline Agent Cards */
+        .agent-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .agent-card {
+            background: #080d1a;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+        }
+        .agent-card-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 6px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        /* Topology Visualizer */
+        .topo-box {
+            background: #050811;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 20px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .topo-tier {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .topo-node {
+            background: #0e1726;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px 14px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-align: center;
+            transition: all 0.2s;
+            cursor: pointer;
+        }
+        .topo-node:hover {
+            border-color: var(--accent-blue);
+            transform: translateY(-2px);
+        }
+        .topo-node.affected {
+            border-color: var(--accent-red);
+            background: rgba(239, 68, 68, 0.15);
+            color: #fca5a5;
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+        }
+        .topo-node.root-core {
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.15);
+            font-size: 0.85rem;
+        }
+
+        /* Cisco Packet Tracer Controls & Terminal */
+        .cisco-toolbar {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            background: #090e1a;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 10px 14px;
+            margin-bottom: 14px;
+        }
+        .cisco-btn {
+            background: #1e293b;
+            color: #38bdf8;
+            border: 1px solid #334155;
+            padding: 6px 14px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+        .cisco-btn:hover {
+            background: #2563eb;
+            color: #fff;
+            border-color: #3b82f6;
+        }
+
+        /* Packet Tracer Hop Animation */
+        .packet-trace-box {
+            display: none;
+            background: #030712;
+            border: 1px solid #1e293b;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 14px;
+        }
+        .packet-trace-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            color: #94a3b8;
+            margin-bottom: 10px;
+        }
+        .hop-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .hop-card {
+            background: #0a0f1d;
+            border: 1px solid #1f293d;
+            border-radius: 6px;
+            padding: 10px;
+            font-size: 0.75rem;
+            position: relative;
+        }
+        .hop-card.active-hop {
+            border-color: #38bdf8;
+            background: rgba(56, 189, 248, 0.08);
+            box-shadow: 0 0 10px rgba(56, 189, 248, 0.2);
+        }
+        .hop-card.dropped-hop {
+            border-color: #ef4444;
+            background: rgba(239, 68, 68, 0.08);
+            box-shadow: 0 0 10px rgba(239, 68, 68, 0.2);
+        }
+
+        /* Cisco IOS Modal */
+        .cisco-modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .cisco-modal-content {
+            background: #000;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            width: 820px;
+            max-width: 95vw;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
+            overflow: hidden;
+        }
+        .cisco-terminal-bar {
+            background: #1e293b;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.82rem;
+            color: #cbd5e1;
+            font-family: monospace;
+        }
+        .cisco-terminal-body {
+            background: #050505;
+            color: #4ade80;
+            font-family: 'Consolas', monospace;
+            font-size: 0.8rem;
+            line-height: 1.45;
+            padding: 16px;
+            max-height: 480px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+        .cisco-cmd-bar {
+            display: flex;
+            gap: 6px;
+            padding: 10px 16px;
+            background: #0a0f1d;
+            border-top: 1px solid #1e293b;
+            flex-wrap: wrap;
+        }
+        .cisco-cmd-btn {
+            background: #1e293b;
+            color: #93c5fd;
+            border: 1px solid #334155;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: monospace;
+            cursor: pointer;
+        }
+        .cisco-cmd-btn:hover {
+            background: #2563eb;
+            color: #fff;
+        }
+
+        /* Remediation Simulation */
+        .sim-card {
+            background: #080d1a;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 12px;
+        }
+        .cli-code {
+            background: #020617;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 8px 12px;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            color: #4ade80;
+            margin-top: 6px;
+            overflow-x: auto;
+        }
+
+        /* Preformatted JSON View */
+        pre.json-viewer {
+            background: #050811;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: var(--font-mono);
+            font-size: 0.82rem;
+            color: #38bdf8;
+            max-height: 480px;
+            overflow-y: auto;
+            margin: 0;
+        }
+
+        /* Print / Save as PDF Styles */
+        @media print {
+            .navbar, .sidebar, .tabs-header, .cisco-toolbar, .btn, .nav-badges, .packet-trace-box {
+                display: none !important;
+            }
+            .workspace {
+                display: block !important;
+                padding: 0 !important;
+            }
+            .main-content {
+                width: 100% !important;
+            }
+            .tab-panel {
+                display: block !important;
+                margin-bottom: 24px;
+                page-break-inside: avoid;
+            }
+            body {
+                background: #fff !important;
+                color: #0f172a !important;
+            }
+            .m-card, .agent-card, table, pre.json-viewer {
+                background: #f8fafc !important;
+                color: #0f172a !important;
+                border: 1px solid #cbd5e1 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Header -->
+    <div class="navbar">
+        <div class="nav-brand">
+            <div class="brand-logo">N</div>
+            <div>
+                <div class="brand-title">NetCoop AI — Multi-Agent Network Intelligence</div>
+                <div class="brand-subtitle">IIT Bhubaneswar Campus Autonomous NOC</div>
+            </div>
+        </div>
+        <div class="nav-badges">
+            <span class="badge badge-green" id="engine-status-badge">100% Deterministic Engine Active</span>
+            <span class="badge badge-blue">Zero External LLMs</span>
+            <span class="badge badge-yellow">MCP Server Ready</span>
+        </div>
+    </div>
+
+    <!-- Main Workspace -->
+    <div class="workspace">
+
+        <!-- Left Controls Sidebar -->
+        <div class="sidebar">
+            <div class="section-title">
+                <span>1. Telemetry Ingestion</span>
+            </div>
+            <div class="control-group">
+                <label style="font-size:0.75rem; color:var(--text-secondary);">Select Pre-built Scenario:</label>
+                <select id="scenario-select" onchange="loadScenario()">
+                    <option value="" disabled selected>Choose a benchmark scenario...</option>
+                </select>
+            </div>
+
+            <div class="control-group" style="margin-top:4px;">
+                <label style="font-size:0.75rem; color:var(--text-secondary);">Enforce Schema Version:</label>
+                <select id="schema-version-select">
+                    <option value="AUTO" selected>AUTO Detect (V1 / V2 / V3)</option>
+                    <option value="V1">Schema V1 (Baseline Organizer)</option>
+                    <option value="V2">Schema V2 (Renamed & Rescaled)</option>
+                    <option value="V3">Schema V3 (Messy / String-Wrapped)</option>
+                </select>
+            </div>
+
+            <div class="control-group" style="margin-top:8px;">
+                <div class="section-title">
+                    <span>Raw Telemetry Payload</span>
+                    <button class="btn btn-secondary" style="padding:2px 8px; font-size:0.7rem;" onclick="formatJSON()">Beautify</button>
+                </div>
+                <textarea id="telemetry-editor" placeholder="Paste JSON telemetry payload or load from scenario..."></textarea>
+            </div>
+
+            <button class="btn btn-primary" id="run-btn" onclick="runDiagnosis()">
+                <span>Run Multi-Agent Diagnosis</span>
+            </button>
+
+            <!-- Synthetic Generator Drawer -->
+            <div style="border-top: 1px solid var(--border); padding-top:14px; margin-top:8px;">
+                <div class="section-title">
+                    <span>Synthetic Telemetry Generator</span>
+                </div>
+                <div class="control-group">
+                    <select id="synth-scenario-select">
+                        <option value="congestion">Inject Link Congestion</option>
+                        <option value="hardware_failure">Inject Hardware CRC Errors</option>
+                        <option value="weak_wifi">Inject Weak Wi-Fi RF</option>
+                        <option value="dns_dhcp_failure">Inject DNS/DHCP Outage</option>
+                        <option value="normal">Generate Normal Baseline</option>
+                    </select>
+                    <button class="btn btn-secondary" style="margin-top:6px;" onclick="generateSyntheticTelemetry()">
+                        Generate Synthetic Telemetry
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Output Content -->
+        <div class="content">
+
+            <!-- Executive KPI Cards -->
+            <div class="metric-cards">
+                <div class="m-card">
+                    <span class="m-card-label">Diagnosed Root Cause</span>
+                    <span class="m-card-val" id="res-root-cause" style="color:var(--accent-red); font-size:1.15rem;">Awaiting Ingestion</span>
+                </div>
+                <div class="m-card">
+                    <span class="m-card-label">Arbiter Confidence</span>
+                    <span class="m-card-val" id="res-confidence" style="color:var(--accent-green);">--%</span>
+                </div>
+                <div class="m-card">
+                    <span class="m-card-label">Affected Devices</span>
+                    <span class="m-card-val" id="res-affected-count" style="color:var(--accent-yellow);">0</span>
+                </div>
+                <div class="m-card">
+                    <span class="m-card-label">Processing Time</span>
+                    <span class="m-card-val" id="res-duration" style="color:var(--accent-blue);">0.0 ms</span>
+                </div>
+            </div>
+
+            <!-- Tab Headers -->
+            <div class="tabs-header">
+                <button class="tab-btn active" onclick="switchTab('tab-pipeline')">1. Agent Collaboration Pipeline</button>
+                <button class="tab-btn" onclick="switchTab('tab-evidence')">2. Structured Evidence Audit</button>
+                <button class="tab-btn" onclick="switchTab('tab-topology')">3. Campus Topology & Blast Radius</button>
+                <button class="tab-btn" onclick="switchTab('tab-remediation')">4. Automated Remediation Simulator</button>
+                <button class="tab-btn" onclick="switchTab('tab-json')">5. Official JSON Report</button>
+            </div>
+
+            <!-- Tab 1: Agent Pipeline -->
+            <div id="tab-pipeline" class="tab-panel active">
+                <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:14px;">
+                    Parallel execution findings across the five specialized agents:
+                </div>
+                <div class="agent-grid" id="agent-findings-container">
+                    <div style="color:var(--text-secondary); font-size:0.85rem; grid-column:span 3; text-align:center; padding:30px;">
+                        Load a scenario and click "Run Multi-Agent Diagnosis" to visualize agent findings.
+                    </div>
+                </div>
+
+                <div class="section-title" style="margin-top:16px;">
+                    <span>Inter-Agent Typed Messaging Contract Log</span>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:20%;">Sender</th>
+                            <th style="width:20%;">Recipient</th>
+                            <th style="width:30%;">Message Type</th>
+                            <th style="width:30%;">Contract Payload</th>
+                        </tr>
+                    </thead>
+                    <tbody id="messages-table-body">
+                        <tr><td colspan="4" style="text-align:center; color:var(--text-secondary);">No active messages.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Tab 2: Evidence Audit -->
+            <div id="tab-evidence" class="tab-panel">
+                <div style="font-size:0.85rem; color:var(--text-secondary); margin-bottom:14px;">
+                    Deterministic evidence signals correlated to diagnostic root-cause hypothesis:
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:25%;">Telemetry Metric</th>
+                            <th style="width:20%;">Observed Value</th>
+                            <th style="width:55%;">Diagnostic Interpretation</th>
+                        </tr>
+                    </thead>
+                    <tbody id="evidence-table-body">
+                        <tr><td colspan="3" style="text-align:center; color:var(--text-secondary);">No diagnostic evidence yet.</td></tr>
+                    </tbody>
+                </table>
+
+                <div class="section-title" style="margin-top:20px;">
+                    <span>Recommended Corrective Playbook</span>
+                </div>
+                <ol id="playbook-list" style="font-size:0.88rem; line-height:1.6; padding-left:20px; color:var(--text-primary);">
+                    <li>Awaiting diagnosis...</li>
+                </ol>
+            </div>
+
+            <!-- Tab 3: Topology Graph & Cisco Packet Tracer Simulator -->
+            <div id="tab-topology" class="tab-panel">
+                <div class="cisco-toolbar">
+                    <span style="font-weight:700; font-size:0.85rem; color:#f8fafc; margin-right:6px;">Cisco Packet Tracer Tools:</span>
+                    <button class="cisco-btn" onclick="runPacketTraceAnimation()">
+                        <span>⚡ Run Packet Flow (Traceroute / Ping)</span>
+                    </button>
+                    <button class="cisco-btn" onclick="openCiscoTerminal('IITBBS-SW-MHR')">
+                        <span>💻 Cisco IOS CLI Console</span>
+                    </button>
+                    <button class="cisco-btn" onclick="toggleWiresharkPane()">
+                        <span>📡 Wireshark Packet Inspection</span>
+                    </button>
+                    <span style="font-size:0.75rem; color:#64748b; margin-left:auto;">Click any node to inspect Cisco Catalyst hardware</span>
+                </div>
+
+                <!-- Packet Tracer Flow Animation Box -->
+                <div class="packet-trace-box" id="packet-trace-box">
+                    <div class="packet-trace-header">
+                        <span><strong>Packet Simulation:</strong> ICMP Echo Probe from <code>HOSTEL-USER-01 (10.10.4.15)</code> &rarr; <code>IITBBS-CORE-SW-01 (10.0.0.1)</code></span>
+                        <span id="trace-status-badge" class="badge badge-green">SIMULATING...</span>
+                    </div>
+                    <div class="hop-grid">
+                        <div class="hop-card" id="hop-1">
+                            <div style="font-weight:700; color:#38bdf8; margin-bottom:2px;">Hop 1: Wi-Fi Access</div>
+                            <div>AP-MHR-W1 (802.11ax)</div>
+                            <div style="color:#94a3b8; font-size:0.7rem; margin-top:4px;" id="hop-1-metric">Delay: 1.8ms | RSSI: -58dBm</div>
+                        </div>
+                        <div class="hop-card" id="hop-2">
+                            <div style="font-weight:700; color:#38bdf8; margin-bottom:2px;">Hop 2: Building Switch</div>
+                            <div>IITBBS-SW-MHR (1G/10G)</div>
+                            <div style="color:#94a3b8; font-size:0.7rem; margin-top:4px;" id="hop-2-metric">Delay: 2.1ms | Drops: 0</div>
+                        </div>
+                        <div class="hop-card" id="hop-3">
+                            <div style="font-weight:700; color:#38bdf8; margin-bottom:2px;">Hop 3: Distribution Switch</div>
+                            <div>IITBBS-DIST-HOSTELS (40G)</div>
+                            <div style="color:#94a3b8; font-size:0.7rem; margin-top:4px;" id="hop-3-metric">Delay: 3.4ms | Loss: 0%</div>
+                        </div>
+                        <div class="hop-card" id="hop-4">
+                            <div style="font-weight:700; color:#38bdf8; margin-bottom:2px;">Hop 4: Datacenter Core</div>
+                            <div>IITBBS-CORE-SW-01 (100G)</div>
+                            <div style="color:#94a3b8; font-size:0.7rem; margin-top:4px;" id="hop-4-metric">RTT: 7.3ms [ACK Received]</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Wireshark Packet Inspection Table -->
+                <div id="wireshark-box" style="display:none; background:#080d1a; border:1px solid #1e293b; border-radius:8px; padding:12px; margin-bottom:14px;">
+                    <div style="font-weight:700; font-size:0.8rem; color:#93c5fd; margin-bottom:8px; display:flex; justify-content:space-between;">
+                        <span>Wireshark Live Packet Capture (Campus Network TAP)</span>
+                        <span style="font-size:0.72rem; color:#64748b;">Filter: ip.addr == 10.10.4.0/24</span>
+                    </div>
+                    <table style="font-size:0.75rem; font-family:monospace;">
+                        <thead>
+                            <tr style="background:#0f172a; color:#94a3b8;">
+                                <th>No.</th><th>Time</th><th>Source</th><th>Destination</th><th>Proto</th><th>Len</th><th>Info</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="color:#67e8f9;"><td>101</td><td>0.0000</td><td>10.10.4.15</td><td>10.0.0.1</td><td>ICMP</td><td>74</td><td>Echo (ping) request  id=0x1402 seq=1 ttl=64</td></tr>
+                            <tr style="color:#67e8f9;"><td>102</td><td>0.0042</td><td>10.0.0.1</td><td>10.10.4.15</td><td>ICMP</td><td>74</td><td>Echo (ping) reply    id=0x1402 seq=1 ttl=64</td></tr>
+                            <tr style="color:#93c5fd;"><td>103</td><td>0.0125</td><td>10.10.4.15</td><td>10.0.0.53</td><td>DNS</td><td>68</td><td>Standard query 0x8a21 A iitbbs.ac.in</td></tr>
+                            <tr style="color:#93c5fd;"><td>104</td><td>0.0141</td><td>10.0.0.53</td><td>10.10.4.15</td><td>DNS</td><td>84</td><td>Standard query response 0x8a21 A 14.139.211.2</td></tr>
+                            <tr style="color:#86efac;"><td>105</td><td>0.0210</td><td>0.0.0.0</td><td>255.255.255.255</td><td>DHCP</td><td>342</td><td>DHCP Discover - Transaction ID 0x39a12b</td></tr>
+                            <tr style="color:#cbd5e1;"><td>106</td><td>0.0354</td><td>10.10.4.15</td><td>10.0.0.1</td><td>TCP</td><td>66</td><td>54210 &rarr; 443 [SYN] Seq=0 Win=64240 MSS=1460</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="topo-box" id="topology-viewer">
+                    <!-- Tier 1: Core -->
+                    <div class="topo-tier">
+                        <div class="topo-node root-core" id="node-IITBBS-CORE-SW-01" onclick="openCiscoTerminal('IITBBS-CORE-SW-01')">
+                            IITBBS-CORE-SW-01<br><span style="font-size:0.65rem; color:#93c5fd;">Datacenter Core (100G)</span>
+                        </div>
+                    </div>
+                    <!-- Tier 2: Distribution -->
+                    <div class="topo-tier">
+                        <div class="topo-node" id="node-IITBBS-DIST-ACADEMIC" onclick="openCiscoTerminal('IITBBS-DIST-ACADEMIC')">
+                            IITBBS-DIST-ACADEMIC<br><span style="font-size:0.65rem; color:#94a3b8;">Academic Dist (40G)</span>
+                        </div>
+                        <div class="topo-node" id="node-IITBBS-DIST-HOSTELS" onclick="openCiscoTerminal('IITBBS-DIST-HOSTELS')">
+                            IITBBS-DIST-HOSTELS<br><span style="font-size:0.65rem; color:#94a3b8;">Hostels Dist (40G)</span>
+                        </div>
+                    </div>
+                    <!-- Tier 3: Building Switches -->
+                    <div class="topo-tier">
+                        <div class="topo-node" id="node-IITBBS-SW-SES" onclick="openCiscoTerminal('IITBBS-SW-SES')">
+                            IITBBS-SW-SES<br><span style="font-size:0.65rem; color:#94a3b8;">Electrical Sciences</span>
+                        </div>
+                        <div class="topo-node" id="node-IITBBS-SW-LHC" onclick="openCiscoTerminal('IITBBS-SW-LHC')">
+                            IITBBS-SW-LHC<br><span style="font-size:0.65rem; color:#94a3b8;">Lecture Halls</span>
+                        </div>
+                        <div class="topo-node" id="node-IITBBS-SW-MHR" onclick="openCiscoTerminal('IITBBS-SW-MHR')">
+                            IITBBS-SW-MHR<br><span style="font-size:0.65rem; color:#94a3b8;">Mahanadi Hostel</span>
+                        </div>
+                        <div class="topo-node" id="node-IITBBS-SW-SHR" onclick="openCiscoTerminal('IITBBS-SW-SHR')">
+                            IITBBS-SW-SHR<br><span style="font-size:0.65rem; color:#94a3b8;">Subarnarekha Hostel</span>
+                        </div>
+                    </div>
+                    <!-- Tier 4: Access Points -->
+                    <div class="topo-tier">
+                        <div class="topo-node" id="node-AP-SES-01" onclick="openCiscoTerminal('AP-SES-01')">AP-SES-01</div>
+                        <div class="topo-node" id="node-AP-LHC-01" onclick="openCiscoTerminal('AP-LHC-01')">AP-LHC-01</div>
+                        <div class="topo-node" id="node-AP-MHR-W1" onclick="openCiscoTerminal('AP-MHR-W1')">AP-MHR-W1</div>
+                        <div class="topo-node" id="node-AP-SHR-W1" onclick="openCiscoTerminal('AP-SHR-W1')">AP-SHR-W1</div>
+                        <div class="topo-node" id="node-AP-HOSTEL-A1" onclick="openCiscoTerminal('AP-HOSTEL-A1')">AP-HOSTEL-A1</div>
+                        <div class="topo-node" id="node-AP-HOSTEL-B2" onclick="openCiscoTerminal('AP-HOSTEL-B2')">AP-HOSTEL-B2</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cisco IOS CLI Console Modal -->
+            <div id="cisco-terminal-modal" class="cisco-modal">
+                <div class="cisco-modal-content">
+                    <div class="cisco-terminal-bar">
+                        <span id="cisco-terminal-title">Cisco IOS XE Terminal &mdash; IITBBS-SW-MHR (Catalyst 9200)</span>
+                        <button onclick="closeCiscoTerminal()" style="background:transparent; border:none; color:#ef4444; font-weight:700; font-size:1.1rem; cursor:pointer;">&times;</button>
+                    </div>
+                    <div class="cisco-cmd-bar">
+                        <span style="font-size:0.75rem; color:#94a3b8; align-self:center;">Quick Exec:</span>
+                        <button class="cisco-cmd-btn" onclick="execCiscoCmd('show_interfaces')">show interfaces</button>
+                        <button class="cisco-cmd-btn" onclick="execCiscoCmd('show_logging')">show logging</button>
+                        <button class="cisco-cmd-btn" onclick="execCiscoCmd('traceroute')">traceroute Core</button>
+                        <button class="cisco-cmd-btn" onclick="execCiscoCmd('show_version')">show version</button>
+                    </div>
+                    <div class="cisco-terminal-body" id="cisco-terminal-output">
+                        Connecting to switch console...
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 4: Remediation Simulator -->
+            <div id="tab-remediation" class="tab-panel">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+                    <div>
+                        <span style="font-weight:700; font-size:1rem; color:var(--accent-blue);">Automated Remediation Simulator (Safe Dry-Run)</span>
+                        <div style="font-size:0.8rem; color:var(--text-secondary);">Simulates corrective engineering actions without modifying live campus infrastructure (Page 3).</div>
+                    </div>
+                    <button class="btn btn-secondary" onclick="simulateHITLApproval()">Simulate Operator HITL Approval</button>
+                </div>
+                <div id="remediation-actions-container">
+                    <div style="color:var(--text-secondary); font-size:0.85rem; padding:20px; text-align:center;">
+                        Run a diagnosis to generate a simulated remediation plan.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tab 5: Official JSON Report -->
+            <div id="tab-json" class="tab-panel">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+                    <span style="font-size:0.85rem; color:var(--text-secondary);">Unified Network Incident Diagnosis Report:</span>
+                    <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                        <button class="btn btn-secondary" onclick="copyJSON()">📋 Copy JSON</button>
+                        <button class="btn btn-secondary" onclick="downloadJSON()">⬇ Download JSON</button>
+                        <button class="btn btn-secondary" onclick="downloadMarkdownBrief()">📝 Download Executive Brief (.md)</button>
+                        <button class="btn btn-secondary" onclick="exportPDF()">📄 Print / Save as PDF</button>
+                    </div>
+                </div>
+                <pre class="json-viewer" id="json-viewer">{\n  "status": "awaiting_diagnosis"\n}</pre>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        let currentResult = null;
+
+        async function init() {
+            try {
+                const resp = await fetch('/api/scenarios');
+                const data = await resp.json();
+                const sel = document.getElementById('scenario-select');
+                data.scenarios.forEach(s => {
+                    const opt = document.createElement('option');
+                    opt.value = s.filename;
+                    opt.textContent = `${s.id}: ${s.description}`;
+                    sel.appendChild(opt);
+                });
+
+                // Default load scenario 2 congestion
+                if (data.scenarios.length > 1) {
+                    sel.value = "scenario_2_congestion.json";
+                    await loadScenario();
+                }
+            } catch (e) {
+                console.error("Init failed:", e);
+            }
+        }
+
+        async function loadScenario() {
+            const filename = document.getElementById('scenario-select').value;
+            if (!filename) return;
+            const resp = await fetch(`/api/scenario/${filename}`);
+            const data = await resp.json();
+            document.getElementById('telemetry-editor').value = JSON.stringify(data.telemetry || data, null, 2);
+        }
+
+        function formatJSON() {
+            try {
+                const ed = document.getElementById('telemetry-editor');
+                const parsed = JSON.parse(ed.value);
+                ed.value = JSON.stringify(parsed, null, 2);
+            } catch(e) {
+                alert("Invalid JSON: " + e.message);
+            }
+        }
+
+        async function generateSyntheticTelemetry() {
+            const sc = document.getElementById('synth-scenario-select').value;
+            const resp = await fetch('/api/generate-synthetic', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ scenario: sc, schema_version: "V1", noise: 0.05 })
+            });
+            const data = await resp.json();
+            document.getElementById('telemetry-editor').value = JSON.stringify(data.telemetry, null, 2);
+            alert(`Generated synthetic telemetry for ${sc.toUpperCase()}. Click 'Run Multi-Agent Diagnosis' to analyze!`);
+        }
+
+        async function runDiagnosis() {
+            const runBtn = document.getElementById('run-btn');
+            runBtn.disabled = true;
+            runBtn.innerText = "Analyzing Telemetry...";
+
+            try {
+                const raw = document.getElementById('telemetry-editor').value;
+                const schemaVer = document.getElementById('schema-version-select').value;
+                const parsed = JSON.parse(raw);
+
+                const resp = await fetch('/api/diagnose', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({ telemetry: parsed, schema_version: schemaVer })
+                });
+
+                if (!resp.ok) {
+                    let errMsg = `Server returned HTTP ${resp.status}`;
+                    try {
+                        const errJson = await resp.json();
+                        if (errJson.error) errMsg += `: ${errJson.error}`;
+                    } catch (_) {
+                        const text = await resp.text();
+                        if (text) errMsg += `: ${text}`;
+                    }
+                    throw new Error(errMsg);
+                }
+
+                currentResult = await resp.json();
+                renderResults(currentResult);
+            } catch (e) {
+                alert("Diagnosis execution failed: " + e.message);
+            } finally {
+                runBtn.disabled = false;
+                runBtn.innerText = "Run Multi-Agent Diagnosis";
+            }
+        }
+
+        function renderResults(data) {
+            const rep = data.report;
+            document.getElementById('res-root-cause').innerText = rep.suspected_root_cause;
+            document.getElementById('res-confidence').innerText = `${Math.round(rep.confidence * 100)}%`;
+            document.getElementById('res-affected-count').innerText = rep.affected_devices ? rep.affected_devices.length : 0;
+            document.getElementById('res-duration').innerText = `${data.duration_ms} ms`;
+
+            // Render JSON viewer
+            document.getElementById('json-viewer').innerText = JSON.stringify(rep, null, 2);
+
+            // Render Evidence Table
+            const evBody = document.getElementById('evidence-table-body');
+            evBody.innerHTML = '';
+            if (rep.supporting_evidence && rep.supporting_evidence.length > 0) {
+                rep.supporting_evidence.forEach(ev => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td class="code-cell">${ev.metric}</td>
+                        <td><code>${typeof ev.value === 'object' ? JSON.stringify(ev.value) : ev.value}</code></td>
+                        <td>${ev.interpretation}</td>
+                    `;
+                    evBody.appendChild(row);
+                });
+            } else {
+                evBody.innerHTML = '<tr><td colspan="3" style="text-align:center;">Nominal operation; no active anomaly evidence.</td></tr>';
+            }
+
+            // Render Playbook
+            const pbList = document.getElementById('playbook-list');
+            pbList.innerHTML = '';
+            rep.recommended_actions.forEach(act => {
+                const li = document.createElement('li');
+                li.innerText = act;
+                pbList.appendChild(li);
+            });
+
+            // Render Agent Findings
+            const agCont = document.getElementById('agent-findings-container');
+            agCont.innerHTML = '';
+            data.agent_findings.forEach(f => {
+                const card = document.createElement('div');
+                card.className = 'agent-card';
+                card.innerHTML = `
+                    <div class="agent-card-title">
+                        <span>${f.agent_name}</span>
+                        <span class="badge ${f.overall_severity === 'CRITICAL' ? 'badge-red' : f.overall_severity === 'WARNING' ? 'badge-yellow' : 'badge-green'}">${f.overall_severity}</span>
+                    </div>
+                    <div style="font-size:0.75rem; color:#93c5fd; margin-bottom:4px;">Device: ${f.device_id}</div>
+                    <div style="font-size:0.75rem; color:var(--text-secondary);">Issues: ${f.suspected_issues.length > 0 ? f.suspected_issues.join(', ') : 'None'}</div>
+                    <div style="font-size:0.72rem; color:#64748b; margin-top:6px;">Evidence Count: ${f.evidence.length}</div>
+                `;
+                agCont.appendChild(card);
+            });
+
+            // Render Inter-Agent Messages
+            const msgBody = document.getElementById('messages-table-body');
+            msgBody.innerHTML = '';
+            data.agent_messages.forEach(m => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td style="color:#4ade80; font-weight:600;">${m.sender}</td>
+                    <td style="color:#fbbf24; font-weight:600;">${m.recipient}</td>
+                    <td class="code-cell">${m.message_type}</td>
+                    <td><code>${JSON.stringify(m.payload)}</code></td>
+                `;
+                msgBody.appendChild(row);
+            });
+
+            // Highlight Topology
+            document.querySelectorAll('.topo-node').forEach(n => n.classList.remove('affected'));
+            if (rep.affected_devices) {
+                rep.affected_devices.forEach(dev => {
+                    const el = document.getElementById(`node-${dev}`);
+                    if (el) el.classList.add('affected');
+                });
+            }
+
+            // Render Remediation Simulation
+            const simCont = document.getElementById('remediation-actions-container');
+            simCont.innerHTML = '';
+            const rem = data.remediation_simulation;
+            if (rem && rem.actions) {
+                rem.actions.forEach(a => {
+                    const card = document.createElement('div');
+                    card.className = 'sim-card';
+                    card.innerHTML = `
+                        <div style="display:flex; justify-content:space-between; font-weight:700; color:#38bdf8; margin-bottom:4px;">
+                            <span>${a.action_id} — ${a.action_type}</span>
+                            <span class="badge badge-blue">${a.safety_level}</span>
+                        </div>
+                        <div style="font-size:0.8rem; color:#94a3b8; margin-bottom:4px;">Target Device: <strong>${a.target_device}</strong></div>
+                        <div style="font-size:0.82rem; color:#cbd5e1;">${a.rationale}</div>
+                        <div class="cli-code">${a.simulated_cli_command}</div>
+                    `;
+                    simCont.appendChild(card);
+                });
+            }
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        function copyJSON() {
+            if (!currentResult) return;
+            navigator.clipboard.writeText(JSON.stringify(currentResult.report, null, 2));
+            alert("Copied Unified Incident Report JSON to clipboard!");
+        }
+
+        function downloadJSON() {
+            if (!currentResult) return;
+            const blob = new Blob([JSON.stringify(currentResult.report, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `incident_report_${currentResult.report.incident_id}.json`;
+            a.click();
+        }
+
+        function downloadMarkdownBrief() {
+            if (!currentResult) return;
+            const brief = currentResult.markdown_summary || "# Incident Diagnostic Brief\nAwaiting execution.";
+            const blob = new Blob([brief], { type: 'text/markdown;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `incident_brief_${currentResult.report.incident_id}.md`;
+            a.click();
+        }
+
+        function exportPDF() {
+            window.print();
+        }
+
+        function simulateHITLApproval() {
+            alert("Human-in-the-Loop Operator Confirmation Approved!\nSimulated remediation playbooks dispatched safely to staging sandbox.");
+        }
+
+        /* Cisco Packet Tracer & Live Terminal Logic */
+        let activeCiscoDeviceData = null;
+
+        function generateClientCiscoCLI(deviceId) {
+            let model = "Cisco Catalyst 9200-48P Enterprise Switch";
+            let intf = "GigabitEthernet1/0/1";
+            let speed = "1000000 Kbit/sec";
+            if (deviceId.includes("CORE")) {
+                model = "Cisco Catalyst 9500-48Y4C (100G/40G Datacenter Core)";
+                intf = "TenGigabitEthernet1/1/1";
+                speed = "100000000 Kbit/sec";
+            } else if (deviceId.includes("DIST")) {
+                model = "Cisco Catalyst 9300-48UXM (40G Distribution Switch)";
+                intf = "TenGigabitEthernet1/0/1";
+                speed = "40000000 Kbit/sec";
+            } else if (deviceId.includes("AP")) {
+                model = "Cisco Catalyst 9130AX Series Wi-Fi 6 AP";
+                intf = "GigabitEthernet0";
+                speed = "2500000 Kbit/sec";
+            }
+
+            const isAnomalous = currentResult && currentResult.report && currentResult.report.suspected_root_cause !== 'NORMAL_OPERATION';
+            const rootCause = currentResult ? currentResult.report.suspected_root_cause : 'NORMAL_OPERATION';
+            const isMHR = deviceId.includes("MHR");
+
+            const crc_errors = (isMHR && rootCause === 'HARDWARE_FAILURE') ? 740 : 0;
+            const queue_drops = (isMHR && rootCause === 'LINK_CONGESTION') ? 145 : 0;
+            const latency_val = isMHR ? 185.0 : 8.2;
+
+            return {
+                device_id: deviceId,
+                model: model,
+                interface_name: intf,
+                crc_errors: crc_errors,
+                queue_drops: queue_drops,
+                cli_output: {
+                    show_interfaces: `${deviceId}# show interfaces ${intf}\n` +
+                        `${intf} is up, line protocol is up (connected)\n` +
+                        `  Hardware is Ethernet, address is 001a.a420.7f01\n` +
+                        `  Description: NetCoop AI Monitored Uplink Interface\n` +
+                        `  MTU 1500 bytes, BW ${speed}, DLY 10 usec,\n` +
+                        `     reliability 255/255, txload 185/255, rxload 140/255\n` +
+                        `  Encapsulation ARPA, loopback not set\n` +
+                        `  Full-duplex, 10Gb/s, media type is SFP-10G-SR\n` +
+                        `  Queueing strategy: fifo\n` +
+                        `  Output queue: ${queue_drops}/40 (size/max), ${queue_drops} total drops\n` +
+                        `  5 minute input rate 45200000 bits/sec, 5840 packets/sec\n` +
+                        `  5 minute output rate 98400000 bits/sec, 12600 packets/sec\n` +
+                        `     14820921 packets input, 1289401290 bytes, 0 no buffer\n` +
+                        `     ${crc_errors} input errors, ${crc_errors} CRC, 0 frame, 0 overrun, 0 ignored\n` +
+                        `     28401928 packets output, 2840192800 bytes, 0 output errors`,
+                    show_logging: `${deviceId}# show logging | include ${intf}\n` +
+                        `%LINK-3-UPDOWN: Interface ${intf}, changed state to up\n` +
+                        `%LINEPROTO-5-UPDOWN: Line protocol on Interface ${intf}, changed state to up\n` +
+                        (queue_drops > 0 ? `%ETH-5-TAIL_DROP: Output queue overflow on ${intf}: ${queue_drops} packets dropped\n` : '') +
+                        (crc_errors > 0 ? `%SYS-4-CRC_ALERT: Physical layer CRC threshold exceeded on ${intf}: ${crc_errors} frame check errors\n` : ''),
+                    traceroute: `${deviceId}# traceroute IITBBS-CORE-SW-01\n` +
+                        `Type escape sequence to abort.\n` +
+                        `Tracing the route to IITBBS-CORE-SW-01 (10.0.0.1)\n` +
+                        `  1 ${deviceId} (Local Gateway) 0.812 msec\n` +
+                        `  2 IITBBS-DIST-HOSTELS (10.10.0.1) 3.421 msec\n` +
+                        `  3 IITBBS-CORE-SW-01 (10.0.0.1) ${latency_val} msec [RTT Measured]`,
+                    show_version: `${deviceId}# show version\n` +
+                        `Cisco IOS XE Software, Version 17.09.04a\n` +
+                        `Cisco IOS Software [Cupertino], Catalyst L3 Switch Software\n` +
+                        `ROM: IOS-XE ROMMON\n` +
+                        `${deviceId} uptime is 42 days, 14 hours, 28 minutes\n` +
+                        `cisco ${model} with 4194304K/2097152K bytes of memory.\n` +
+                        `Processor board ID FOC2419U09K`
+                }
+            };
+        }
+
+        async function openCiscoTerminal(deviceId) {
+            const modal = document.getElementById('cisco-terminal-modal');
+            const title = document.getElementById('cisco-terminal-title');
+            const output = document.getElementById('cisco-terminal-output');
+
+            title.innerText = `Connecting to ${deviceId} console...`;
+            output.innerText = `Connecting to switch console via Telnet/SSH port 22...\nEstablishing secure session to ${deviceId}...`;
+            modal.style.display = 'flex';
+
+            try {
+                const resp = await fetch(`/api/device-cli/${deviceId}`);
+                if (resp.ok) {
+                    const data = await resp.json();
+                    if (data && data.cli_output) {
+                        activeCiscoDeviceData = data;
+                    } else {
+                        activeCiscoDeviceData = generateClientCiscoCLI(deviceId);
+                    }
+                } else {
+                    activeCiscoDeviceData = generateClientCiscoCLI(deviceId);
+                }
+            } catch (err) {
+                activeCiscoDeviceData = generateClientCiscoCLI(deviceId);
+            }
+
+            title.innerText = `Cisco IOS XE Terminal — ${activeCiscoDeviceData.device_id} (${activeCiscoDeviceData.model})`;
+            output.innerText = activeCiscoDeviceData.cli_output.show_interfaces;
+        }
+
+        function closeCiscoTerminal() {
+            document.getElementById('cisco-terminal-modal').style.display = 'none';
+        }
+
+        window.addEventListener('click', function(e) {
+            const modal = document.getElementById('cisco-terminal-modal');
+            if (e.target === modal) {
+                closeCiscoTerminal();
+            }
+        });
+
+        function execCiscoCmd(cmdKey) {
+            const output = document.getElementById('cisco-terminal-output');
+            if (!activeCiscoDeviceData || !activeCiscoDeviceData.cli_output[cmdKey]) {
+                output.innerText += `\n% Command '${cmdKey}' executed.\n`;
+                return;
+            }
+            output.innerText = activeCiscoDeviceData.cli_output[cmdKey];
+        }
+
+        function toggleWiresharkPane() {
+            const el = document.getElementById('wireshark-box');
+            el.style.display = (el.style.display === 'none' || el.style.display === '') ? 'block' : 'none';
+        }
+
+        function runPacketTraceAnimation() {
+            const box = document.getElementById('packet-trace-box');
+            box.style.display = 'block';
+
+            const badge = document.getElementById('trace-status-badge');
+            const h1 = document.getElementById('hop-1');
+            const h2 = document.getElementById('hop-2');
+            const h3 = document.getElementById('hop-3');
+            const h4 = document.getElementById('hop-4');
+
+            // Reset
+            [h1, h2, h3, h4].forEach(h => {
+                h.className = 'hop-card';
+            });
+            badge.className = 'badge badge-yellow';
+            badge.innerText = 'TRANSMITTING HOP 1...';
+
+            const isAnomalous = currentResult && currentResult.report && currentResult.report.suspected_root_cause !== 'NORMAL_OPERATION';
+            const rootCause = currentResult ? currentResult.report.suspected_root_cause : 'NORMAL_OPERATION';
+
+            // Hop 1: Wi-Fi Access
+            setTimeout(() => {
+                h1.className = 'hop-card active-hop';
+                badge.innerText = 'HOP 1 (AP-MHR-W1) &rarr; FORWARDING...';
+                if (rootCause === 'WEAK_WIFI') {
+                    h1.className = 'hop-card dropped-hop';
+                    document.getElementById('hop-1-metric').innerText = 'Delay: 64.2ms | RSSI: -86dBm (ATTENUATED)';
+                }
+            }, 500);
+
+            // Hop 2: Building Switch
+            setTimeout(() => {
+                h2.className = 'hop-card active-hop';
+                badge.innerText = 'HOP 2 (IITBBS-SW-MHR) &rarr; QUEUING...';
+                if (rootCause === 'LINK_CONGESTION') {
+                    h2.className = 'hop-card dropped-hop';
+                    document.getElementById('hop-2-metric').innerText = 'Delay: 185.0ms | Drops: 145 (BUFFERBLOAT)';
+                } else if (rootCause === 'HARDWARE_FAILURE') {
+                    h2.className = 'hop-card dropped-hop';
+                    document.getElementById('hop-2-metric').innerText = 'Delay: 142.0ms | CRC Errors: 740 (FCS DROP)';
+                }
+            }, 1200);
+
+            // Hop 3: Distribution Switch
+            setTimeout(() => {
+                h3.className = 'hop-card active-hop';
+                badge.innerText = 'HOP 3 (IITBBS-DIST-HOSTELS) &rarr; ROUTING...';
+            }, 1900);
+
+            // Hop 4: Datacenter Core
+            setTimeout(() => {
+                h4.className = 'hop-card active-hop';
+                if (isAnomalous) {
+                    badge.className = 'badge badge-red';
+                    badge.innerText = `CONGESTION / DEGRADATION DETECTED (${rootCause})`;
+                } else {
+                    badge.className = 'badge badge-green';
+                    badge.innerText = 'DELIVERED (RTT: 7.3ms)';
+                }
+            }, 2600);
+        }
+
+        window.onload = init;
+    </script>
+</body>
+</html>

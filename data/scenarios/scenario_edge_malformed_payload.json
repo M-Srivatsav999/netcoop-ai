@@ -1,0 +1,17 @@
+{
+  "scenario_id": "SCENARIO_EDGE_MALFORMED_PAYLOAD",
+  "description": "Corrupted non-numeric values, empty strings, and missing attributes to test safe error recovery.",
+  "telemetry": [
+    {
+      "device_id": "CORRUPT-NODE-01",
+      "timestamp": "invalid_date_format",
+      "status": "UNKNOWN",
+      "metrics": {
+        "latency_ms": "NaN",
+        "packet_loss_pct": "not_a_number",
+        "cpu_pct": null,
+        "interface_errors": "corrupt"
+      }
+    }
+  ]
+}

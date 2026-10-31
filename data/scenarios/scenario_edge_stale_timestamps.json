@@ -1,0 +1,20 @@
+{
+  "scenario_id": "SCENARIO_EDGE_STALE_TIMESTAMPS",
+  "description": "Telemetry snapshot captured 24 hours prior to verify staleness penalty and uncertainty logging.",
+  "telemetry": [
+    {
+      "device_id": "CORE-SW-01",
+      "timestamp": "2026-10-30T12:00:00Z",
+      "status": "HEALTHY",
+      "metrics": {
+        "latency_ms": 15.0,
+        "packet_loss_pct": 0.0,
+        "throughput_mbps": 900.0,
+        "cpu_pct": 25.0,
+        "memory_pct": 40.0,
+        "queue_drops": 0,
+        "interface_errors": 0
+      }
+    }
+  ]
+}

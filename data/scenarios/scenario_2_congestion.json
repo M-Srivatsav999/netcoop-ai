@@ -1,0 +1,37 @@
+{
+  "scenario_id": "SCENARIO_2_CONGESTION",
+  "description": "V2 Schema payload: Link congestion with high latency, queue drops, and packet loss with zero physical CRC errors.",
+  "telemetry": [
+    {
+      "host_id": "BLDG-SW-ENG",
+      "epoch_timestamp": 1793448000,
+      "status": "WARNING",
+      "metrics": {
+        "latency_sec": 0.185,
+        "jitter_s": 0.038,
+        "packet_loss_ratio": 0.052,
+        "throughput_bps": 9850000000,
+        "cpu_utilization_ratio": 0.68,
+        "memory_utilization_ratio": 0.74,
+        "queue_drops": 145,
+        "crc_errors": 0
+      }
+    },
+    {
+      "host_id": "AP-ENG-01",
+      "epoch_timestamp": 1793448000,
+      "status": "WARNING",
+      "metrics": {
+        "latency_sec": 0.210,
+        "jitter_s": 0.042,
+        "packet_loss_ratio": 0.048,
+        "throughput_bps": 12000000,
+        "cpu_utilization_ratio": 0.45,
+        "memory_utilization_ratio": 0.55,
+        "queue_drops": 60,
+        "crc_errors": 0,
+        "rssi_dbm": -60.0
+      }
+    }
+  ]
+}

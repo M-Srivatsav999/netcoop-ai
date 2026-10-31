@@ -1,0 +1,62 @@
+# ============================================================
+# NetCoop AI — .gitignore
+# ============================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+*.log
+*.egg-info/
+dist/
+build/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# Investigation Session Store Cache
+.session_store/
+
+# Environment / secrets
+.env
+.env.local
+.env*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Generated output (keep the video and report out of git)
+netcoop_ai_demo.mp4
+report.html
+evaluation_results.json
+
+# ============================================================
+# Legacy GapFinder / Next.js artifacts — NOT part of this project
+# ============================================================
+/app/
+/components/
+/lib/
+/prisma/
+/node_modules/
+/.next/
+/out/
+package.json
+package-lock.json
+next.config.mjs
+next-env.d.ts
+postcss.config.js
+tailwind.config.ts
+tsconfig.json
+*.tsbuildinfo

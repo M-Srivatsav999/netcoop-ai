@@ -1,0 +1,67 @@
+{
+  "scenario_id": "SCENARIO_1_NORMAL",
+  "description": "Baseline nominal campus operation across Core, Distribution, Building, and AP tiers.",
+  "telemetry": [
+    {
+      "device_id": "CORE-SW-01",
+      "timestamp": "2026-10-31T12:00:00Z",
+      "status": "HEALTHY",
+      "metrics": {
+        "latency_ms": 2.4,
+        "jitter_ms": 0.4,
+        "packet_loss_pct": 0.0,
+        "throughput_mbps": 940.0,
+        "cpu_pct": 22.0,
+        "memory_pct": 35.0,
+        "queue_drops": 0,
+        "interface_errors": 0
+      }
+    },
+    {
+      "device_id": "DIST-SW-NORTH",
+      "timestamp": "2026-10-31T12:00:00Z",
+      "status": "HEALTHY",
+      "metrics": {
+        "latency_ms": 6.8,
+        "jitter_ms": 1.1,
+        "packet_loss_pct": 0.0,
+        "throughput_mbps": 420.0,
+        "cpu_pct": 28.0,
+        "memory_pct": 42.0,
+        "queue_drops": 0,
+        "interface_errors": 0
+      }
+    },
+    {
+      "device_id": "BLDG-SW-ENG",
+      "timestamp": "2026-10-31T12:00:00Z",
+      "status": "HEALTHY",
+      "metrics": {
+        "latency_ms": 11.2,
+        "jitter_ms": 1.8,
+        "packet_loss_pct": 0.0,
+        "throughput_mbps": 185.0,
+        "cpu_pct": 34.0,
+        "memory_pct": 48.0,
+        "queue_drops": 0,
+        "interface_errors": 0
+      }
+    },
+    {
+      "device_id": "AP-ENG-01",
+      "timestamp": "2026-10-31T12:00:00Z",
+      "status": "HEALTHY",
+      "metrics": {
+        "latency_ms": 18.5,
+        "jitter_ms": 3.2,
+        "packet_loss_pct": 0.0,
+        "throughput_mbps": 72.0,
+        "cpu_pct": 31.0,
+        "memory_pct": 52.0,
+        "queue_drops": 0,
+        "interface_errors": 0,
+        "signal_strength_dbm": -58.0
+      }
+    }
+  ]
+}
