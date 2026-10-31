@@ -42,6 +42,7 @@ Thumbs.db
 netcoop_ai_demo.mp4
 report.html
 evaluation_results.json
+*.zip
 
 # ============================================================
 # Legacy GapFinder / Next.js artifacts — NOT part of this project
