@@ -92,6 +92,21 @@ def main() -> int:
         action="store_true",
         help="Execute the complete evaluation suite across all hackathon scenarios."
     )
+    parser.add_argument(
+        "--benchmark",
+        action="store_true",
+        help="Execute the 700-case scientific benchmark with multiclass Brier score and reliability diagram."
+    )
+    parser.add_argument(
+        "--held-out",
+        action="store_true",
+        help="Execute the 210-case held-out generalization benchmark across unseen campus topologies."
+    )
+    parser.add_argument(
+        "--verify-all",
+        action="store_true",
+        help="Execute comprehensive end-to-end competition audit across all test suites and benchmarks."
+    )
 
     args = parser.parse_args()
 
@@ -130,6 +145,22 @@ def main() -> int:
         print(f"Failed: {summary['failed']}")
         print(f"Pass Rate: {summary['pass_rate']}%")
         return 0 if summary["failed"] == 0 else 1
+
+    if args.benchmark:
+        from evaluation.benchmark_runner import BenchmarkRunner
+        runner = BenchmarkRunner(cases_per_class=100)
+        runner.run_full_benchmark()
+        return 0
+
+    if args.held_out:
+        from evaluation.held_out_benchmark import HeldOutBenchmarkRunner
+        runner = HeldOutBenchmarkRunner(cases_per_class=30)
+        runner.run_held_out_benchmark()
+        return 0
+
+    if args.verify_all:
+        import verify_all
+        return verify_all.main()
 
     # Ingestion source
     raw_payload = None
