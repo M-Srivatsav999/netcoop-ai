@@ -146,19 +146,33 @@ class CorrelationAgent:
         else:
             overall_completeness = 0.0
 
-        # Insufficient Evidence Gatekeeper:
-        # If no positive net score, or confidence is below minimum threshold, or completeness is critically low
-        # and not a clear normal network
+        # Insufficient Evidence Gatekeeper — ordered by severity:
+
+        # 1. Critically stale: data > 7200s old with no detected anomalies.
+        #    Asserting NORMAL from day-old data is worse than admitting uncertainty.
+        STALE_THRESHOLD_S = 7200.0
+        critically_stale = (staleness_seconds > STALE_THRESHOLD_S and not all_anomalous_devices)
+
+        # 2. Critically sparse: < 20% completeness with no detected anomalies.
+        critically_sparse = (overall_completeness < 0.20 and not all_anomalous_devices)
+
         is_normal_net = (top_target == HypothesisType.NORMAL_OPERATION.value and not all_anomalous_devices)
-        
+
         uncertainties: List[str] = list(top_data.get("uncertainty_factors", []))
         limitations: List[str] = list(top_data.get("limitations", []))
         limitations.append(f"Topological context: {topo_explanation}")
 
-        # Critically sparse telemetry: < 20% completeness with no detected anomalies = insufficient evidence
-        critically_sparse = (overall_completeness < 0.20 and not all_anomalous_devices)
-
-        if critically_sparse:
+        if critically_stale:
+            primary_root_cause = HypothesisType.INSUFFICIENT_EVIDENCE.value
+            confidence = top_confidence
+            uncertainties.append(
+                "Telemetry exceeds maximum freshness threshold (>2h) — "
+                "asserting normal operation from historical telemetry is unreliable."
+            )
+            limitations.append(
+                "Insufficient freshness: telemetry must be within 2 hours to assert NORMAL_OPERATION."
+            )
+        elif critically_sparse:
             primary_root_cause = HypothesisType.INSUFFICIENT_EVIDENCE.value
             confidence = top_confidence
             uncertainties.append(

@@ -2,6 +2,7 @@
 
 import json
 import sys
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 import pytest
 
@@ -21,10 +22,37 @@ def load_scenario(filename: str):
     return data.get("telemetry", data), data.get("scenario_id", filename)
 
 
+def scenario_reference_time(telemetry, is_stale: bool = False) -> datetime | None:
+    """Return a fixed reference_time derived from the scenario's own timestamps.
+
+    This ensures tests are not sensitive to when they are run — staleness is
+    computed relative to the scenario data, not the system clock.
+    For the deliberate stale-data scenario, we return None so the real clock applies.
+    """
+    if is_stale:
+        return None  # Let real clock make data look stale — that is the point
+    devices = telemetry if isinstance(telemetry, list) else [telemetry]
+    candidates: list[datetime] = []
+    for dev in devices:
+        raw = dev.get("timestamp") or dev.get("epoch_timestamp")
+        if raw:
+            try:
+                if isinstance(raw, (int, float)):
+                    candidates.append(datetime.fromtimestamp(raw, tz=timezone.utc))
+                else:
+                    candidates.append(datetime.fromisoformat(str(raw).replace("Z", "+00:00")))
+            except Exception:
+                pass
+    if candidates:
+        return max(candidates) + timedelta(seconds=60)
+    return None
+
+
 def test_scenario_1_normal():
     telemetry, s_id = load_scenario("scenario_1_normal.json")
     orch = NetworkIntelligenceOrchestrator()
-    result = orch.process(raw_input=telemetry, incident_id=s_id)
+    result = orch.process(raw_input=telemetry, incident_id=s_id,
+                          reference_time=scenario_reference_time(telemetry))
 
     assert result.report.suspected_root_cause == HypothesisType.NORMAL_OPERATION.value
     assert len(result.report.affected_devices) == 0
@@ -34,7 +62,8 @@ def test_scenario_1_normal():
 def test_scenario_2_congestion():
     telemetry, s_id = load_scenario("scenario_2_congestion.json")
     orch = NetworkIntelligenceOrchestrator()
-    result = orch.process(raw_input=telemetry, incident_id=s_id)
+    result = orch.process(raw_input=telemetry, incident_id=s_id,
+                          reference_time=scenario_reference_time(telemetry))
 
     assert result.report.status == "diagnosed"
     assert result.report.suspected_root_cause == HypothesisType.LINK_CONGESTION.value
@@ -56,7 +85,8 @@ def test_scenario_2_congestion():
 def test_scenario_3_hardware_failure():
     telemetry, s_id = load_scenario("scenario_3_hardware_failure.json")
     orch = NetworkIntelligenceOrchestrator()
-    result = orch.process(raw_input=telemetry, incident_id=s_id)
+    result = orch.process(raw_input=telemetry, incident_id=s_id,
+                          reference_time=scenario_reference_time(telemetry))
 
     assert result.report.suspected_root_cause == HypothesisType.HARDWARE_FAILURE.value
     assert "BLDG-SW-HOSTEL-A" in result.report.affected_devices
@@ -67,7 +97,8 @@ def test_scenario_3_hardware_failure():
 def test_scenario_4_weak_wifi():
     telemetry, s_id = load_scenario("scenario_4_weak_wifi.json")
     orch = NetworkIntelligenceOrchestrator()
-    result = orch.process(raw_input=telemetry, incident_id=s_id)
+    result = orch.process(raw_input=telemetry, incident_id=s_id,
+                          reference_time=scenario_reference_time(telemetry))
 
     assert result.report.suspected_root_cause == HypothesisType.WEAK_WIFI.value
     assert "AP-HOSTEL-B2" in result.report.affected_devices
@@ -76,7 +107,8 @@ def test_scenario_4_weak_wifi():
 def test_scenario_5_dns_dhcp_failure():
     telemetry, s_id = load_scenario("scenario_5_dns_dhcp_failure.json")
     orch = NetworkIntelligenceOrchestrator()
-    result = orch.process(raw_input=telemetry, incident_id=s_id)
+    result = orch.process(raw_input=telemetry, incident_id=s_id,
+                          reference_time=scenario_reference_time(telemetry))
 
     assert result.report.suspected_root_cause == HypothesisType.DNS_DHCP_FAILURE.value
     assert "SRV-DNS-01" in result.report.affected_devices
@@ -85,7 +117,8 @@ def test_scenario_5_dns_dhcp_failure():
 def test_scenario_6_schema_interop_failure():
     telemetry, s_id = load_scenario("scenario_6_schema_interop_failure.json")
     orch = NetworkIntelligenceOrchestrator()
-    result = orch.process(raw_input=telemetry, incident_id=s_id)
+    result = orch.process(raw_input=telemetry, incident_id=s_id,
+                          reference_time=scenario_reference_time(telemetry))
 
     # Ingestion must not crash, must record normalization warnings
     total_warnings = sum(len(r.normalization_warnings) for r in result.canonical_telemetry)
@@ -100,7 +133,8 @@ def test_scenario_6_schema_interop_failure():
 def test_edge_missing_telemetry():
     telemetry, s_id = load_scenario("scenario_edge_missing_telemetry.json")
     orch = NetworkIntelligenceOrchestrator()
-    result = orch.process(raw_input=telemetry, incident_id=s_id)
+    result = orch.process(raw_input=telemetry, incident_id=s_id,
+                          reference_time=scenario_reference_time(telemetry))
 
     # Missing metrics must trigger insufficient evidence or heavy confidence penalty
     assert result.report.confidence < 0.60 or result.report.suspected_root_cause == HypothesisType.INSUFFICIENT_EVIDENCE.value
@@ -110,7 +144,8 @@ def test_edge_missing_telemetry():
 def test_edge_conflicting_labels():
     telemetry, s_id = load_scenario("scenario_edge_conflicting_labels.json")
     orch = NetworkIntelligenceOrchestrator()
-    result = orch.process(raw_input=telemetry, incident_id=s_id)
+    result = orch.process(raw_input=telemetry, incident_id=s_id,
+                          reference_time=scenario_reference_time(telemetry))
 
     # Must override false HEALTHY label and identify hardware failure
     assert result.report.suspected_root_cause == HypothesisType.HARDWARE_FAILURE.value
@@ -120,7 +155,8 @@ def test_edge_conflicting_labels():
 def test_edge_unknown_devices():
     telemetry, s_id = load_scenario("scenario_edge_unknown_devices.json")
     orch = NetworkIntelligenceOrchestrator()
-    result = orch.process(raw_input=telemetry, incident_id=s_id)
+    result = orch.process(raw_input=telemetry, incident_id=s_id,
+                          reference_time=scenario_reference_time(telemetry))
 
     # Handled without crashing
     assert "ROGUE-ACCESS-POINT-99" in result.report.affected_devices

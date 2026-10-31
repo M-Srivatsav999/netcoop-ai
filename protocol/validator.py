@@ -375,10 +375,38 @@ class TelemetryNormalizer:
             raw_tp = metric_source.get("throughput", metric_source.get("bandwidth"))
             throughput_val = cls._parse_float(raw_tp, "throughput", warnings)
 
+        # Link Utilization (%)
+        link_util_val = None
+        if "link_utilization_pct" in metric_source:
+            link_util_val = cls._parse_float(metric_source["link_utilization_pct"], "link_utilization_pct", warnings)
+        elif "link_utilization" in metric_source or "link_util_pct" in metric_source:
+            raw_lu = metric_source.get("link_utilization", metric_source.get("link_util_pct"))
+            p_lu = cls._parse_float(raw_lu, "link_utilization", warnings)
+            if p_lu is not None:
+                if p_lu <= 1.0 and p_lu > 0.0:
+                    link_util_val = round(p_lu * 100.0, 2)
+                    warnings.append(NormalizationWarning(
+                        field="link_utilization_pct",
+                        original_value=raw_lu,
+                        action_taken=f"converted_ratio_to_percentage({link_util_val})",
+                        reason="Link utilization ratio to percentage"
+                    ))
+                else:
+                    link_util_val = p_lu
+
         # CPU Utilization (%)
         cpu_val = None
         if "cpu_pct" in metric_source:
             cpu_val = cls._parse_float(metric_source["cpu_pct"], "cpu_pct", warnings)
+        elif "cpu_utilization_pct" in metric_source:
+            raw_cpu = metric_source["cpu_utilization_pct"]
+            cpu_val = cls._parse_float(raw_cpu, "cpu_utilization_pct", warnings)
+            warnings.append(NormalizationWarning(
+                field="cpu_pct",
+                original_value=raw_cpu,
+                action_taken=f"mapped_cpu_utilization_pct_to_cpu_pct({cpu_val})",
+                reason="Organizer schema alias: cpu_utilization_pct -> cpu_pct"
+            ))
         elif "cpu_utilization_ratio" in metric_source or "utilization_ratio" in metric_source:
             raw_cpu = metric_source.get("cpu_utilization_ratio", metric_source.get("utilization_ratio"))
             ratio_cpu = cls._parse_float(raw_cpu, "cpu_utilization_ratio", warnings)
@@ -512,6 +540,7 @@ class TelemetryNormalizer:
             jitter_ms=jitter_val,
             packet_loss_pct=packet_loss_val,
             throughput_mbps=throughput_val,
+            link_utilization_pct=link_util_val,
             cpu_pct=cpu_val,
             memory_pct=mem_val,
             queue_drops=queue_drops_val,

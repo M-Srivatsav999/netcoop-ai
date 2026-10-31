@@ -50,41 +50,23 @@ class ReporterAgent:
             if u not in combined_limitations:
                 combined_limitations.append(u)
 
-        # Build incidents list — captures all co-occurring faults for multi-incident scenarios
-        incidents = []
-        # Primary incident always included first
-        primary_incident = IncidentSummary(
-            root_cause=arbitration.primary_root_cause,
-            confidence=round(arbitration.confidence, 3),
-            affected_devices=arbitration.affected_devices,
-            supporting_evidence=supporting
-        )
-        incidents.append(primary_incident)
+        # Reported confidence: 0.0 when insufficient_evidence (can't be "36% sure of something")
+        reported_confidence = 0.0 if status == "insufficient_evidence" else round(arbitration.confidence, 3)
 
-        # Any alternative hypothesis with substantial support (net_score > 0 and confidence > 0.40)
-        # gets included as a co-occurring incident rather than just an "alternative cause"
-        for alt in arbitration.alternative_hypotheses:
-            if (alt.get("net_score", 0) > 0 and alt.get("confidence", 0) >= 0.40
-                    and alt.get("hypothesis") not in ("NORMAL_OPERATION", "INSUFFICIENT_EVIDENCE")):
-                incidents.append(IncidentSummary(
-                    root_cause=alt["hypothesis"],
-                    confidence=round(alt["confidence"], 3),
-                    affected_devices=alt.get("affected_devices", arbitration.affected_devices),
-                    supporting_evidence=[]
-                ))
-
+        # incidents[] intentionally left empty until topology-cluster-based multi-incident
+        # diagnosis is implemented. Listing ranked alternatives as "incidents" is misleading.
         return UnifiedIncidentReport(
             incident_id=inc_id,
             status=status,
             suspected_root_cause=arbitration.primary_root_cause,
-            confidence=round(arbitration.confidence, 3),
+            confidence=reported_confidence,
             affected_devices=arbitration.affected_devices,
             supporting_evidence=supporting,
             alternative_causes=alt_causes,
             recommended_actions=arbitration.recommended_actions,
             evidence_sources=sources,
             limitations=combined_limitations,
-            incidents=incidents if len(incidents) > 1 else []  # Only populate when multiple faults
+            incidents=[]
         )
 
     @staticmethod

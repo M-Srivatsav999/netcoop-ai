@@ -30,6 +30,10 @@ class MetricThresholds(BaseModel):
     throughput_warn_mbps: float = 20.0
     throughput_crit_mbps: float = 5.0
 
+    # Link Utilization (%)
+    link_util_warn_pct: float = 70.0
+    link_util_crit_pct: float = 90.0
+
     # CPU Utilization (%)
     cpu_warn_pct: float = 75.0
     cpu_crit_pct: float = 90.0

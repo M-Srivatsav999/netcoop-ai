@@ -4,6 +4,9 @@ An explainable, deterministic, multi-agent network fault diagnosis and telemetry
 
 The system operates **entirely without external LLM APIs**, utilizing strict mathematical evidence aggregation, multi-tier campus network topology awareness, deterministic conflict resolution, and Pydantic-enforced Canonical Internal Messages (CIM).
 
+> 🎥 **Demo Walkthrough Video**: `[Insert YouTube / Google Drive Walkthrough Video Link Here]`  
+> 📖 **Demo Script & Guide**: See [DEMO_SCRIPT.md](DEMO_SCRIPT.md) for the 3-minute video recording flow.
+
 ---
 
 ## 1. Architectural Overview

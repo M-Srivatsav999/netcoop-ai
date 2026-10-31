@@ -94,7 +94,7 @@ class TelemetryAgent:
 
         # 4. Throughput Analysis
         tp_sev = self.rules.classify_throughput(m.throughput_mbps)
-        if m.throughput_mbps is None:
+        if m.throughput_mbps is None and m.link_utilization_pct is None:
             missing_metrics.append("throughput_mbps")
         elif tp_sev in (SeverityLevel.WARNING, SeverityLevel.CRITICAL):
             suspected_issues.append("DEGRADED_THROUGHPUT")
@@ -113,8 +113,46 @@ class TelemetryAgent:
                 description=f"Throughput degraded to {m.throughput_mbps} Mbps on {dev}."
             ))
 
+        # 5. Link Utilization Analysis
+        lu_sev = SeverityLevel.UNKNOWN
+        if m.link_utilization_pct is not None:
+            if m.link_utilization_pct >= self.rules.thresholds.link_util_crit_pct:
+                lu_sev = SeverityLevel.CRITICAL
+                suspected_issues.append("SATURATED_LINK")
+                evidence.append(EvidenceItem(
+                    evidence_id=f"TEL-LINKUTIL-{dev}",
+                    source_agent="TelemetryAgent",
+                    device_id=dev,
+                    metric_name="link_utilization_pct",
+                    observed_value=m.link_utilization_pct,
+                    threshold_reference=f">={self.rules.thresholds.link_util_crit_pct}%",
+                    severity=lu_sev,
+                    polarity=EvidencePolarity.SUPPORTS,
+                    hypothesis_target=HypothesisType.LINK_CONGESTION.value,
+                    weight=0.90,
+                    description=f"Link utilization critically saturated at {m.link_utilization_pct}% on {dev}."
+                ))
+            elif m.link_utilization_pct >= self.rules.thresholds.link_util_warn_pct:
+                lu_sev = SeverityLevel.WARNING
+                suspected_issues.append("HIGH_LINK_UTILIZATION")
+                evidence.append(EvidenceItem(
+                    evidence_id=f"TEL-LINKUTIL-{dev}",
+                    source_agent="TelemetryAgent",
+                    device_id=dev,
+                    metric_name="link_utilization_pct",
+                    observed_value=m.link_utilization_pct,
+                    threshold_reference=f">={self.rules.thresholds.link_util_warn_pct}%",
+                    severity=lu_sev,
+                    polarity=EvidencePolarity.SUPPORTS,
+                    hypothesis_target=HypothesisType.LINK_CONGESTION.value,
+                    weight=0.65,
+                    description=f"Elevated link utilization at {m.link_utilization_pct}% on {dev}."
+                ))
+            else:
+                lu_sev = SeverityLevel.HEALTHY
+
         # Nominal / Healthy Verification
-        severities = [lat_sev, jit_sev, loss_sev, tp_sev]
+        severities = [lat_sev, jit_sev, loss_sev, tp_sev, lu_sev]
         valid_sevs = [s for s in severities if s != SeverityLevel.UNKNOWN]
 
         if valid_sevs and all(s == SeverityLevel.HEALTHY for s in valid_sevs):

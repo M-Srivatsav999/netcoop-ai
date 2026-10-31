@@ -77,6 +77,7 @@ class CanonicalMetrics(BaseModel):
     jitter_ms: Optional[float] = None
     packet_loss_pct: Optional[float] = None
     throughput_mbps: Optional[float] = None
+    link_utilization_pct: Optional[float] = None
     cpu_pct: Optional[float] = None
     memory_pct: Optional[float] = None
     queue_drops: Optional[int] = None
@@ -85,7 +86,7 @@ class CanonicalMetrics(BaseModel):
     dns_resolution_ms: Optional[float] = None
     dhcp_lease_success: Optional[bool] = None
 
-    @field_validator("packet_loss_pct", "cpu_pct", "memory_pct")
+    @field_validator("packet_loss_pct", "cpu_pct", "memory_pct", "link_utilization_pct")
     @classmethod
     def validate_percentages(cls, value: Optional[float]) -> Optional[float]:
         if value is not None:

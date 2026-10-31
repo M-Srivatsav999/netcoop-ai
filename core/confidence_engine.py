@@ -120,7 +120,7 @@ class ConfidenceEngine:
         if staleness_seconds > 1800.0:
             staleness_penalty = min(0.30, (staleness_seconds / 86400.0) * 0.30)
             uncertainty_factors.append(
-                f"Stale telemetry timestamp: data is {round(staleness_seconds, 1)} seconds old."
+                "Stale telemetry timestamp: payload age exceeds nominal freshness window (>30m)."
             )
             limitations.append("Diagnosis based on non-realtime historical telemetry snapshots.")
 
