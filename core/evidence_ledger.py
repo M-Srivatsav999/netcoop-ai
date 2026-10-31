@@ -1,23 +1,29 @@
-"""NetCoop AI Central Evidence Ledger & Cross-Agent Consensus Audit.
+"""NetCoop AI Cryptographically Protected Central Evidence Ledger.
 
-Implements an immutable ledger of findings, contradiction detection across agents,
-correlation IDs, message integrity validation, and end-to-end orchestration tracing.
+Implements a tamper-evident, cryptographically chained audit ledger (Merkle-style SHA-256 hash chain),
+frozen immutable Pydantic entries, canonical JSON message serialization, and cross-agent contradiction resolution.
 """
 
 from __future__ import annotations
 
+import hashlib
+import json
 import uuid
 from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional
-from pydantic import BaseModel, Field
+from typing import Any, Dict, List, Optional, Tuple
+from pydantic import BaseModel, ConfigDict, Field
 
 from protocol.models import AgentFinding, AgentMessage, HypothesisType
 
 
 class LedgerEntry(BaseModel):
-    """Immutable entry in the central diagnostic evidence ledger."""
+    """Cryptographically chained immutable entry in the diagnostic evidence ledger."""
+    model_config = ConfigDict(frozen=True)
+
     entry_id: str = Field(default_factory=lambda: f"LEDGER-{uuid.uuid4().hex[:8].upper()}")
     correlation_id: str
+    prev_hash: str = Field(description="SHA-256 hash of previous ledger entry, ensuring immutability")
+    entry_hash: str = Field(description="SHA-256 signature of this entry's canonical payload")
     agent_id: str
     device_id: str
     metric_name: str
@@ -27,6 +33,55 @@ class LedgerEntry(BaseModel):
     target_hypothesis: str
     weight: float = 1.0
     recorded_at: str = Field(default_factory=lambda: datetime.now(timezone.utc).isoformat())
+
+    @classmethod
+    def create(
+        cls,
+        correlation_id: str,
+        prev_hash: str,
+        agent_id: str,
+        device_id: str,
+        metric_name: str,
+        observed_value: Any,
+        finding_summary: str,
+        polarity: str,
+        target_hypothesis: str,
+        weight: float = 1.0,
+        recorded_at: Optional[str] = None
+    ) -> LedgerEntry:
+        """Construct a cryptographically signed immutable ledger entry."""
+        rec_time = recorded_at or datetime.now(timezone.utc).isoformat()
+        # Compute canonical hash payload
+        canonical_dict = {
+            "correlation_id": correlation_id,
+            "prev_hash": prev_hash,
+            "agent_id": agent_id,
+            "device_id": device_id,
+            "metric_name": metric_name,
+            "observed_value": str(observed_value),
+            "finding_summary": finding_summary,
+            "polarity": polarity,
+            "target_hypothesis": target_hypothesis,
+            "weight": weight,
+            "recorded_at": rec_time
+        }
+        canonical_str = json.dumps(canonical_dict, sort_keys=True, separators=(',', ':'))
+        computed_hash = hashlib.sha256(canonical_str.encode("utf-8")).hexdigest()
+
+        return cls(
+            correlation_id=correlation_id,
+            prev_hash=prev_hash,
+            entry_hash=computed_hash,
+            agent_id=agent_id,
+            device_id=device_id,
+            metric_name=metric_name,
+            observed_value=observed_value,
+            finding_summary=finding_summary,
+            polarity=polarity,
+            target_hypothesis=target_hypothesis,
+            weight=weight,
+            recorded_at=rec_time
+        )
 
 
 class ContradictionRecord(BaseModel):
@@ -41,24 +96,29 @@ class ContradictionRecord(BaseModel):
 
 
 class EvidenceLedger:
-    """Central ledger maintaining structured findings, audit traces, and conflict resolutions."""
+    """Tamper-evident, cryptographically chained evidence ledger with integrity verification."""
+
+    GENESIS_HASH = "0000000000000000000000000000000000000000000000000000000000000000"
 
     def __init__(self, correlation_id: Optional[str] = None) -> None:
         self.correlation_id = correlation_id or f"CORR-{uuid.uuid4().hex[:8].upper()}"
         self.entries: List[LedgerEntry] = []
         self.contradictions: List[ContradictionRecord] = []
         self._seen_messages: set = set()
+        self._last_hash: str = self.GENESIS_HASH
 
     def record_agent_findings(self, agent_id: str, findings: List[AgentFinding]) -> int:
-        """Ingest findings from a specialized agent into the central ledger."""
+        """Ingest findings from a specialized agent into the cryptographically chained ledger."""
         added = 0
         for f in findings:
             for ev in f.evidence:
                 target_hyp = getattr(ev, "hypothesis_target", getattr(ev, "hypothesis", None))
                 if hasattr(target_hyp, "value"):
                     target_hyp = target_hyp.value
-                entry = LedgerEntry(
+
+                entry = LedgerEntry.create(
                     correlation_id=self.correlation_id,
+                    prev_hash=self._last_hash,
                     agent_id=agent_id,
                     device_id=f.device_id,
                     metric_name=ev.metric_name,
@@ -69,8 +129,44 @@ class EvidenceLedger:
                     weight=ev.weight
                 )
                 self.entries.append(entry)
+                self._last_hash = entry.entry_hash
                 added += 1
         return added
+
+    def verify_chain_integrity(self) -> Tuple[bool, Optional[str]]:
+        """Verify the cryptographic hash chain across all entries in the ledger.
+        
+        Returns:
+            (is_valid, error_explanation)
+        """
+        expected_prev = self.GENESIS_HASH
+        for idx, entry in enumerate(self.entries):
+            # Check previous hash pointer
+            if entry.prev_hash != expected_prev:
+                return False, f"Broken hash chain at entry {idx} ({entry.entry_id}): expected prev_hash {expected_prev}, got {entry.prev_hash}"
+
+            # Recompute canonical hash to detect in-memory tampering
+            canonical_dict = {
+                "correlation_id": entry.correlation_id,
+                "prev_hash": entry.prev_hash,
+                "agent_id": entry.agent_id,
+                "device_id": entry.device_id,
+                "metric_name": entry.metric_name,
+                "observed_value": str(entry.observed_value),
+                "finding_summary": entry.finding_summary,
+                "polarity": entry.polarity,
+                "target_hypothesis": entry.target_hypothesis,
+                "weight": entry.weight,
+                "recorded_at": entry.recorded_at
+            }
+            canonical_str = json.dumps(canonical_dict, sort_keys=True, separators=(',', ':'))
+            computed = hashlib.sha256(canonical_str.encode("utf-8")).hexdigest()
+            if computed != entry.entry_hash:
+                return False, f"Tampered entry detected at index {idx} ({entry.entry_id}): signature mismatch."
+
+            expected_prev = entry.entry_hash
+
+        return True, None
 
     def detect_and_resolve_contradictions(
         self,
@@ -80,7 +176,6 @@ class EvidenceLedger:
         """Detect and formally arbitrate contradictions between reported claims and empirical metrics."""
         records: List[ContradictionRecord] = []
         for dev_id in conflicted_devices:
-            # Find evidence supporting fault on this device
             fault_entries = [e for e in self.entries if e.device_id == dev_id and e.polarity == "SUPPORTS"]
             rec = ContradictionRecord(
                 device_id=dev_id,
@@ -103,19 +198,30 @@ class EvidenceLedger:
         return records
 
     def validate_message_integrity(self, message: AgentMessage) -> bool:
-        """Validate agent message structure and guard against duplicate delivery."""
-        msg_sig = (message.sender, message.recipient, message.message_type, str(message.payload))
-        if msg_sig in self._seen_messages:
+        """Validate agent message structure and guard against duplicate delivery using cryptographic hashing."""
+        canonical_msg = json.dumps({
+            "sender": message.sender,
+            "recipient": message.recipient,
+            "message_type": message.message_type,
+            "payload": message.payload
+        }, sort_keys=True, separators=(',', ':'))
+        msg_hash = hashlib.sha256(canonical_msg.encode("utf-8")).hexdigest()
+
+        if msg_hash in self._seen_messages:
             return False  # Duplicate message detected
-        self._seen_messages.add(msg_sig)
+        self._seen_messages.add(msg_hash)
         return True
 
     def get_ledger_summary(self) -> Dict[str, Any]:
-        """Return audit summary of ledger status."""
+        """Return audit summary of ledger status and cryptographic health."""
+        valid, err = self.verify_chain_integrity()
         return {
             "correlation_id": self.correlation_id,
             "total_entries": len(self.entries),
+            "cryptographic_chain_valid": valid,
+            "chain_root_hash": self.GENESIS_HASH,
+            "chain_tip_hash": self._last_hash,
             "total_contradictions_resolved": len(self.contradictions),
-            "participating_agents": list({e.agent_id for e in self.entries}),
-            "monitored_devices": list({e.device_id for e in self.entries}),
+            "participating_agents": sorted(list({e.agent_id for e in self.entries})),
+            "monitored_devices": sorted(list({e.device_id for e in self.entries})),
         }

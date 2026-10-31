@@ -228,7 +228,7 @@ class EvidenceEngine:
                 ))
 
             # Rule 4: Weak Wi-Fi Signal
-            if m.signal_strength_dbm is not None and m.signal_strength_dbm <= -75.0:
+            if m.signal_strength_dbm is not None and m.signal_strength_dbm <= -72.0:
                 resolution_evidence.append(EvidenceItem(
                     evidence_id=f"RESOLVE-WIFI-{dev}",
                     source_agent="EvidenceEngine",

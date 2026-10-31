@@ -78,8 +78,9 @@ class DatasetGenerator:
         status: str = "WARNING"
     ) -> Dict[str, Any]:
         """Format metrics dict into specific schema format."""
-        ts_iso = datetime.now(timezone.utc).isoformat()
-        ts_epoch = 1793448000
+        now_dt = datetime.now(timezone.utc)
+        ts_iso = now_dt.isoformat()
+        ts_epoch = int(now_dt.timestamp())
 
         if schema == SchemaVersion.V2:
             v2_m: Dict[str, Any] = {}

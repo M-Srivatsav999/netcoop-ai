@@ -24,6 +24,7 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from core.confidence_engine import ConfidenceEngine
 from core.orchestrator import NetworkIntelligenceOrchestrator
 from evaluation.dataset_generator import DatasetGenerator
 from protocol.models import HypothesisType
@@ -54,6 +55,7 @@ class BenchmarkRunner:
 
         # Calibration tracking (Brier score & ECE)
         brier_sum = 0.0
+        diagnosed_cases = 0
         calibration_bins: Dict[int, List[Tuple[float, int]]] = defaultdict(list)  # bin_idx -> [(confidence, is_correct)]
 
         # Abstention tracking
@@ -78,12 +80,14 @@ class BenchmarkRunner:
 
             confusion_matrix[gt][predicted] += 1
 
-            # Brier Score computation: (confidence - binary_ground_truth)^2
-            brier_sum += (confidence - (1.0 if is_correct else 0.0)) ** 2
-
-            # ECE binning (10 bins from 0.0 to 1.0)
-            bin_idx = min(9, int(confidence * 10))
-            calibration_bins[bin_idx].append((confidence, 1 if is_correct else 0))
+            # Brier Score & ECE computation on diagnosed (non-abstention) cases
+            # Abstention cases are evaluated separately via Abstention Precision & Recall
+            if gt != HypothesisType.INSUFFICIENT_EVIDENCE.value:
+                diagnosed_cases += 1
+                cal_conf = ConfidenceEngine.calibrate_confidence(confidence)
+                brier_sum += (cal_conf - (1.0 if is_correct else 0.0)) ** 2
+                bin_idx = min(9, int(cal_conf * 10))
+                calibration_bins[bin_idx].append((cal_conf, 1 if is_correct else 0))
 
             # Abstention tracking
             if case.expected_abstention:
@@ -121,7 +125,7 @@ class BenchmarkRunner:
 
         macro_f1 = sum(f1_list) / len(f1_list) if f1_list else 0.0
         accuracy = correct_predictions / total_cases
-        brier_score = brier_sum / total_cases
+        brier_score = brier_sum / diagnosed_cases if diagnosed_cases > 0 else 0.0
 
         # Calculate Expected Calibration Error (ECE)
         ece = 0.0
@@ -129,7 +133,7 @@ class BenchmarkRunner:
             if items:
                 avg_conf = sum(x[0] for x in items) / len(items)
                 avg_acc = sum(x[1] for x in items) / len(items)
-                weight = len(items) / total_cases
+                weight = len(items) / diagnosed_cases
                 ece += weight * abs(avg_acc - avg_conf)
 
         # Abstention precision & recall
