@@ -171,3 +171,28 @@ Every diagnosis terminates in the unified schema required by Page 5:
   ]
 }
 ```
+
+---
+
+## 7. Tamper-Evident Merkle Evidence Ledger
+
+To guarantee auditability and prevent post-hoc evidence tampering across distributed agents, every collected piece of evidence is appended to an immutable, cryptographically chained ledger (`core/evidence_ledger.py`):
+
+- **Cryptographic Hash Chaining**: Each entry stores `prev_hash` (the SHA-256 hash of the previous ledger block, initialized to `"0"*64` for the genesis block) and computes its own `entry_hash = SHA256(prev_hash + canonical_json(entry))`.
+- **Immutable Entry Records**: `LedgerEntry` models enforce `model_config = ConfigDict(frozen=True)` preventing in-memory mutation.
+- **Runtime Integrity Verification**: Calling `ledger.verify_chain_integrity()` traverses all blocks from genesis to head, recomputes canonical hashes, and verifies that no intermediate evidence was modified or omitted.
+
+---
+
+## 8. Information-Theoretic Investigation Plan (Shannon Entropy)
+
+Active troubleshooting follow-up checks are ranked by true **Shannon Information Gain** (`core/investigation_engine.py`):
+
+$$H(S) = -\sum_{i=1}^{K} p_i \log_2(p_i)$$
+
+Given a binary diagnostic check $C$ that splits hypotheses into candidate partitions $A$ and $B$:
+
+$$IG(S, C) = H(S) - \left[ P(A) \cdot H(A) + P(B) \cdot H(B) \right]$$
+
+Checks with higher information gain bits ($>0.5\text{ bits}$) are prioritized at the top of `investigation_plan`, targeting platform-specific commands across **Cisco Catalyst IOS XE**, **Cisco Catalyst 9800 WLC**, and **Linux Core Services**.
+
