@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-31 18:49:03 UTC",
+  "timestamp": "2026-10-31 19:09:16 UTC",
   "total_scenarios_evaluated": 700,
   "overall_accuracy": 100.0,
   "macro_f1_score": 1.0,
@@ -85,10 +85,10 @@
     }
   ],
   "latency_metrics_ms": {
-    "mean": 2.0,
-    "p50": 1.87,
-    "p95": 2.96,
-    "total_run_time_sec": 1.42
+    "mean": 1.8,
+    "p50": 1.72,
+    "p95": 2.65,
+    "total_run_time_sec": 1.28
   },
   "per_class_metrics": {
     "DNS_DHCP_FAILURE": {
@@ -141,25 +141,25 @@
       "HARDWARE_FAILURE": 0,
       "INSUFFICIENT_EVIDENCE": 0,
       "LINK_CONGESTION": 0,
-      "WEAK_WIFI": 0,
-      "RESOURCE_EXHAUSTION": 0
+      "RESOURCE_EXHAUSTION": 0,
+      "WEAK_WIFI": 0
     },
     "LINK_CONGESTION": {
       "LINK_CONGESTION": 100,
       "DNS_DHCP_FAILURE": 0,
       "HARDWARE_FAILURE": 0,
       "INSUFFICIENT_EVIDENCE": 0,
+      "RESOURCE_EXHAUSTION": 0,
       "NORMAL_OPERATION": 0,
-      "WEAK_WIFI": 0,
-      "RESOURCE_EXHAUSTION": 0
+      "WEAK_WIFI": 0
     },
     "HARDWARE_FAILURE": {
       "HARDWARE_FAILURE": 100,
       "DNS_DHCP_FAILURE": 0,
+      "RESOURCE_EXHAUSTION": 0,
       "LINK_CONGESTION": 0,
       "NORMAL_OPERATION": 0,
       "WEAK_WIFI": 0,
-      "RESOURCE_EXHAUSTION": 0,
       "INSUFFICIENT_EVIDENCE": 0
     },
     "WEAK_WIFI": {
@@ -173,11 +173,11 @@
     },
     "DNS_DHCP_FAILURE": {
       "DNS_DHCP_FAILURE": 100,
+      "HARDWARE_FAILURE": 0,
+      "RESOURCE_EXHAUSTION": 0,
       "LINK_CONGESTION": 0,
       "NORMAL_OPERATION": 0,
-      "HARDWARE_FAILURE": 0,
       "WEAK_WIFI": 0,
-      "RESOURCE_EXHAUSTION": 0,
       "INSUFFICIENT_EVIDENCE": 0
     },
     "RESOURCE_EXHAUSTION": {
@@ -193,10 +193,10 @@
       "INSUFFICIENT_EVIDENCE": 100,
       "DNS_DHCP_FAILURE": 0,
       "HARDWARE_FAILURE": 0,
+      "RESOURCE_EXHAUSTION": 0,
       "LINK_CONGESTION": 0,
       "NORMAL_OPERATION": 0,
-      "WEAK_WIFI": 0,
-      "RESOURCE_EXHAUSTION": 0
+      "WEAK_WIFI": 0
     }
   }
 }

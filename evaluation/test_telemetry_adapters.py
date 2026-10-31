@@ -21,6 +21,7 @@ def test_cisco_ios_xe_adapter_crc_and_drops():
     cli_output = """
     GigabitEthernet1/0/1 is up, line protocol is up (connected)
       5 minute input rate 450000000 bits/sec, 55000 packets/sec
+      5 minute output rate 95000000 bits/sec, 12000 packets/sec
       Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0
       Output queue: 0/40/85/0 (size/max total/drops/flushes)
       1450 packets input, 185000 bytes, 0 no buffer
@@ -30,9 +31,12 @@ def test_cisco_ios_xe_adapter_crc_and_drops():
     telemetry = adapter.parse(cli_output, device_id="IITBBS-SW-MHR")
 
     assert telemetry.device_id == "IITBBS-SW-MHR"
-    assert telemetry.metrics.interface_errors == 57  # 12 + 45
+    # Cisco counter semantics: CRC errors are part of input errors, max() avoids double-counting
+    assert telemetry.metrics.interface_errors == 45
     assert telemetry.metrics.queue_drops == 85
     assert telemetry.metrics.throughput_mbps == 450.0
+    assert telemetry.data_provenance["input_rate_mbps"] == 450.0
+    assert telemetry.data_provenance["output_rate_mbps"] == 95.0
     # Missing metrics must be None, not 0.0
     assert telemetry.metrics.latency_ms is None
     assert telemetry.metrics.packet_loss_pct is None
@@ -72,6 +76,37 @@ def test_linux_services_adapter_dig_and_dhcp():
 
     assert telemetry.device_id == "SRV-DNS-01"
     assert telemetry.metrics.dns_resolution_ms == 540.0
+    assert telemetry.reported_status == "CRITICAL"
+
+
+def test_linux_services_adapter_nxdomain_is_healthy():
+    dig_output = """
+    ; <<>> DiG 9.18.1 <<>> @10.0.10.1 nonexistent.iitbbs.ac.in
+    ;; Got answer:
+    ;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 1823
+    ;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+    ;; Query time: 15 msec
+    ;; SERVER: 10.0.10.1#53(10.0.10.1)
+    """
+    adapter = LinuxServicesAdapter()
+    telemetry = adapter.parse(dig_output, device_id="SRV-DNS-01")
+
+    assert telemetry.device_id == "SRV-DNS-01"
+    # NXDOMAIN is a valid authoritative response confirming domain does not exist; service is healthy
+    assert telemetry.metrics.dns_resolution_ms == 15.0
+    assert telemetry.reported_status == "HEALTHY"
+
+
+def test_linux_services_adapter_timeout_is_critical():
+    dig_output = """
+    ; <<>> DiG 9.18.1 <<>> @10.0.10.1 www.iitbbs.ac.in
+    ;; connection timed out; no servers could be reached
+    """
+    adapter = LinuxServicesAdapter()
+    telemetry = adapter.parse(dig_output, device_id="SRV-DNS-01")
+
+    assert telemetry.device_id == "SRV-DNS-01"
+    assert telemetry.metrics.dns_resolution_ms == 999.0
     assert telemetry.reported_status == "CRITICAL"
 
 

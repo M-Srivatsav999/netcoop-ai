@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-10-31 18:49:04 UTC",
+  "timestamp": "2026-10-31 19:09:18 UTC",
   "held_out_scenarios_evaluated": 210,
   "overall_accuracy": 100.0,
   "macro_f1_score": 1.0,
@@ -56,5 +56,5 @@
       "support": 30
     }
   },
-  "latency_mean_ms": 1.78
+  "latency_mean_ms": 1.77
 }

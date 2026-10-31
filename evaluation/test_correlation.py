@@ -192,3 +192,29 @@ def test_isotonic_calibrator_pava_fitting_and_monotonicity():
     assert default_cal.predict(0.85) >= 0.94
     assert default_cal.predict(1.0) == 0.985
 
+
+def test_isotonic_calibrator_persistence_and_runtime_integration(tmp_path):
+    from core.confidence_engine import IsotonicCalibrator, ConfidenceEngine, set_calibrator, get_calibrator
+
+    # Create and fit a custom calibrator
+    custom = IsotonicCalibrator(knots_x=[0.0, 0.4, 0.7, 1.0], knots_y=[0.0, 0.6, 0.9, 0.99])
+    model_file = tmp_path / "test_calibration.json"
+    custom.save_model(model_file)
+    assert model_file.exists()
+
+    # Load and verify
+    loaded = IsotonicCalibrator.load_model(model_file)
+    assert loaded.knots_x == [0.0, 0.4, 0.7, 1.0]
+    assert loaded.knots_y == [0.0, 0.6, 0.9, 0.99]
+    assert loaded.predict(0.4) == 0.6
+
+    # Test runtime injection into production path
+    old_calibrator = get_calibrator()
+    try:
+        set_calibrator(loaded)
+        calibrated = ConfidenceEngine.calibrate_confidence(0.4)
+        assert calibrated == 0.6
+    finally:
+        set_calibrator(old_calibrator)
+
+

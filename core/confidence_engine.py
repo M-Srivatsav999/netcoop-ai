@@ -10,6 +10,32 @@ from typing import Any, Dict, List, Tuple
 from pydantic import BaseModel, Field
 
 from protocol.models import CanonicalTelemetry, HypothesisType
+import json
+from pathlib import Path
+
+CALIBRATION_MODEL_PATH = Path(__file__).resolve().parent.parent / "data" / "calibration_model.json"
+_GLOBAL_CALIBRATOR: Optional[IsotonicCalibrator] = None
+
+
+def get_calibrator() -> IsotonicCalibrator:
+    """Retrieve global singleton calibrator, loading from persisted model if available."""
+    global _GLOBAL_CALIBRATOR
+    if _GLOBAL_CALIBRATOR is None:
+        if CALIBRATION_MODEL_PATH.exists():
+            try:
+                _GLOBAL_CALIBRATOR = IsotonicCalibrator.load_model(CALIBRATION_MODEL_PATH)
+            except Exception:
+                _GLOBAL_CALIBRATOR = IsotonicCalibrator()
+        else:
+            _GLOBAL_CALIBRATOR = IsotonicCalibrator()
+    return _GLOBAL_CALIBRATOR
+
+
+def set_calibrator(calibrator: IsotonicCalibrator) -> None:
+    """Override the global calibrator (useful for testing and calibration tuning)."""
+    global _GLOBAL_CALIBRATOR
+    _GLOBAL_CALIBRATOR = calibrator
+
 
 
 class ConfidenceConfig(BaseModel):
@@ -150,10 +176,10 @@ class ConfidenceEngine:
         """Calibrate heuristic confidence score using fitted Isotonic Regression (PAVA).
 
         Uses non-parametric Pool Adjacent Violators Algorithm (PAVA) fitted piecewise
-        isotonic regression to map heuristic scores to empirical posterior probabilities.
+        isotonic regression loaded from the persisted calibration model to map heuristic
+        scores to empirical posterior probabilities.
         """
-        calibrator = IsotonicCalibrator()
-        return calibrator.predict(c)
+        return get_calibrator().predict(c)
 
 
 class IsotonicCalibrator:
@@ -221,4 +247,21 @@ class IsotonicCalibrator:
                 return round(y0 + t * (y1 - y0), 3)
 
         return round(self.knots_y[-1], 3)
+
+    def save_model(self, path: Path | str) -> None:
+        """Persist fitted isotonic calibration knots to JSON file."""
+        data = {
+            "algorithm": "Pool Adjacent Violators Algorithm (PAVA) Isotonic Regression",
+            "knots_x": self.knots_x,
+            "knots_y": self.knots_y
+        }
+        with open(path, "w", encoding="utf-8") as f:
+            json.dump(data, f, indent=2)
+
+    @classmethod
+    def load_model(cls, path: Path | str) -> IsotonicCalibrator:
+        """Load fitted isotonic calibration model from JSON file."""
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        return cls(knots_x=data.get("knots_x"), knots_y=data.get("knots_y"))
 
