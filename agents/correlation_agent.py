@@ -256,6 +256,44 @@ class CorrelationAgent:
             affected_devices
         )
 
+        # Multi-Incident Partitioning (Topology & Fault Domain Grouping)
+        # When multiple distinct devices exhibit anomalous telemetry across different fault domains,
+        # produce separate incident records in co_occurring_incidents.
+        co_occurring: List[IncidentSummary] = []
+        if len(all_anomalous_devices) > 1 and primary_root_cause != HypothesisType.NORMAL_OPERATION.value:
+            from protocol.models import IncidentSummary
+            # Identify which device caused which specific hypothesis
+            for dev_id in sorted(list(all_anomalous_devices)):
+                dev_findings = [f for f in agent_findings if f.device_id == dev_id]
+                dev_ev_items = [item for f in dev_findings for item in f.evidence if item.polarity == EvidencePolarity.SUPPORTS and item.hypothesis_target != HypothesisType.NORMAL_OPERATION.value]
+                # Include cross-metric conflict resolution items for this device
+                conflict_for_dev = [item for item in conflict_items if item.device_id == dev_id and item.polarity == EvidencePolarity.SUPPORTS]
+                dev_ev_items.extend(conflict_for_dev)
+
+                # Check dominant hypothesis for this individual device
+                target_counts: Dict[str, float] = {}
+                for item in dev_ev_items:
+                    target_counts[item.hypothesis_target] = target_counts.get(item.hypothesis_target, 0.0) + item.weight
+                if target_counts:
+                    # Give precedence to high-weight specific faults over general transport degradation
+                    best_dev_target = max(target_counts.items(), key=lambda x: x[1])[0]
+                    # Find matching confidence
+                    matched_conf = next((conf for t, _, conf, _ in ranked_hypotheses if t == best_dev_target), confidence)
+                    dev_structured = [
+                        StructuredEvidence(
+                            metric=item.metric_name,
+                            value=item.observed_value,
+                            interpretation=item.description
+                        )
+                        for item in dev_ev_items if item.hypothesis_target == best_dev_target
+                    ]
+                    co_occurring.append(IncidentSummary(
+                        root_cause=best_dev_target,
+                        confidence=round(matched_conf, 3),
+                        affected_devices=[dev_id],
+                        supporting_evidence=dev_structured
+                    ))
+
         return ArbitrationResult(
             primary_root_cause=primary_root_cause,
             confidence=confidence,
@@ -269,5 +307,6 @@ class CorrelationAgent:
             uncertainty_factors=uncertainties,
             limitations=limitations,
             recommended_actions=recommended_actions,
-            execution_trace_id=trace_id
+            execution_trace_id=trace_id,
+            co_occurring_incidents=co_occurring
         )

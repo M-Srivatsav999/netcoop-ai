@@ -53,8 +53,9 @@ class ReporterAgent:
         # Reported confidence: 0.0 when insufficient_evidence (can't be "36% sure of something")
         reported_confidence = 0.0 if status == "insufficient_evidence" else round(arbitration.confidence, 3)
 
-        # incidents[] intentionally left empty until topology-cluster-based multi-incident
-        # diagnosis is implemented. Listing ranked alternatives as "incidents" is misleading.
+        # Populate incidents[] when multiple co-occurring incidents are detected
+        incidents_list = list(arbitration.co_occurring_incidents) if arbitration.co_occurring_incidents else []
+
         return UnifiedIncidentReport(
             incident_id=inc_id,
             status=status,
@@ -66,7 +67,7 @@ class ReporterAgent:
             recommended_actions=arbitration.recommended_actions,
             evidence_sources=sources,
             limitations=combined_limitations,
-            incidents=[]
+            incidents=incidents_list
         )
 
     @staticmethod

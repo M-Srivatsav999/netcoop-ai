@@ -192,6 +192,7 @@ class ArbitrationResult(BaseModel):
     limitations: List[str] = Field(default_factory=list)
     recommended_actions: List[str] = Field(default_factory=list)
     execution_trace_id: str = ""
+    co_occurring_incidents: List[IncidentSummary] = Field(default_factory=list)
 
 
 class StructuredEvidence(BaseModel):

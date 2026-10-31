@@ -62,26 +62,50 @@ def run_all_evaluations() -> Dict[str, Any]:
             "must_affect": ["SRV-DNS-01"],
         },
         "scenario_6_schema_interop_failure.json": {
+            "expected_cause": HypothesisType.LINK_CONGESTION.value,
             "min_warnings": 4,
+            "min_confidence": 0.60,
         },
         "scenario_edge_missing_telemetry.json": {
+            "expected_cause": HypothesisType.INSUFFICIENT_EVIDENCE.value,
             "expect_insufficient_or_low_conf": True,
         },
         "scenario_edge_conflicting_labels.json": {
             "expected_cause": HypothesisType.HARDWARE_FAILURE.value,
             "must_override_label": True,
+            "must_affect": ["DIST-SW-SOUTH"],
         },
         "scenario_edge_stale_timestamps.json": {
+            "expected_cause": HypothesisType.INSUFFICIENT_EVIDENCE.value,
             "must_penalize_staleness": True,
         },
         "scenario_edge_unknown_devices.json": {
+            "expected_cause": HypothesisType.WEAK_WIFI.value,
             "must_affect": ["ROGUE-ACCESS-POINT-99"],
         },
         "scenario_edge_multiple_incidents.json": {
             "min_confidence": 0.50,
+            "must_have_multiple_incidents": 2,
+            "must_affect": ["AP-HOSTEL-B1", "BLDG-SW-ENG"],
         },
         "scenario_edge_malformed_payload.json": {
             "expected_cause": HypothesisType.INSUFFICIENT_EVIDENCE.value,
+        },
+        "scenario_organizer_latency_spike.json": {
+            "expected_cause": HypothesisType.LINK_CONGESTION.value,
+            "min_confidence": 0.65,
+            "must_affect": ["SW_CAMPUS_3"],
+        },
+        "scenario_organizer_hardware_failure.json": {
+            "expected_cause": HypothesisType.HARDWARE_FAILURE.value,
+            "min_confidence": 0.60,
+            "must_affect": ["SW_CAMPUS_8"],
+        },
+        "scenario_organizer_batch_10_devices.json": {
+            "expected_cause": HypothesisType.HARDWARE_FAILURE.value,
+            "min_confidence": 0.50,
+            "must_affect": ["SW_CAMPUS_FAULTY_10"],
+            "max_affected": 1,
         }
     }
 
@@ -183,6 +207,14 @@ def run_all_evaluations() -> Dict[str, Any]:
                 if d not in res1.report.affected_devices:
                     passed = False
                     failure_reasons.append(f"Device {d} not in affected_devices {res1.report.affected_devices}")
+
+        if expectations.get("must_have_multiple_incidents"):
+            req_inc = expectations["must_have_multiple_incidents"]
+            if len(res1.report.incidents) < req_inc:
+                passed = False
+                failure_reasons.append(
+                    f"Expected at least {req_inc} co-occurring incidents in report.incidents, got {len(res1.report.incidents)}"
+                )
 
         if expectations.get("must_override_label"):
             has_override = any("untrusted" in c.lower() or "contradicted" in c.lower() for c in res1.arbitration_result.contradictory_evidence)

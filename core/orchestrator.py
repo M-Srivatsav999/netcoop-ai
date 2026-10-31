@@ -212,6 +212,23 @@ class NetworkIntelligenceOrchestrator:
                 conflicted_devices.append(record.device_id)
 
         if conflicted_devices:
+            # Emit structured AgentDisagreement message to document explicit inter-agent conflict
+            messages.append(AgentMessage(
+                sender="CorrelationAgent",
+                recipient="TelemetryAgent",
+                message_type="AGENT_DISAGREEMENT",
+                payload={
+                    "disagreement_type": "REPORTED_LABEL_VS_EMPIRICAL_METRICS",
+                    "conflicted_devices": conflicted_devices,
+                    "competing_hypotheses": {
+                        "generator_claim": "HEALTHY",
+                        "telemetry_claim": "ANOMALOUS_TRANSPORT",
+                        "infrastructure_claim": "HARDWARE_OR_QUEUE_SATURATION"
+                    },
+                    "resolution_strategy": "EMPIRICAL_EVIDENCE_SUPREMACY",
+                    "status": "OPEN"
+                }
+            ))
             messages.append(AgentMessage(
                 sender="CorrelationAgent",
                 recipient="TelemetryAgent",
@@ -229,7 +246,8 @@ class NetworkIntelligenceOrchestrator:
                 payload={
                     "devices": conflicted_devices,
                     "resolution": "Label overridden by metric evidence",
-                    "override_justification": "Observed metrics contradict reported status; deterministic rules take precedence"
+                    "override_justification": "Observed metrics contradict reported status; deterministic rules take precedence",
+                    "status": "RESOLVED"
                 }
             ))
             log_trace(
