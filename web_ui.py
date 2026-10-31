@@ -19,6 +19,12 @@ import uvicorn
 from core.orchestrator import NetworkIntelligenceOrchestrator
 from core.remediation import RemediationSimulator
 from core.state_store import SessionStateStore
+from core.telemetry_adapters import (
+    CiscoIOSXEAdapter,
+    CiscoWLC9800Adapter,
+    LinuxServicesAdapter,
+    SyslogNetworkAdapter
+)
 from core.topology import TopologyEngine
 from data.generator import SyntheticTelemetryGenerator
 from protocol.models import SchemaVersion
@@ -238,6 +244,50 @@ async def get_benchmark():
         with open(b_path, "r", encoding="utf-8") as f:
             return JSONResponse(content=json.load(f))
     return JSONResponse(status_code=404, content={"error": "Benchmark report not generated."})
+
+
+@app.get("/api/held_out_benchmark")
+async def get_held_out_benchmark():
+    """Retrieve held-out generalization benchmark report across unseen campus topologies."""
+    h_path = PROJECT_ROOT / "evaluation" / "held_out_benchmark_report.json"
+    if h_path.exists():
+        with open(h_path, "r", encoding="utf-8") as f:
+            return JSONResponse(content=json.load(f))
+    return JSONResponse(status_code=404, content={"error": "Held-out benchmark report not generated."})
+
+
+@app.post("/api/diagnose_raw_cli")
+async def diagnose_raw_cli(request: Request):
+    """Parse and diagnose raw CLI / syslog text directly from campus network infrastructure."""
+    try:
+        body = await request.json()
+        raw_text = body.get("raw_cli", "")
+        adapter_type = body.get("adapter", "cisco_ios_xe").lower()
+        device_id = body.get("device_id", "IITBBS-SW-MHR")
+
+        if "wlc" in adapter_type:
+            adapter = CiscoWLC9800Adapter()
+        elif "linux" in adapter_type or "dns" in adapter_type:
+            adapter = LinuxServicesAdapter()
+        elif "syslog" in adapter_type:
+            adapter = SyslogNetworkAdapter()
+        else:
+            adapter = CiscoIOSXEAdapter()
+
+        telemetry = adapter.parse(raw_text, device_id=device_id)
+        result = orchestrator.process(
+            raw_input=[telemetry.model_dump(mode="json")],
+            incident_id=f"CLI-{device_id}"
+        )
+        return JSONResponse(content={
+            "parsed_telemetry": telemetry.model_dump(mode="json"),
+            "report": result.report.model_dump(mode="json"),
+            "markdown_summary": result.markdown_summary,
+            "arbitration": result.arbitration_result.model_dump(mode="json"),
+            "investigation_plan": [c.model_dump(mode="json") for c in result.investigation_plan]
+        })
+    except Exception as exc:
+        return JSONResponse(status_code=500, content={"error": str(exc)})
 
 
 @app.get("/api/device-cli/{device_id}")
