@@ -210,12 +210,33 @@ def main() -> int:
     if args.schema_version != "AUTO":
         explicit_version = SchemaVersion(args.schema_version)
 
+    # Determine reference_time if timestamps are present in historical scenario payloads
+    reference_time = None
+    if isinstance(raw_payload, list):
+        from datetime import datetime, timezone, timedelta
+        ts_candidates = []
+        for item in raw_payload:
+            if isinstance(item, dict):
+                raw_ts = item.get("timestamp") or item.get("epoch_timestamp") or item.get("ts")
+                if raw_ts is not None:
+                    try:
+                        if isinstance(raw_ts, (int, float)):
+                            ts_candidates.append(datetime.fromtimestamp(raw_ts, tz=timezone.utc))
+                        else:
+                            dt = datetime.fromisoformat(str(raw_ts).replace("Z", "+00:00"))
+                            ts_candidates.append(dt)
+                    except Exception:
+                        pass
+        if ts_candidates:
+            reference_time = max(ts_candidates) + timedelta(seconds=60)
+
     # Initialize and execute orchestrator
     orchestrator = NetworkIntelligenceOrchestrator()
     result = orchestrator.process(
         raw_input=raw_payload,
         incident_id=incident_id,
-        explicit_version=explicit_version
+        explicit_version=explicit_version,
+        reference_time=reference_time
     )
 
     # Optional automated remediation simulation (Page 3 of spec)
