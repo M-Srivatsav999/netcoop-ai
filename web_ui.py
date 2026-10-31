@@ -103,6 +103,7 @@ async def diagnose(request: Request):
             affected_devices=result.report.affected_devices,
             telemetry_records=result.canonical_telemetry
         )
+        verification = RemediationSimulator.verify_simulated_recovery(remediation)
 
         # Composite Network Health Index (Heuristic Calibration)
         # Formula: H_campus = sum(w_i * H_i) / sum(w_i)
@@ -194,6 +195,7 @@ async def diagnose(request: Request):
             "agent_findings": [f.model_dump(mode="json") for f in result.agent_findings],
             "agent_messages": [m.model_dump(mode="json") for m in result.agent_messages],
             "remediation_simulation": remediation.model_dump(mode="json"),
+            "recovery_verification": verification.model_dump(mode="json"),
             "canonical_telemetry": [t.model_dump(mode="json") for t in result.canonical_telemetry],
             "execution_trace": result.execution_trace,
             "duration_ms": result.total_duration_ms,

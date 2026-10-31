@@ -56,7 +56,7 @@
 
 ### Slide 6: Scientific Validation & Held-Out Generalization
 - **Benchmark Suite**:
-  - `65/65` Pytest Unit Tests passing in 1.55s.
+  - `79/79` Pytest Unit Tests passing in 1.96s across 12 test suites.
   - `15/15` Scenario Evaluations passing with 100% deterministic reproducibility.
   - `150/150` Organizer Telemetry Generator Checks passing (0 dropped fields).
 - **PAVA Isotonic Calibration**:

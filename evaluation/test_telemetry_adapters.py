@@ -1,10 +1,10 @@
 """Unit Tests for Multi-Source Network Telemetry Adapters.
 
 Tests parsing of real-world equipment output:
-- Cisco IOS XE Switch CLI
-- Cisco Catalyst 9800 WLC CLI
-- Linux DNS (dig) & DHCP service logs
-- Enterprise Syslog streams
+- Cisco IOS XE Switch CLI (independent total vs CRC errors, inconsistency auditing)
+- Cisco Catalyst 9800 WLC CLI (RSSI, SNR, data rates)
+- Linux DNS (dig) & DHCP service logs (context-aware transport vs resolution status)
+- Enterprise Syslog streams (RFC 5424/3164 parsing)
 - Explicit missing data guarantees
 """
 
@@ -25,14 +25,16 @@ def test_cisco_ios_xe_adapter_crc_and_drops():
       Input queue: 0/75/0/0 (size/max/drops/flushes); Total output drops: 0
       Output queue: 0/40/85/0 (size/max total/drops/flushes)
       1450 packets input, 185000 bytes, 0 no buffer
-      12 input errors, 45 CRC, 0 frame, 0 overrun, 0 ignored
+      50 input errors, 15 CRC, 0 frame, 0 overrun, 0 ignored
     """
     adapter = CiscoIOSXEAdapter()
     telemetry = adapter.parse(cli_output, device_id="IITBBS-SW-MHR")
 
     assert telemetry.device_id == "IITBBS-SW-MHR"
-    # Cisco counter semantics: CRC errors are part of input errors, max() avoids double-counting
-    assert telemetry.metrics.interface_errors == 45
+    # Total input errors preserved as canonical interface_errors
+    assert telemetry.metrics.interface_errors == 50
+    assert telemetry.metrics.crc_errors == 15
+    assert telemetry.data_provenance["counter_inconsistency"] is False
     assert telemetry.metrics.queue_drops == 85
     assert telemetry.metrics.throughput_mbps == 450.0
     assert telemetry.data_provenance["input_rate_mbps"] == 450.0
@@ -41,6 +43,22 @@ def test_cisco_ios_xe_adapter_crc_and_drops():
     assert telemetry.metrics.latency_ms is None
     assert telemetry.metrics.packet_loss_pct is None
     assert telemetry.reported_status == "WARNING"
+
+
+def test_cisco_ios_xe_counter_inconsistency_flagged():
+    # Anomaly case: sub-counter CRC errors exceed reported total input errors
+    cli_output = """
+    GigabitEthernet1/0/1 is up, line protocol is up (connected)
+      12 input errors, 45 CRC, 0 frame, 0 overrun, 0 ignored
+    """
+    adapter = CiscoIOSXEAdapter()
+    telemetry = adapter.parse(cli_output, device_id="IITBBS-SW-MHR")
+
+    assert telemetry.metrics.interface_errors == 12
+    assert telemetry.metrics.crc_errors == 45
+    assert telemetry.data_provenance["counter_inconsistency"] is True
+    assert len(telemetry.normalization_warnings) == 1
+    assert "exceed total input errors" in telemetry.normalization_warnings[0].reason
 
 
 def test_cisco_wlc_adapter_rssi_snr():
@@ -62,7 +80,46 @@ def test_cisco_wlc_adapter_rssi_snr():
     assert telemetry.reported_status == "WARNING"
 
 
-def test_linux_services_adapter_dig_and_dhcp():
+def test_linux_services_adapter_noerror_success():
+    dig_output = """
+    ; <<>> DiG 9.18.1 <<>> @10.0.10.1 www.iitbbs.ac.in
+    ;; Got answer:
+    ;; ->>HEADER<<- opcode: QUERY, status: NOERROR, id: 3312
+    ;; flags: qr rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 1
+    ;; Query time: 18 msec
+    ;; SERVER: 10.0.10.1#53(10.0.10.1)
+    """
+    adapter = LinuxServicesAdapter()
+    telemetry = adapter.parse(dig_output, device_id="SRV-DNS-01")
+
+    assert telemetry.device_id == "SRV-DNS-01"
+    assert telemetry.metrics.dns_resolution_ms == 18.0
+    assert telemetry.data_provenance["dns_transport_available"] is True
+    assert telemetry.data_provenance["dns_resolution_success"] is True
+    assert telemetry.reported_status == "HEALTHY"
+
+
+def test_linux_services_adapter_nxdomain_context_aware():
+    dig_output = """
+    ; <<>> DiG 9.18.1 <<>> @10.0.10.1 nonexistent.iitbbs.ac.in
+    ;; Got answer:
+    ;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 1823
+    ;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
+    ;; Query time: 15 msec
+    ;; SERVER: 10.0.10.1#53(10.0.10.1)
+    """
+    adapter = LinuxServicesAdapter()
+    telemetry = adapter.parse(dig_output, device_id="SRV-DNS-01")
+
+    assert telemetry.device_id == "SRV-DNS-01"
+    assert telemetry.metrics.dns_resolution_ms == 15.0
+    # Service transport is available (server responded), but expected hostname was not resolved
+    assert telemetry.data_provenance["dns_transport_available"] is True
+    assert telemetry.data_provenance["dns_resolution_success"] is False
+    assert telemetry.reported_status == "WARNING"
+
+
+def test_linux_services_adapter_servfail_is_critical():
     dig_output = """
     ; <<>> DiG 9.18.1 <<>> @10.0.10.1 www.iitbbs.ac.in
     ;; Got answer:
@@ -76,25 +133,9 @@ def test_linux_services_adapter_dig_and_dhcp():
 
     assert telemetry.device_id == "SRV-DNS-01"
     assert telemetry.metrics.dns_resolution_ms == 540.0
+    assert telemetry.data_provenance["dns_transport_available"] is True
+    assert telemetry.data_provenance["dns_resolution_success"] is False
     assert telemetry.reported_status == "CRITICAL"
-
-
-def test_linux_services_adapter_nxdomain_is_healthy():
-    dig_output = """
-    ; <<>> DiG 9.18.1 <<>> @10.0.10.1 nonexistent.iitbbs.ac.in
-    ;; Got answer:
-    ;; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN, id: 1823
-    ;; flags: qr rd ra; QUERY: 1, ANSWER: 0, AUTHORITY: 1, ADDITIONAL: 1
-    ;; Query time: 15 msec
-    ;; SERVER: 10.0.10.1#53(10.0.10.1)
-    """
-    adapter = LinuxServicesAdapter()
-    telemetry = adapter.parse(dig_output, device_id="SRV-DNS-01")
-
-    assert telemetry.device_id == "SRV-DNS-01"
-    # NXDOMAIN is a valid authoritative response confirming domain does not exist; service is healthy
-    assert telemetry.metrics.dns_resolution_ms == 15.0
-    assert telemetry.reported_status == "HEALTHY"
 
 
 def test_linux_services_adapter_timeout_is_critical():
@@ -107,6 +148,8 @@ def test_linux_services_adapter_timeout_is_critical():
 
     assert telemetry.device_id == "SRV-DNS-01"
     assert telemetry.metrics.dns_resolution_ms == 999.0
+    assert telemetry.data_provenance["dns_transport_available"] is False
+    assert telemetry.data_provenance["dns_resolution_success"] is False
     assert telemetry.reported_status == "CRITICAL"
 
 

@@ -267,7 +267,8 @@ class HeldOutBenchmarkRunner:
 
             if gt != HypothesisType.INSUFFICIENT_EVIDENCE.value:
                 diagnosed_cases += 1
-                cal_conf = ConfidenceEngine.calibrate_confidence(confidence)
+                # res.report.confidence is already calibrated by CorrelationAgent; avoids double-calibration
+                cal_conf = confidence
                 brier_sum += (cal_conf - (1.0 if is_correct else 0.0)) ** 2
 
                 # Multiclass Brier score

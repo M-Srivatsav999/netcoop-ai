@@ -55,6 +55,8 @@ class CiscoIOSXEAdapter(BaseTelemetryAdapter):
         in_throughput_mbps: Optional[float] = None
         out_throughput_mbps: Optional[float] = None
         reported_status = "HEALTHY"
+        counter_inconsistency = False
+        warnings = []
 
         crc_match = self.CRC_PATTERN.search(raw_input)
         if crc_match:
@@ -62,10 +64,25 @@ class CiscoIOSXEAdapter(BaseTelemetryAdapter):
             crc_val = int(crc_match.group(2))
             raw_total_input_err = total_err
             raw_crc_count = crc_val
-            # Cisco counter semantics: CRC errors are part of input errors.
-            # Do NOT add them together (avoids double-counting).
-            interface_errors = max(total_err, crc_val)
-            if interface_errors > 10:
+
+            # Preserving total_input_errors and crc_errors as separate, independently auditable measurements.
+            # In Cisco IOS XE, interface_errors reflects the total input errors counter.
+            interface_errors = total_err
+
+            # Flag inconsistent counter relationships if CRC sub-counter exceeds total input errors
+            if crc_val > total_err:
+                counter_inconsistency = True
+                from protocol.models import NormalizationWarning
+                warnings.append(
+                    NormalizationWarning(
+                        field="interface_errors",
+                        original_value={"total_input_errors": total_err, "crc_errors": crc_val},
+                        action_taken="flag_counter_inconsistency",
+                        reason=f"Sub-counter CRC errors ({crc_val}) exceed total input errors ({total_err}); preserving total as canonical and recording inconsistency."
+                    )
+                )
+
+            if total_err > 10 or crc_val > 10:
                 reported_status = "WARNING"
 
         qd_match = self.QUEUE_DROP_PATTERN.search(raw_input)
@@ -88,6 +105,7 @@ class CiscoIOSXEAdapter(BaseTelemetryAdapter):
 
         metrics = CanonicalMetrics(
             interface_errors=interface_errors,
+            crc_errors=raw_crc_count,
             queue_drops=queue_drops,
             throughput_mbps=peak_throughput
         )
@@ -98,10 +116,12 @@ class CiscoIOSXEAdapter(BaseTelemetryAdapter):
             reported_status=reported_status,
             metrics=metrics,
             schema_version_detected=SchemaVersion.V1,
+            normalization_warnings=warnings,
             data_provenance={
                 "adapter": "CiscoIOSXEAdapter",
-                "raw_total_input_errors": raw_total_input_err,
-                "raw_crc_errors": raw_crc_count,
+                "total_input_errors": raw_total_input_err,
+                "crc_errors": raw_crc_count,
+                "counter_inconsistency": counter_inconsistency,
                 "input_rate_mbps": in_throughput_mbps,
                 "output_rate_mbps": out_throughput_mbps,
                 "raw_length": len(raw_input)
@@ -150,12 +170,18 @@ class CiscoWLC9800Adapter(BaseTelemetryAdapter):
 
 
 class LinuxServicesAdapter(BaseTelemetryAdapter):
-    """Adapter for Linux core network services (DNS dig & DHCP status)."""
+    """Adapter for Linux core network services (DNS dig & DHCP status).
+    
+    Context-aware parser that keeps DNS transport availability separate from
+    successful resolution of the target hostname.
+    """
 
     # Matches: ";; Query time: 450 msec"
     QUERY_TIME_PATTERN = re.compile(r";;\s*Query time:\s*(\d+)\s*msec", re.IGNORECASE)
     # Matches: ";; status: NOERROR" or ";; status: SERVFAIL" or ";; status: NXDOMAIN"
     STATUS_PATTERN = re.compile(r";;\s*->>HEADER<<-.*status:\s*([A-Z]+)", re.IGNORECASE)
+    # Matches: "ANSWER: 1" or "ANSWER: 0"
+    ANSWER_COUNT_PATTERN = re.compile(r"ANSWER:\s*(\d+)", re.IGNORECASE)
     # Matches: "DHCPACK on 10.0.10.101"
     DHCP_LEASE_PATTERN = re.compile(r"DHCP(?:ACK|NAK|OFFER)", re.IGNORECASE)
 
@@ -164,32 +190,46 @@ class LinuxServicesAdapter(BaseTelemetryAdapter):
         dhcp_ok: Optional[bool] = None
         status = "HEALTHY"
         dns_status_code = "UNKNOWN"
+        dns_transport_available = True
+        dns_resolution_success = False
+        answer_count = 0
 
         qt_match = self.QUERY_TIME_PATTERN.search(raw_input)
         if qt_match:
             dns_ms = float(qt_match.group(1))
-            if dns_ms > 100.0:
-                status = "WARNING"
+
+        ans_match = self.ANSWER_COUNT_PATTERN.search(raw_input)
+        if ans_match:
+            answer_count = int(ans_match.group(1))
 
         st_match = self.STATUS_PATTERN.search(raw_input)
         if st_match:
             dns_status_code = st_match.group(1).upper()
-            if dns_status_code in ("SERVFAIL", "REFUSED"):
+            if dns_status_code == "NOERROR":
+                dns_transport_available = True
+                dns_resolution_success = (answer_count > 0)
+                status = "WARNING" if (dns_ms is not None and dns_ms > 100.0) else "HEALTHY"
+            elif dns_status_code == "NXDOMAIN":
+                # Transport works (server responded authoritatively), but requested host is not registered
+                dns_transport_available = True
+                dns_resolution_success = False
+                # If queried expected hostname is missing, flagged as WARNING (configuration/record error)
+                # while distinguishing from transport/daemon collapse
+                status = "WARNING"
+            elif dns_status_code in ("SERVFAIL", "REFUSED"):
+                # Server internal failure or policy block
+                dns_transport_available = True
+                dns_resolution_success = False
                 status = "CRITICAL"
                 if dns_ms is None:
                     dns_ms = 999.0
-            elif dns_status_code in ("NOERROR", "NXDOMAIN"):
-                # NXDOMAIN indicates a functioning DNS service that successfully resolved non-existence
-                # It is NOT an outage or infrastructure defect.
-                if dns_ms is not None and dns_ms > 100.0:
-                    status = "WARNING"
-                else:
-                    status = "HEALTHY"
 
         if "connection timed out" in raw_input.lower() or "no servers could be reached" in raw_input.lower():
             status = "CRITICAL"
             dns_ms = 999.0
             dns_status_code = "TIMEOUT"
+            dns_transport_available = False
+            dns_resolution_success = False
 
         if "dhcp" in raw_input.lower():
             if "dhcpnak" in raw_input.lower() or "no free leases" in raw_input.lower():
@@ -212,6 +252,9 @@ class LinuxServicesAdapter(BaseTelemetryAdapter):
             data_provenance={
                 "adapter": "LinuxServicesAdapter",
                 "dns_status_code": dns_status_code,
+                "dns_transport_available": dns_transport_available,
+                "dns_resolution_success": dns_resolution_success,
+                "answer_count": answer_count,
                 "raw_length": len(raw_input)
             }
         )

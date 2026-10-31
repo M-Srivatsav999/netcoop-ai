@@ -218,3 +218,74 @@ def test_isotonic_calibrator_persistence_and_runtime_integration(tmp_path):
         set_calibrator(old_calibrator)
 
 
+def test_calibration_model_provenance_and_dataset():
+    """Verify cryptographic SHA-256 provenance of calibration dataset and persisted PAVA model."""
+    import hashlib
+    import json
+    from pathlib import Path
+
+    project_root = Path(__file__).resolve().parent.parent
+    dataset_file = project_root / "data" / "calibration_dataset.json"
+    model_file = project_root / "data" / "calibration_model.json"
+
+    assert dataset_file.exists(), "Calibration dataset data/calibration_dataset.json must be present."
+    assert model_file.exists(), "Persisted calibration model data/calibration_model.json must be present."
+
+    with open(dataset_file, "r", encoding="utf-8") as f:
+        cases = json.load(f)
+    assert len(cases) == 200
+
+    # Cryptographic SHA-256 audit
+    with open(dataset_file, "rb") as f:
+        actual_sha256 = hashlib.sha256(f.read()).hexdigest()
+
+    with open(model_file, "r", encoding="utf-8") as f:
+        model_data = json.load(f)
+
+    assert model_data["calibration_dataset_sha256"] == actual_sha256
+    assert model_data["sample_count"] == 200
+    assert len(model_data["class_distribution"]) >= 6
+    assert len(model_data["knots_x"]) == len(model_data["knots_y"])
+    # Monotonicity check on knots
+    for i in range(len(model_data["knots_x"]) - 1):
+        assert model_data["knots_x"][i] <= model_data["knots_x"][i + 1]
+        assert model_data["knots_y"][i] <= model_data["knots_y"][i + 1]
+
+
+def test_production_diagnosis_uses_loaded_calibration_model():
+    """Prove that CorrelationAgent and live diagnosis pipeline actively apply the loaded calibrator."""
+    from core.confidence_engine import IsotonicCalibrator, set_calibrator, get_calibrator
+    from core.orchestrator import NetworkIntelligenceOrchestrator
+    import json
+    from pathlib import Path
+
+    project_root = Path(__file__).resolve().parent.parent
+    scenario_path = project_root / "data" / "scenarios" / "scenario_2_congestion.json"
+    with open(scenario_path, "r", encoding="utf-8") as f:
+        payload = json.load(f)["telemetry"]
+
+    orchestrator = NetworkIntelligenceOrchestrator()
+    original_calibrator = get_calibrator()
+
+    try:
+        # Run with production calibrator
+        res_prod = orchestrator.process(payload, incident_id="CALIB-TEST-1")
+        prod_conf = res_prod.report.confidence
+        assert prod_conf > 0.0
+
+        # Inject a synthetic calibrator mapping all probabilities to 0.777
+        test_calibrator = IsotonicCalibrator(knots_x=[0.0, 1.0], knots_y=[0.777, 0.777])
+        set_calibrator(test_calibrator)
+
+        res_test = orchestrator.process(payload, incident_id="CALIB-TEST-2")
+        # Live diagnosis MUST produce the injected calibrated value!
+        assert res_test.report.confidence == 0.777
+        assert res_test.arbitration_result.calibrated_confidence == 0.777
+        # Raw confidence is preserved and distinct
+        assert res_test.arbitration_result.raw_confidence != 0.777
+
+    finally:
+        set_calibrator(original_calibrator)
+
+
+

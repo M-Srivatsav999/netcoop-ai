@@ -192,11 +192,13 @@ class IsotonicCalibrator:
     def __init__(
         self,
         knots_x: Optional[List[float]] = None,
-        knots_y: Optional[List[float]] = None
+        knots_y: Optional[List[float]] = None,
+        metadata: Optional[Dict[str, Any]] = None
     ) -> None:
         # Monotonic empirical knots fitted via PAVA on validation corpus
         self.knots_x = knots_x or [0.0, 0.35, 0.50, 0.65, 0.80, 1.0]
         self.knots_y = knots_y or [0.0, 0.50, 0.88, 0.91, 0.94, 0.985]
+        self.metadata = metadata or {}
 
     @classmethod
     def fit_pava(cls, x_vals: List[float], y_vals: List[float]) -> IsotonicCalibrator:
@@ -225,8 +227,23 @@ class IsotonicCalibrator:
             else:
                 i += 1
 
-        knots_x = [b[2] for b in blocks] + [blocks[-1][3]]
-        knots_y = [b[1] / b[0] for b in blocks] + [blocks[-1][1] / blocks[-1][0]]
+        # Deduplicate blocks to produce strictly monotonic knot points
+        unique_knots: List[Tuple[float, float]] = []
+        for b in blocks:
+            x_val = round(b[3], 4)
+            y_val = round(b[1] / b[0], 4)
+            if not unique_knots:
+                unique_knots.append((round(b[2], 4), y_val))
+                if x_val > round(b[2], 4):
+                    unique_knots.append((x_val, y_val))
+            else:
+                if x_val > unique_knots[-1][0]:
+                    unique_knots.append((x_val, y_val))
+                else:
+                    unique_knots[-1] = (x_val, max(unique_knots[-1][1], y_val))
+
+        knots_x = [k[0] for k in unique_knots]
+        knots_y = [k[1] for k in unique_knots]
         return cls(knots_x=knots_x, knots_y=knots_y)
 
     def predict(self, x: float) -> float:
@@ -248,12 +265,14 @@ class IsotonicCalibrator:
 
         return round(self.knots_y[-1], 3)
 
-    def save_model(self, path: Path | str) -> None:
-        """Persist fitted isotonic calibration knots to JSON file."""
+    def save_model(self, path: Path | str, extra_meta: Optional[Dict[str, Any]] = None) -> None:
+        """Persist fitted isotonic calibration knots and provenance metadata to JSON file."""
         data = {
             "algorithm": "Pool Adjacent Violators Algorithm (PAVA) Isotonic Regression",
             "knots_x": self.knots_x,
-            "knots_y": self.knots_y
+            "knots_y": self.knots_y,
+            **(self.metadata or {}),
+            **(extra_meta or {})
         }
         with open(path, "w", encoding="utf-8") as f:
             json.dump(data, f, indent=2)
@@ -263,5 +282,8 @@ class IsotonicCalibrator:
         """Load fitted isotonic calibration model from JSON file."""
         with open(path, "r", encoding="utf-8") as f:
             data = json.load(f)
-        return cls(knots_x=data.get("knots_x"), knots_y=data.get("knots_y"))
+        knots_x = data.get("knots_x")
+        knots_y = data.get("knots_y")
+        meta = {k: v for k, v in data.items() if k not in ("knots_x", "knots_y")}
+        return cls(knots_x=knots_x, knots_y=knots_y, metadata=meta)
 

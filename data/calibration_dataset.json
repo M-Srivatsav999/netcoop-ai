@@ -1,0 +1,4042 @@
+[
+  {
+    "case_id": "CALIB-0001-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.006900000000000001,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.233
+        }
+      },
+      {
+        "host_id": "IITBBS-SW-SHR",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0087,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.157
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0002-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.008199999999999999,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.158
+        }
+      },
+      {
+        "host_id": "AP-MHR-W2",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0086,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.204
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0003-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SES",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 2.8,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 23.2,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "AP-MHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 2.1,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 41.7,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "AP-SHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 8.7,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 35.2,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "AP-SES-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 9.9,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 27.1,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0004-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-MHR",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "9.3 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      },
+      {
+        "device_id": "AP-MHR-W1",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "3.0 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0005-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.013800000000000002,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.294
+        }
+      },
+      {
+        "host_id": "IITBBS-DIST-HOSTELS",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.014,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.415
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0006-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "5.0 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      },
+      {
+        "device_id": "AP-SES-01",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "10.1 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      },
+      {
+        "device_id": "AP-SHR-W1",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "13.3 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0007-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SES",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 13.8,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 41.7,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "AP-LHC-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 2.8,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 21.5,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "IITBBS-SW-SHR",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 7.5,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 37.3,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "IITBBS-DIST-ACADEMIC",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 11.6,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 27.9,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0008-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-LHC",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "8.3 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      },
+      {
+        "device_id": "IITBBS-SW-SHR",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "7.5 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0009-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-LHC-01",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0103,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.409
+        }
+      },
+      {
+        "host_id": "IITBBS-SW-SHR",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0124,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.33399999999999996
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0010-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-LHC",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.011,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.409
+        }
+      },
+      {
+        "host_id": "IITBBS-DIST-ACADEMIC",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0023,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.423
+        }
+      },
+      {
+        "host_id": "AP-LHC-01",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.013099999999999999,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.165
+        }
+      },
+      {
+        "host_id": "AP-MHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.008,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.212
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0011-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-MHR",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0047,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.287
+        }
+      },
+      {
+        "host_id": "IITBBS-DIST-ACADEMIC",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0136,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.335
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0012-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0032,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.35
+        }
+      },
+      {
+        "host_id": "IITBBS-SW-MHR",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0108,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.32299999999999995
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0013-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-HOSTELS",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 9.5,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 39.7,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "IITBBS-DIST-ACADEMIC",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 2.3,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 28.1,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0014-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SES",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 4.5,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 41.3,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "AP-LHC-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 9.4,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 28.3,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "IITBBS-DIST-HOSTELS",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 3.8,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 29.3,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0015-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-LHC-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 12.1,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 41.9,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "IITBBS-SW-SHR",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 9.9,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 41.4,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 4.4,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 37.6,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0016-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W2",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0025,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.43
+        }
+      },
+      {
+        "host_id": "AP-SES-01",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.009300000000000001,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.19899999999999998
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0017-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SHR",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 10.6,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 25.7,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "AP-MHR-W2",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 3.4,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 30.5,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "IITBBS-SW-SES",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 14.5,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 44.9,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0018-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-LHC",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 11.6,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 28.4,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "AP-MHR-W2",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 3.1,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 27.8,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "AP-SHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 3.8,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 24.6,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 14.1,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 44.7,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0019-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SES",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "10.0 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      },
+      {
+        "device_id": "IITBBS-DIST-HOSTELS",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "14.4 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0020-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-SHR",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0136,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.22899999999999998
+        }
+      },
+      {
+        "host_id": "IITBBS-DIST-HOSTELS",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0027,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.28300000000000003
+        }
+      },
+      {
+        "host_id": "AP-LHC-01",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0086,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.415
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0021-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SES",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 5.5,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 35.4,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "IITBBS-SW-LHC",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 7.6,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 30.1,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "AP-MHR-W2",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 5.1,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 28.1,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0022-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 6.4,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 34.7,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "AP-SES-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 5.5,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 26.1,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 7.8,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 24.5,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0023-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-DIST-HOSTELS",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.013699999999999999,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.35200000000000004
+        }
+      },
+      {
+        "host_id": "AP-SHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0094,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.24100000000000002
+        }
+      },
+      {
+        "host_id": "IITBBS-DIST-ACADEMIC",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0023,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.428
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0024-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0035,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.231
+        }
+      },
+      {
+        "host_id": "IITBBS-SW-SHR",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0088,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.321
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0025-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-HOSTELS",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 8.9,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 34.2,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      },
+      {
+        "device_id": "IITBBS-SW-LHC",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "HEALTHY",
+        "metrics": {
+          "latency_ms": 11.0,
+          "packet_loss_pct": 0.0,
+          "cpu_pct": 17.5,
+          "interface_errors": 0,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0026-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0025,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.21600000000000003
+        }
+      },
+      {
+        "host_id": "AP-LHC-01",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.004900000000000001,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.319
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0027-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W2",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0046,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.39899999999999997
+        }
+      },
+      {
+        "host_id": "IITBBS-DIST-ACADEMIC",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.013800000000000002,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.22399999999999998
+        }
+      },
+      {
+        "host_id": "AP-LHC-01",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0144,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.207
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0028-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-MHR",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "14.6 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      },
+      {
+        "device_id": "AP-SHR-W1",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "4.4 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0029-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "13.2 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      },
+      {
+        "device_id": "IITBBS-SW-MHR",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "7.8 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      },
+      {
+        "device_id": "IITBBS-DIST-ACADEMIC",
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_ms": "14.6 ms",
+          "packet_loss_pct": "0.0%",
+          "queue_drops": "0 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0030-NORMAL_OPERATION",
+    "ground_truth_root_cause": "NORMAL_OPERATION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-LHC-01",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.004900000000000001,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.401
+        }
+      },
+      {
+        "host_id": "IITBBS-CORE-SW-01",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0127,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.413
+        }
+      },
+      {
+        "host_id": "AP-SES-01",
+        "epoch_timestamp": 1793440000,
+        "status": "HEALTHY",
+        "metrics": {
+          "latency_sec": 0.0148,
+          "packet_loss_ratio": 0.0,
+          "queue_drops": 0,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.27699999999999997
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0031-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SES-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "latency_ms": 196.9,
+          "packet_loss_pct": 3.1,
+          "queue_drops": 77,
+          "interface_errors": 0,
+          "cpu_pct": 57.5
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0032-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SES-01",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.2025,
+          "packet_loss_ratio": 0.042,
+          "queue_drops": 156,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.614
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0033-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-LHC",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "179.4 ms",
+          "packet_loss_pct": "7.3%",
+          "queue_drops": "87 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0034-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "153.1 ms",
+          "packet_loss_pct": "6.1%",
+          "queue_drops": "174 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0035-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.1951,
+          "packet_loss_ratio": 0.045,
+          "queue_drops": 72,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.722
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0036-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SES-01",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.19569999999999999,
+          "packet_loss_ratio": 0.067,
+          "queue_drops": 157,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.569
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0037-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SES-01",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.10529999999999999,
+          "packet_loss_ratio": 0.065,
+          "queue_drops": 111,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.508
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0038-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SHR",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "216.7 ms",
+          "packet_loss_pct": "7.8%",
+          "queue_drops": "114 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0039-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-MHR",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.2144,
+          "packet_loss_ratio": 0.051,
+          "queue_drops": 96,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.687
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0040-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W2",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.18719999999999998,
+          "packet_loss_ratio": 0.031,
+          "queue_drops": 58,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.599
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0041-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-ACADEMIC",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "latency_ms": 183.0,
+          "packet_loss_pct": 2.7,
+          "queue_drops": 100,
+          "interface_errors": 0,
+          "cpu_pct": 72.0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0042-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-HOSTELS",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "latency_ms": 193.7,
+          "packet_loss_pct": 4.8,
+          "queue_drops": 62,
+          "interface_errors": 0,
+          "cpu_pct": 56.2
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0043-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-HOSTELS",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "latency_ms": 135.1,
+          "packet_loss_pct": 3.9,
+          "queue_drops": 179,
+          "interface_errors": 0,
+          "cpu_pct": 57.9
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0044-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-ACADEMIC",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "126.3 ms",
+          "packet_loss_pct": "3.7%",
+          "queue_drops": "151 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0045-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-ACADEMIC",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "109.3 ms",
+          "packet_loss_pct": "4.4%",
+          "queue_drops": "114 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0046-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "latency_ms": 136.8,
+          "packet_loss_pct": 5.4,
+          "queue_drops": 150,
+          "interface_errors": 0,
+          "cpu_pct": 54.0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0047-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-ACADEMIC",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "latency_ms": 210.8,
+          "packet_loss_pct": 4.8,
+          "queue_drops": 106,
+          "interface_errors": 0,
+          "cpu_pct": 68.5
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0048-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "latency_ms": 209.1,
+          "packet_loss_pct": 3.9,
+          "queue_drops": 165,
+          "interface_errors": 0,
+          "cpu_pct": 67.6
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0049-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-HOSTELS",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "latency_ms": 197.9,
+          "packet_loss_pct": 7.6,
+          "queue_drops": 170,
+          "interface_errors": 0,
+          "cpu_pct": 54.3
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0050-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "latency_ms": 143.6,
+          "packet_loss_pct": 5.5,
+          "queue_drops": 148,
+          "interface_errors": 0,
+          "cpu_pct": 74.7
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0051-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "215.7 ms",
+          "packet_loss_pct": "7.2%",
+          "queue_drops": "132 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0052-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.1103,
+          "packet_loss_ratio": 0.048,
+          "queue_drops": 170,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.6829999999999999
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0053-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "latency_ms": 149.0,
+          "packet_loss_pct": 5.9,
+          "queue_drops": 45,
+          "interface_errors": 0,
+          "cpu_pct": 64.6
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0054-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "latency_ms": 91.5,
+          "packet_loss_pct": 4.0,
+          "queue_drops": 109,
+          "interface_errors": 0,
+          "cpu_pct": 71.5
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0055-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-ACADEMIC",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "latency_ms": 144.1,
+          "packet_loss_pct": 3.4,
+          "queue_drops": 71,
+          "interface_errors": 0,
+          "cpu_pct": 60.9
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0056-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SHR",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "134.2 ms",
+          "packet_loss_pct": "2.5%",
+          "queue_drops": "93 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0057-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-SES",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.10729999999999999,
+          "packet_loss_ratio": 0.055,
+          "queue_drops": 132,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.665
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0058-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-MHR",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "159.5 ms",
+          "packet_loss_pct": "3.2%",
+          "queue_drops": "120 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0059-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-ACADEMIC",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "103.5 ms",
+          "packet_loss_pct": "3.3%",
+          "queue_drops": "110 drops",
+          "interface_errors": "0"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0060-LINK_CONGESTION",
+    "ground_truth_root_cause": "LINK_CONGESTION",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W2",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.1279,
+          "packet_loss_ratio": 0.027999999999999997,
+          "queue_drops": 171,
+          "crc_errors": 0,
+          "cpu_utilization_ratio": 0.747
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0061-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "interface_errors": 60,
+          "packet_loss_pct": 5.8,
+          "latency_ms": 51.0,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0062-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.0233,
+          "packet_loss_ratio": 0.063,
+          "queue_drops": 0,
+          "crc_errors": 53
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0063-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "27.2 ms",
+          "packet_loss_pct": "8.9%",
+          "queue_drops": "0 drops",
+          "interface_errors": "143"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0064-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-LHC",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.0364,
+          "packet_loss_ratio": 0.076,
+          "queue_drops": 0,
+          "crc_errors": 196
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0065-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-DIST-ACADEMIC",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.0175,
+          "packet_loss_ratio": 0.105,
+          "queue_drops": 0,
+          "crc_errors": 145
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0066-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-HOSTELS",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "interface_errors": 173,
+          "packet_loss_pct": 11.3,
+          "latency_ms": 49.6,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0067-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-MHR",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "interface_errors": 170,
+          "packet_loss_pct": 6.0,
+          "latency_ms": 19.9,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0068-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-ACADEMIC",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "interface_errors": 71,
+          "packet_loss_pct": 7.3,
+          "latency_ms": 19.1,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0069-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W2",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.0334,
+          "packet_loss_ratio": 0.059000000000000004,
+          "queue_drops": 0,
+          "crc_errors": 78
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0070-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.028,
+          "packet_loss_ratio": 0.04,
+          "queue_drops": 0,
+          "crc_errors": 177
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0071-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-MHR",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "interface_errors": 100,
+          "packet_loss_pct": 8.9,
+          "latency_ms": 22.7,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0072-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "48.6 ms",
+          "packet_loss_pct": "5.8%",
+          "queue_drops": "0 drops",
+          "interface_errors": "92"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0073-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SES-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "interface_errors": 127,
+          "packet_loss_pct": 9.2,
+          "latency_ms": 29.3,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0074-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SES",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "44.0 ms",
+          "packet_loss_pct": "6.1%",
+          "queue_drops": "0 drops",
+          "interface_errors": "80"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0075-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "27.2 ms",
+          "packet_loss_pct": "7.8%",
+          "queue_drops": "0 drops",
+          "interface_errors": "141"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0076-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SES-01",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.0487,
+          "packet_loss_ratio": 0.106,
+          "queue_drops": 0,
+          "crc_errors": 126
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0077-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W2",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.0273,
+          "packet_loss_ratio": 0.092,
+          "queue_drops": 0,
+          "crc_errors": 115
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0078-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "interface_errors": 183,
+          "packet_loss_pct": 4.1,
+          "latency_ms": 50.7,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0079-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "57.2 ms",
+          "packet_loss_pct": "3.6%",
+          "queue_drops": "0 drops",
+          "interface_errors": "157"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0080-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-LHC-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "interface_errors": 188,
+          "packet_loss_pct": 10.3,
+          "latency_ms": 56.2,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0081-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-CORE-SW-01",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.0217,
+          "packet_loss_ratio": 0.032,
+          "queue_drops": 0,
+          "crc_errors": 63
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0082-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SES",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "interface_errors": 103,
+          "packet_loss_pct": 5.8,
+          "latency_ms": 15.5,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0083-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-SES",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.0288,
+          "packet_loss_ratio": 0.067,
+          "queue_drops": 0,
+          "crc_errors": 30
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0084-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W2",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.027800000000000002,
+          "packet_loss_ratio": 0.11,
+          "queue_drops": 0,
+          "crc_errors": 146
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0085-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-MHR",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "57.6 ms",
+          "packet_loss_pct": "8.4%",
+          "queue_drops": "0 drops",
+          "interface_errors": "150"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0086-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "interface_errors": 88,
+          "packet_loss_pct": 8.3,
+          "latency_ms": 16.9,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0087-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-SES",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.016800000000000002,
+          "packet_loss_ratio": 0.043,
+          "queue_drops": 0,
+          "crc_errors": 184
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0088-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "latency_sec": 0.0178,
+          "packet_loss_ratio": 0.08,
+          "queue_drops": 0,
+          "crc_errors": 88
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0089-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-MHR",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "interface_errors": 78,
+          "packet_loss_pct": 3.7,
+          "latency_ms": 23.9,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0090-HARDWARE_FAILURE",
+    "ground_truth_root_cause": "HARDWARE_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-ACADEMIC",
+        "status": "WARNING",
+        "metrics": {
+          "latency_ms": "40.3 ms",
+          "packet_loss_pct": "9.4%",
+          "queue_drops": "0 drops",
+          "interface_errors": "108"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0091-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_ratio": 0.013000000000000001,
+          "queue_drops": 0,
+          "rssi_dbm": -80.4
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0092-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SES-01",
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_pct": "4.5%",
+          "queue_drops": "0 drops",
+          "signal_strength_dbm": "-80.6 dBm"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0093-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SES-01",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_ratio": 0.012,
+          "queue_drops": 0,
+          "rssi_dbm": -80.8
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0094-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SES-01",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_ratio": 0.012,
+          "queue_drops": 0,
+          "rssi_dbm": -88.2
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0095-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SHR-W1",
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_pct": "1.9%",
+          "queue_drops": "0 drops",
+          "signal_strength_dbm": "-88.7 dBm"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0096-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SHR-W1",
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_pct": "2.7%",
+          "queue_drops": "0 drops",
+          "signal_strength_dbm": "-78.1 dBm"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0097-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "signal_strength_dbm": -82.5,
+          "throughput_mbps": 3.7,
+          "packet_loss_pct": 3.4,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0098-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "signal_strength_dbm": -80.1,
+          "throughput_mbps": 7.7,
+          "packet_loss_pct": 2.2,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0099-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-LHC-01",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_ratio": 0.024,
+          "queue_drops": 0,
+          "rssi_dbm": -84.2
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0100-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_ratio": 0.04,
+          "queue_drops": 0,
+          "rssi_dbm": -81.7
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0101-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SHR-W1",
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_pct": "4.3%",
+          "queue_drops": "0 drops",
+          "signal_strength_dbm": "-84.0 dBm"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0102-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_pct": "3.4%",
+          "queue_drops": "0 drops",
+          "signal_strength_dbm": "-81.8 dBm"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0103-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-LHC-01",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_ratio": 0.017,
+          "queue_drops": 0,
+          "rssi_dbm": -81.4
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0104-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SHR-W1",
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_pct": "1.1%",
+          "queue_drops": "0 drops",
+          "signal_strength_dbm": "-87.5 dBm"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0105-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "signal_strength_dbm": -84.7,
+          "throughput_mbps": 4.2,
+          "packet_loss_pct": 2.0,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0106-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SES-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "signal_strength_dbm": -86.7,
+          "throughput_mbps": 2.5,
+          "packet_loss_pct": 2.9,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0107-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "signal_strength_dbm": -85.4,
+          "throughput_mbps": 4.5,
+          "packet_loss_pct": 1.9,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0108-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-LHC-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "signal_strength_dbm": -78.1,
+          "throughput_mbps": 4.0,
+          "packet_loss_pct": 4.1,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0109-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-LHC-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "signal_strength_dbm": -86.5,
+          "throughput_mbps": 6.4,
+          "packet_loss_pct": 3.4,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0110-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_pct": "2.5%",
+          "queue_drops": "0 drops",
+          "signal_strength_dbm": "-81.9 dBm"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0111-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SES-01",
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_pct": "2.1%",
+          "queue_drops": "0 drops",
+          "signal_strength_dbm": "-88.6 dBm"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0112-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-LHC-01",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_ratio": 0.04,
+          "queue_drops": 0,
+          "rssi_dbm": -81.8
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0113-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-LHC-01",
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_pct": "2.8%",
+          "queue_drops": "0 drops",
+          "signal_strength_dbm": "-82.4 dBm"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0114-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W2",
+        "epoch_timestamp": 1793440000,
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_ratio": 0.025,
+          "queue_drops": 0,
+          "rssi_dbm": -81.4
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0115-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SES-01",
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_pct": "2.4%",
+          "queue_drops": "0 drops",
+          "signal_strength_dbm": "-83.4 dBm"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0116-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "signal_strength_dbm": -82.4,
+          "throughput_mbps": 5.1,
+          "packet_loss_pct": 2.3,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0117-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-LHC-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "signal_strength_dbm": -85.8,
+          "throughput_mbps": 2.8,
+          "packet_loss_pct": 1.6,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0118-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SES-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "signal_strength_dbm": -81.3,
+          "throughput_mbps": 3.6,
+          "packet_loss_pct": 3.8,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0119-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "WARNING",
+        "metrics": {
+          "signal_strength_dbm": -88.2,
+          "throughput_mbps": 6.1,
+          "packet_loss_pct": 4.3,
+          "queue_drops": 0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0120-WEAK_WIFI",
+    "ground_truth_root_cause": "WEAK_WIFI",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "status": "WARNING",
+        "metrics": {
+          "packet_loss_pct": "2.8%",
+          "queue_drops": "0 drops",
+          "signal_strength_dbm": "-82.1 dBm"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0121-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SHR-W1",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "19.6 ms",
+          "packet_loss_pct": "0.0%",
+          "dns_resolution_ms": "912.8 ms"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0122-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "dns_resolution_ms": 805.8,
+          "dhcp_lease_success": false,
+          "latency_ms": 18.0,
+          "packet_loss_pct": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0123-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-LHC-01",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.01,
+          "packet_loss_ratio": 0.0,
+          "dns_latency_sec": 0.9847,
+          "dhcp_lease_success": false
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0124-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.0057,
+          "packet_loss_ratio": 0.0,
+          "dns_latency_sec": 0.7888999999999999,
+          "dhcp_lease_success": false
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0125-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-MHR",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "16.2 ms",
+          "packet_loss_pct": "0.0%",
+          "dns_resolution_ms": "600.3 ms"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0126-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-DIST-HOSTELS",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.0079,
+          "packet_loss_ratio": 0.0,
+          "dns_latency_sec": 1.0189,
+          "dhcp_lease_success": false
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0127-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-LHC",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "12.8 ms",
+          "packet_loss_pct": "0.0%",
+          "dns_resolution_ms": "713.4 ms"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0128-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-LHC",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "dns_resolution_ms": 1148.6,
+          "dhcp_lease_success": false,
+          "latency_ms": 10.0,
+          "packet_loss_pct": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0129-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-LHC",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.0077,
+          "packet_loss_ratio": 0.0,
+          "dns_latency_sec": 0.9093,
+          "dhcp_lease_success": false
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0130-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-LHC",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.015099999999999999,
+          "packet_loss_ratio": 0.0,
+          "dns_latency_sec": 0.9316,
+          "dhcp_lease_success": false
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0131-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SES-01",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "19.1 ms",
+          "packet_loss_pct": "0.0%",
+          "dns_resolution_ms": "899.1 ms"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0132-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-DIST-HOSTELS",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.0056,
+          "packet_loss_ratio": 0.0,
+          "dns_latency_sec": 1.0012,
+          "dhcp_lease_success": false
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0133-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-SHR",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.0107,
+          "packet_loss_ratio": 0.0,
+          "dns_latency_sec": 0.7026,
+          "dhcp_lease_success": false
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0134-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "19.8 ms",
+          "packet_loss_pct": "0.0%",
+          "dns_resolution_ms": "812.1 ms"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0135-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "18.6 ms",
+          "packet_loss_pct": "0.0%",
+          "dns_resolution_ms": "1096.7 ms"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0136-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "dns_resolution_ms": 628.3,
+          "dhcp_lease_success": false,
+          "latency_ms": 8.3,
+          "packet_loss_pct": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0137-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SES-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "dns_resolution_ms": 662.1,
+          "dhcp_lease_success": false,
+          "latency_ms": 12.2,
+          "packet_loss_pct": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0138-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-HOSTELS",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "5.3 ms",
+          "packet_loss_pct": "0.0%",
+          "dns_resolution_ms": "709.8 ms"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0139-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-HOSTELS",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "10.9 ms",
+          "packet_loss_pct": "0.0%",
+          "dns_resolution_ms": "830.3 ms"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0140-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "15.3 ms",
+          "packet_loss_pct": "0.0%",
+          "dns_resolution_ms": "799.1 ms"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0141-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "dns_resolution_ms": 1098.0,
+          "dhcp_lease_success": false,
+          "latency_ms": 16.5,
+          "packet_loss_pct": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0142-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-LHC-01",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "14.8 ms",
+          "packet_loss_pct": "0.0%",
+          "dns_resolution_ms": "587.8 ms"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0143-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-LHC-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "dns_resolution_ms": 832.1,
+          "dhcp_lease_success": false,
+          "latency_ms": 13.1,
+          "packet_loss_pct": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0144-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "dns_resolution_ms": 1016.0,
+          "dhcp_lease_success": false,
+          "latency_ms": 11.2,
+          "packet_loss_pct": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0145-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-DIST-ACADEMIC",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.015300000000000001,
+          "packet_loss_ratio": 0.0,
+          "dns_latency_sec": 1.089,
+          "dhcp_lease_success": false
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0146-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SHR-W1",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "5.4 ms",
+          "packet_loss_pct": "0.0%",
+          "dns_resolution_ms": "905.0 ms"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0147-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-DIST-HOSTELS",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.015300000000000001,
+          "packet_loss_ratio": 0.0,
+          "dns_latency_sec": 1.0003,
+          "dhcp_lease_success": false
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0148-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "dns_resolution_ms": 1189.1,
+          "dhcp_lease_success": false,
+          "latency_ms": 6.3,
+          "packet_loss_pct": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0149-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-LHC",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "dns_resolution_ms": 1033.4,
+          "dhcp_lease_success": false,
+          "latency_ms": 8.5,
+          "packet_loss_pct": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0150-DNS_DHCP_FAILURE",
+    "ground_truth_root_cause": "DNS_DHCP_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W1",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "dns_resolution_ms": 586.6,
+          "dhcp_lease_success": false,
+          "latency_ms": 18.8,
+          "packet_loss_pct": 0.0
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0151-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-CORE-SW-01",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.3906,
+          "packet_loss_ratio": 0.631,
+          "crc_errors": 262
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0152-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "interface_errors": 212,
+          "packet_loss_pct": 44.5,
+          "latency_ms": 272.5
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0153-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-CORE-SW-01",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.3078,
+          "packet_loss_ratio": 0.62,
+          "crc_errors": 129
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0154-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-CORE-SW-01",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.3551,
+          "packet_loss_ratio": 0.294,
+          "crc_errors": 271
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0155-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "228.3 ms",
+          "packet_loss_pct": "42.7%",
+          "interface_errors": "149"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0156-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-CORE-SW-01",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.354,
+          "packet_loss_ratio": 0.413,
+          "crc_errors": 146
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0157-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "interface_errors": 225,
+          "packet_loss_pct": 60.3,
+          "latency_ms": 360.7
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0158-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "interface_errors": 204,
+          "packet_loss_pct": 26.1,
+          "latency_ms": 366.8
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0159-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "interface_errors": 295,
+          "packet_loss_pct": 47.7,
+          "latency_ms": 318.6
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0160-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "interface_errors": 96,
+          "packet_loss_pct": 52.0,
+          "latency_ms": 387.7
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0161-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "154.8 ms",
+          "packet_loss_pct": "49.8%",
+          "interface_errors": "265"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0162-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "interface_errors": 125,
+          "packet_loss_pct": 59.6,
+          "latency_ms": 206.2
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0163-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "277.6 ms",
+          "packet_loss_pct": "32.3%",
+          "interface_errors": "167"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0164-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "254.3 ms",
+          "packet_loss_pct": "52.3%",
+          "interface_errors": "202"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0165-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "interface_errors": 215,
+          "packet_loss_pct": 30.4,
+          "latency_ms": 213.7
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0166-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-CORE-SW-01",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.18669999999999998,
+          "packet_loss_ratio": 0.502,
+          "crc_errors": 259
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0167-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "interface_errors": 201,
+          "packet_loss_pct": 47.8,
+          "latency_ms": 331.4
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0168-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "182.1 ms",
+          "packet_loss_pct": "58.5%",
+          "interface_errors": "275"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0169-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-CORE-SW-01",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.1739,
+          "packet_loss_ratio": 0.304,
+          "crc_errors": 122
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0170-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "224.2 ms",
+          "packet_loss_pct": "47.8%",
+          "interface_errors": "162"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0171-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-CORE-SW-01",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.15130000000000002,
+          "packet_loss_ratio": 0.401,
+          "crc_errors": 123
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0172-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "CRITICAL",
+        "metrics": {
+          "interface_errors": 194,
+          "packet_loss_pct": 40.9,
+          "latency_ms": 391.3
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0173-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_ms": "254.6 ms",
+          "packet_loss_pct": "46.2%",
+          "interface_errors": "221"
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0174-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-CORE-SW-01",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.1741,
+          "packet_loss_ratio": 0.6,
+          "crc_errors": 290
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0175-UPSTREAM_SWITCH_FAILURE",
+    "ground_truth_root_cause": "UPSTREAM_SWITCH_FAILURE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-CORE-SW-01",
+        "epoch_timestamp": 1793440000,
+        "status": "CRITICAL",
+        "metrics": {
+          "latency_sec": 0.19190000000000002,
+          "packet_loss_ratio": 0.578,
+          "crc_errors": 200
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0176-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-HOSTELS",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "UNKNOWN",
+        "metrics": {
+          "latency_ms": null,
+          "packet_loss_pct": null,
+          "cpu_pct": null,
+          "queue_drops": null
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0177-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0178-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-LHC-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "UNKNOWN",
+        "metrics": {
+          "latency_ms": null,
+          "packet_loss_pct": null,
+          "cpu_pct": null,
+          "queue_drops": null
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0179-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SES-01",
+        "epoch_timestamp": 1793440000,
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0180-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-LHC",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "UNKNOWN",
+        "metrics": {
+          "latency_ms": null,
+          "packet_loss_pct": null,
+          "cpu_pct": null,
+          "queue_drops": null
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0181-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-CORE-SW-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "UNKNOWN",
+        "metrics": {
+          "latency_ms": null,
+          "packet_loss_pct": null,
+          "cpu_pct": null,
+          "queue_drops": null
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0182-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-DIST-HOSTELS",
+        "epoch_timestamp": 1793440000,
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0183-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-ACADEMIC",
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0184-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SHR",
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0185-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SHR",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "UNKNOWN",
+        "metrics": {
+          "latency_ms": null,
+          "packet_loss_pct": null,
+          "cpu_pct": null,
+          "queue_drops": null
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0186-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-SES-01",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "UNKNOWN",
+        "metrics": {
+          "latency_ms": null,
+          "packet_loss_pct": null,
+          "cpu_pct": null,
+          "queue_drops": null
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0187-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-DIST-HOSTELS",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "UNKNOWN",
+        "metrics": {
+          "latency_ms": null,
+          "packet_loss_pct": null,
+          "cpu_pct": null,
+          "queue_drops": null
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0188-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-MHR",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "UNKNOWN",
+        "metrics": {
+          "latency_ms": null,
+          "packet_loss_pct": null,
+          "cpu_pct": null,
+          "queue_drops": null
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0189-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-DIST-ACADEMIC",
+        "epoch_timestamp": 1793440000,
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0190-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0191-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "UNKNOWN",
+        "metrics": {
+          "latency_ms": null,
+          "packet_loss_pct": null,
+          "cpu_pct": null,
+          "queue_drops": null
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0192-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SHR",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "UNKNOWN",
+        "metrics": {
+          "latency_ms": null,
+          "packet_loss_pct": null,
+          "cpu_pct": null,
+          "queue_drops": null
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0193-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "IITBBS-SW-SES",
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0194-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-MHR-W1",
+        "epoch_timestamp": 1793440000,
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0195-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "AP-SES-01",
+        "epoch_timestamp": 1793440000,
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0196-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-SHR",
+        "epoch_timestamp": 1793440000,
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0197-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "UNKNOWN",
+        "metrics": {
+          "latency_ms": null,
+          "packet_loss_pct": null,
+          "cpu_pct": null,
+          "queue_drops": null
+        }
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0198-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V3",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0199-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V2",
+    "telemetry_payload": [
+      {
+        "host_id": "IITBBS-SW-MHR",
+        "epoch_timestamp": 1793440000,
+        "status": "UNKNOWN",
+        "metrics": {}
+      }
+    ]
+  },
+  {
+    "case_id": "CALIB-0200-INSUFFICIENT_EVIDENCE",
+    "ground_truth_root_cause": "INSUFFICIENT_EVIDENCE",
+    "schema_version": "V1",
+    "telemetry_payload": [
+      {
+        "device_id": "AP-MHR-W2",
+        "timestamp": "2026-10-31T20:00:00Z",
+        "reported_status": "UNKNOWN",
+        "metrics": {
+          "latency_ms": null,
+          "packet_loss_pct": null,
+          "cpu_pct": null,
+          "queue_drops": null
+        }
+      }
+    ]
+  }
+]

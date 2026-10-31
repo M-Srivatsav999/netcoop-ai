@@ -82,6 +82,7 @@ class CanonicalMetrics(BaseModel):
     memory_pct: Optional[float] = None
     queue_drops: Optional[int] = None
     interface_errors: Optional[int] = None
+    crc_errors: Optional[int] = None
     signal_strength_dbm: Optional[float] = None
     dns_resolution_ms: Optional[float] = None
     dhcp_lease_success: Optional[bool] = None
@@ -181,6 +182,8 @@ class ArbitrationResult(BaseModel):
     """Central arbitration decision produced by the CorrelationAgent."""
     primary_root_cause: str
     confidence: float = Field(ge=0.0, le=1.0)
+    raw_confidence: float = 0.0
+    calibrated_confidence: float = 0.0
     affected_devices: List[str] = Field(default_factory=list)
     supporting_evidence: List[str] = Field(default_factory=list)
     structured_evidence: List[StructuredEvidence] = Field(default_factory=list)
@@ -232,3 +235,50 @@ class UnifiedIncidentReport(BaseModel):
         default_factory=list,
         description="All co-occurring incidents detected (populated when multiple faults present)"
     )
+
+
+# ============================================================================
+# AGENT MESSAGE PROTOCOL (AMP) - HACKATHON 30% INTEROPERABILITY STANDARD
+# ============================================================================
+
+class AMPEvidenceItem(BaseModel):
+    """Atomic evidence record exchanged between collaborating agents."""
+    metric: str
+    value: Any
+    unit: str
+    source: str
+    timestamp: Optional[datetime] = None
+    interpretation: str = ""
+
+
+class AMPHypothesis(BaseModel):
+    """Candidate root cause with supporting rationale and counter-evidence."""
+    cause: str
+    confidence: float = Field(ge=0.0, le=1.0)
+    rationale: str
+    counter_evidence: List[str] = Field(default_factory=list)
+
+
+class AgentMessageProtocol(BaseModel):
+    """The canonical Agent Message Protocol (AMP) contract.
+
+    Mandated by the hackathon 30% interoperability specification:
+    - Independent agents exchange strictly typed, versioned messages
+    - Explicit units prevent metric scaling errors
+    - Clear timestamps enable temporal causality correlation
+    - Structured hypotheses separate evidence from opinion
+    """
+    message_id: str
+    incident_id: str
+    agent_id: str
+    schema_version: str = "AMP/1.0"
+    timestamp: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    device_id: str
+    observation_window: str = "5m"
+    finding_type: str
+    severity: SeverityLevel = SeverityLevel.INFO
+    evidence: List[AMPEvidenceItem] = Field(default_factory=list)
+    hypotheses: List[AMPHypothesis] = Field(default_factory=list)
+    limitations: List[str] = Field(default_factory=list)
+    requires_followup: bool = False
+

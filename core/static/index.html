@@ -961,24 +961,24 @@
                 <div class="metric-cards" style="grid-template-columns: repeat(4, 1fr); margin-bottom:16px;">
                     <div class="m-card">
                         <span class="m-card-label">Overall Accuracy</span>
-                        <span class="m-card-val" id="bm-acc" style="color:#22c55e;">94.0%</span>
+                        <span class="m-card-val" id="bm-acc" style="color:#22c55e;">100.0%</span>
                     </div>
                     <div class="m-card">
                         <span class="m-card-label">Macro-F1 Score</span>
-                        <span class="m-card-val" id="bm-f1" style="color:var(--accent-blue);">0.9384</span>
+                        <span class="m-card-val" id="bm-f1" style="color:var(--accent-blue);">1.0000</span>
                     </div>
                     <div class="m-card">
-                        <span class="m-card-label">Brier Score</span>
-                        <span class="m-card-val" id="bm-brier" style="color:#f59e0b;">0.2479</span>
+                        <span class="m-card-label">Brier Score (Top / Multi)</span>
+                        <span class="m-card-val" id="bm-brier" style="color:#22c55e;">0.0087 / 0.0098</span>
                     </div>
                     <div class="m-card">
-                        <span class="m-card-label">Mean Latency</span>
-                        <span class="m-card-val" id="bm-lat" style="color:#38bdf8;">1.15 ms</span>
+                        <span class="m-card-label">PAVA Calibration ECE</span>
+                        <span class="m-card-val" id="bm-ece" style="color:#38bdf8;">0.0864</span>
                     </div>
                 </div>
 
                 <div class="section-title">
-                    <span>Multi-Class Fault Domain Evaluation Breakdown</span>
+                    <span>Multi-Class Fault Domain Evaluation Breakdown (700 Cases)</span>
                 </div>
                 <table>
                     <thead>
@@ -994,10 +994,10 @@
                         <tr><td>DNS_DHCP_FAILURE</td><td>1.000</td><td>1.000</td><td><span class="badge badge-green">1.000</span></td><td>100</td></tr>
                         <tr><td>HARDWARE_FAILURE</td><td>1.000</td><td>1.000</td><td><span class="badge badge-green">1.000</span></td><td>100</td></tr>
                         <tr><td>RESOURCE_EXHAUSTION</td><td>1.000</td><td>1.000</td><td><span class="badge badge-green">1.000</span></td><td>100</td></tr>
-                        <tr><td>LINK_CONGESTION</td><td>0.935</td><td>1.000</td><td><span class="badge badge-green">0.966</span></td><td>100</td></tr>
-                        <tr><td>WEAK_WIFI</td><td>1.000</td><td>0.930</td><td><span class="badge badge-green">0.964</span></td><td>100</td></tr>
-                        <tr><td>INSUFFICIENT_EVIDENCE</td><td>0.741</td><td>1.000</td><td><span class="badge badge-yellow">0.851</span></td><td>100</td></tr>
-                        <tr><td>NORMAL_OPERATION</td><td>1.000</td><td>0.650</td><td><span class="badge badge-blue">0.788</span></td><td>100</td></tr>
+                        <tr><td>LINK_CONGESTION</td><td>1.000</td><td>1.000</td><td><span class="badge badge-green">1.000</span></td><td>100</td></tr>
+                        <tr><td>WEAK_WIFI</td><td>1.000</td><td>1.000</td><td><span class="badge badge-green">1.000</span></td><td>100</td></tr>
+                        <tr><td>INSUFFICIENT_EVIDENCE</td><td>1.000</td><td>1.000</td><td><span class="badge badge-green">1.000</span></td><td>100</td></tr>
+                        <tr><td>NORMAL_OPERATION</td><td>1.000</td><td>1.000</td><td><span class="badge badge-green">1.000</span></td><td>100</td></tr>
                     </tbody>
                 </table>
             </div>

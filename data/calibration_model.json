@@ -1,10 +1,40 @@
 {
   "algorithm": "Pool Adjacent Violators Algorithm (PAVA) Isotonic Regression",
-  "dataset": "evaluation/calibration_dataset",
-  "fitted_at": "2026-11-01T00:00:00Z",
-  "calibration_samples": 200,
-  "loss_function": "Least Squares Monotonic Step Loss (PAVA)",
-  "knots_x": [0.0, 0.35, 0.5, 0.65, 0.8, 1.0],
-  "knots_y": [0.0, 0.5, 0.88, 0.91, 0.94, 0.985],
-  "monotonic": true
+  "knots_x": [
+    0.0,
+    0.401,
+    0.597,
+    0.603,
+    0.619,
+    0.644,
+    0.788,
+    0.821,
+    1.0
+  ],
+  "knots_y": [
+    0.0,
+    0.5,
+    0.8222,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0,
+    1.0
+  ],
+  "sample_count": 200,
+  "diagnosed_training_points": 175,
+  "calibration_dataset_path": "data/calibration_dataset.json",
+  "calibration_dataset_sha256": "22a3091b94af98d2496416daf24b87871e4d14f6b06998e2887bc216d90ca09f",
+  "class_distribution": {
+    "NORMAL_OPERATION": 30,
+    "LINK_CONGESTION": 30,
+    "HARDWARE_FAILURE": 30,
+    "WEAK_WIFI": 30,
+    "DNS_DHCP_FAILURE": 30,
+    "UPSTREAM_SWITCH_FAILURE": 25,
+    "INSUFFICIENT_EVIDENCE": 25
+  },
+  "fitting_command": "python evaluation/fit_calibration_model.py",
+  "fitted_at": "2026-10-31T19:50:19.915511+00:00"
 }

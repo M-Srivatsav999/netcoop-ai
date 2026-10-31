@@ -181,7 +181,20 @@ def test_remediation_simulation():
     assert len(sim.actions) >= 1
     assert sim.actions[0].action_type == "APPLY_DSCP_QOS_POLICING"
     assert "egress_queue_drops" in sim.actions[0].projected_recovery
+    assert sim.actions[0].rollback_cli_command != ""
     assert sim.blast_radius_contained is True
+    assert sim.lifecycle_state == "SIMULATED"
+
+    # Test recovery verification loop
+    verification = RemediationSimulator.verify_simulated_recovery(sim)
+    assert verification.recovery_verified is True
+    assert verification.lifecycle_state == "SIMULATED_RECOVERY_VERIFIED"
+    assert len(verification.kpi_deltas) > 0
+    # Latency recovery delta calculation
+    lat_delta = verification.kpi_deltas.get("BLDG-SW-ENG_round_trip_latency_ms")
+    assert lat_delta is not None
+    assert lat_delta["improvement_pct"] == 90.0
+    assert verification.rollback_recommended is False
 
 
 def test_session_state_store_pause_resume(tmp_path):

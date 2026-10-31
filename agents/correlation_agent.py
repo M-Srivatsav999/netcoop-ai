@@ -121,10 +121,13 @@ class CorrelationAgent:
                 topology_consistency=topo_score,
                 staleness_seconds=staleness_seconds
             )
-            data["computed_confidence"] = conf
+            # Calibrate raw heuristic score using the fitted PAVA Isotonic Regression curve
+            calibrated_conf = self.confidence_engine.calibrate_confidence(conf)
+            data["raw_confidence"] = conf
+            data["computed_confidence"] = calibrated_conf
             data["uncertainty_factors"] = uncert
             data["limitations"] = limits
-            ranked_hypotheses.append((target, data["net_score"], conf, data))
+            ranked_hypotheses.append((target, data["net_score"], calibrated_conf, data))
 
         # Sort hypotheses:
         # When anomalies are detected on the network, fault hypotheses with verified confidence take precedence over NORMAL_OPERATION.
@@ -164,7 +167,8 @@ class CorrelationAgent:
 
         if critically_stale:
             primary_root_cause = HypothesisType.INSUFFICIENT_EVIDENCE.value
-            confidence = top_confidence
+            confidence = 0.0
+            raw_confidence = 0.0
             uncertainties.append(
                 "Telemetry exceeds maximum freshness threshold (>2h) — "
                 "asserting normal operation from historical telemetry is unreliable."
@@ -174,14 +178,16 @@ class CorrelationAgent:
             )
         elif critically_sparse:
             primary_root_cause = HypothesisType.INSUFFICIENT_EVIDENCE.value
-            confidence = top_confidence
+            confidence = 0.0
+            raw_confidence = 0.0
             uncertainties.append(
                 f"Critically sparse telemetry: only {round(overall_completeness * 100, 1)}% of metrics populated — cannot assert normal operation."
             )
             limitations.append("Insufficient data to diagnose or rule out faults; at least 20% metric coverage required.")
-        elif not is_normal_net and (top_confidence < self.confidence_engine.config.min_confidence_threshold or top_net_score <= 0.0):
+        elif not is_normal_net and (top_data.get("raw_confidence", top_confidence) < self.confidence_engine.config.min_confidence_threshold or top_net_score <= 0.0):
             primary_root_cause = HypothesisType.INSUFFICIENT_EVIDENCE.value
-            confidence = top_confidence
+            confidence = 0.0
+            raw_confidence = 0.0
             uncertainties.append(
                 f"Confidence ({top_confidence}) did not meet minimum threshold ({self.confidence_engine.config.min_confidence_threshold})."
             )
@@ -189,6 +195,7 @@ class CorrelationAgent:
         else:
             primary_root_cause = top_target
             confidence = top_confidence
+            raw_confidence = top_data.get("raw_confidence", top_confidence)
 
         # If primary root cause is normal operation, clamp affected devices to empty
         if primary_root_cause == HypothesisType.NORMAL_OPERATION.value:
@@ -418,6 +425,8 @@ class CorrelationAgent:
         return ArbitrationResult(
             primary_root_cause=primary_root_cause,
             confidence=confidence,
+            raw_confidence=raw_confidence,
+            calibrated_confidence=confidence,
             affected_devices=affected_devices,
             supporting_evidence=supporting_strings,
             structured_evidence=structured_items,

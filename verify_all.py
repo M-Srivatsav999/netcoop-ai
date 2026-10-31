@@ -1,7 +1,7 @@
 """Comprehensive Competition-Readiness Verification & Acceptance Suite for NetCoop AI.
 
 Executes and audits the entire platform end-to-end:
-1. Pytest Unit & Regression Suite (65 tests)
+1. Pytest Unit & Regression Suite (79 tests across 12 suites)
 2. Scenario Reproducibility Suite (15 scenarios) with strict pass_rate == 100%
 3. Organizer Generator Check (150 cases, 0 dropped fields)
 4. Scientific 700-Case Evaluation Lab & PAVA Isotonic Calibration with strict numerical thresholds:
@@ -175,8 +175,8 @@ def main() -> int:
     step_results = []
 
     # 1. Pytest Suite
-    ok1 = run_cmd("python -m pytest evaluation/ -v", "Full Pytest Suite (65 tests)")
-    step_results.append(("Pytest Test Suite (Agents, Ledger, Adapters, Robustness)", "65/65 Tests", ok1))
+    ok1 = run_cmd("python -m pytest evaluation/ -v", "Full Pytest Suite (79 tests)")
+    step_results.append(("Pytest Test Suite (Agents, Ledger, Adapters, Robustness)", "79/79 Tests", ok1))
 
     # 2. 15-Scenario Reproducibility
     ok2 = run_cmd("python evaluation/run_evaluation.py", "15 Scenario Reproducibility Benchmark")
@@ -226,7 +226,7 @@ def main() -> int:
 
     if all_steps_ok and thresholds_ok:
         print("\n>>> ALL ACCEPTANCE CRITERIA VERIFIED: SYSTEM MEETS COMPETITION THRESHOLDS <<<")
-        print(">>> 65 Pytests, 15 Scenarios, 700 Benchmark & 210 Held-Out Cases Statistically Verified <<<\n")
+        print(">>> 79 Pytests, 15 Scenarios, 700 Benchmark & 210 Held-Out Cases Statistically Verified <<<\n")
         return 0
     else:
         print("\n>>> CRITICAL WARNING: ONE OR MORE CHECKS OR ACCEPTANCE THRESHOLDS FAILED <<<")

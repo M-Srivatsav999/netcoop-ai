@@ -228,14 +228,23 @@ class EvidenceLedger:
             self.contradictions.append(rec)
         return records
 
-    def validate_message_integrity(self, message: AgentMessage) -> bool:
+    def validate_message_integrity(self, message: AgentMessage | Any) -> bool:
         """Validate agent message structure and guard against duplicate delivery using cryptographic hashing."""
-        canonical_msg = json.dumps({
-            "sender": message.sender,
-            "recipient": message.recipient,
-            "message_type": message.message_type,
-            "payload": message.payload
-        }, sort_keys=True, separators=(',', ':'))
+        if hasattr(message, "message_id"):
+            canonical_msg = json.dumps({
+                "message_id": getattr(message, "message_id"),
+                "incident_id": getattr(message, "incident_id"),
+                "agent_id": getattr(message, "agent_id"),
+                "finding_type": getattr(message, "finding_type"),
+                "device_id": getattr(message, "device_id")
+            }, sort_keys=True, separators=(',', ':'))
+        else:
+            canonical_msg = json.dumps({
+                "sender": getattr(message, "sender", "UNKNOWN"),
+                "recipient": getattr(message, "recipient", "UNKNOWN"),
+                "message_type": getattr(message, "message_type", "UNKNOWN"),
+                "payload": getattr(message, "payload", {})
+            }, sort_keys=True, separators=(',', ':'))
         msg_hash = hashlib.sha256(canonical_msg.encode("utf-8")).hexdigest()
 
         if msg_hash in self._seen_messages:
