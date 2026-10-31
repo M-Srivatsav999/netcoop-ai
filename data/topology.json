@@ -264,5 +264,12 @@
       "capacity_gbps": 1,
       "parent": "BLDG-SW-ENG"
     }
-  ]
+  ],
+  "service_dependencies": {
+    "CLIENT-HA-101": { "dns_server": "SRV-DNS-01", "dhcp_server": "SRV-DHCP-01" },
+    "CLIENT-HA-102": { "dns_server": "SRV-DNS-01", "dhcp_server": "SRV-DHCP-01" },
+    "CLIENT-HB-201": { "dns_server": "SRV-DNS-01", "dhcp_server": "SRV-DHCP-01" },
+    "CLIENT-MHR-101": { "dns_server": "SRV-DNS-01", "dhcp_server": "SRV-DHCP-01" },
+    "LAB-PC-ENG-01": { "dns_server": "SRV-DNS-01", "dhcp_server": "SRV-DHCP-01" }
+  }
 }

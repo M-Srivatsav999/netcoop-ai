@@ -379,8 +379,8 @@ class TelemetryNormalizer:
         link_util_val = None
         if "link_utilization_pct" in metric_source:
             link_util_val = cls._parse_float(metric_source["link_utilization_pct"], "link_utilization_pct", warnings)
-        elif "link_utilization" in metric_source or "link_util_pct" in metric_source:
-            raw_lu = metric_source.get("link_utilization", metric_source.get("link_util_pct"))
+        elif any(k in metric_source for k in ("link_utilization", "link_util_pct", "link_utilization_ratio", "link_ratio", "link_util")):
+            raw_lu = next(metric_source[k] for k in ("link_utilization", "link_util_pct", "link_utilization_ratio", "link_ratio", "link_util") if k in metric_source)
             p_lu = cls._parse_float(raw_lu, "link_utilization", warnings)
             if p_lu is not None:
                 if p_lu <= 1.0 and p_lu > 0.0:

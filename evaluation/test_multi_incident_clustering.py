@@ -156,3 +156,44 @@ def test_service_dependency_propagation_single_incident():
     assert "SRV-DNS-01" in inc.affected_devices
     assert "CLIENT-HA-101" in inc.affected_devices
     assert len(inc.supporting_evidence) >= 2
+
+
+def test_upstream_congestion_root_cause_localization():
+    """Verify that in link congestion cascades affecting both an upstream switch and downstream APs,
+    the causal upstream bottleneck switch (BLDG-SW-ENG) is correctly localized as the root_cause_device,
+    rather than a downstream symptom receiver (AP-ENG-01).
+    """
+    orch = NetworkIntelligenceOrchestrator()
+    sc_path = PROJECT_ROOT / "data" / "scenarios" / "scenario_2_congestion.json"
+    with open(sc_path, "r", encoding="utf-8") as f:
+        data = json.load(f)
+
+    res = orch.process(data.get("telemetry", data))
+    assert len(res.report.incidents) == 1
+    inc = res.report.incidents[0]
+    assert inc.root_cause == HypothesisType.LINK_CONGESTION.value
+    # Must correctly identify upstream bottleneck switch as origin
+    assert inc.root_cause_device == "BLDG-SW-ENG"
+
+
+def test_service_dependency_validation_and_engine_integrity():
+    """Verify that TopologyEngine validates service dependency mappings against registered topology
+    nodes and ensures referenced servers exist.
+    """
+    from core.topology import TopologyEngine
+    topo = TopologyEngine()
+    
+    # Verify service dependencies are loaded and validated
+    assert len(topo.service_dependencies) > 0
+    assert "CLIENT-HA-101" in topo.service_dependencies
+    
+    # All referenced servers must actually exist in registered nodes
+    for client_id, srv_map in topo.service_dependencies.items():
+        for s_type, srv_id in srv_map.items():
+            assert srv_id in topo.nodes
+            assert topo.nodes[srv_id].type == "server"
+
+    # Test is_service_dependent query
+    assert topo.is_service_dependent("CLIENT-HA-101", "SRV-DNS-01") is True
+    assert topo.is_service_dependent("CLIENT-HA-101", "NON-EXISTENT-SERVER") is False
+

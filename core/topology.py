@@ -53,6 +53,7 @@ class TopologyEngine:
 
     def __init__(self, topology_path: Optional[Path | str] = None) -> None:
         self.nodes: Dict[str, TopologyNode] = {}
+        self.service_dependencies: Dict[str, Dict[str, str]] = {}
         self.root_id: Optional[str] = None
         self._load_topology(topology_path or self.DEFAULT_TOPOLOGY_PATH)
 
@@ -84,6 +85,19 @@ class TopologyEngine:
         for node in self.nodes.values():
             if node.parent_id and node.parent_id in self.nodes:
                 self.nodes[node.parent_id].children_ids.append(node.id)
+
+        # Load and validate configurable service dependencies
+        # Ensures every referenced server exists in verified campus topology
+        raw_deps = data.get("service_dependencies", {})
+        self.service_dependencies = {}
+        for client_id, srv_map in raw_deps.items():
+            valid_srv_map = {}
+            for svc_name, srv_id in srv_map.items():
+                if srv_id in self.nodes:
+                    valid_srv_map[svc_name] = srv_id
+            if valid_srv_map:
+                self.service_dependencies[client_id] = valid_srv_map
+        self.SERVICE_DEPENDENCIES = self.service_dependencies
 
     def _create_fallback_topology(self) -> None:
         """Create a default 4-tier campus network in memory."""
@@ -132,6 +146,26 @@ class TopologyEngine:
             parent_id=parent
         )
         return synth
+
+    def get_service_dependency(self, device_id: str, service_type: str = "dns_server") -> Optional[str]:
+        """Return the explicit server providing the specified network service to a client."""
+        deps = self.service_dependencies.get(device_id)
+        if deps:
+            return deps.get(service_type)
+        return None
+
+    def is_service_dependent(self, client_id: str, server_id: str) -> bool:
+        """Check if client_id is explicitly mapped to receive network services from server_id."""
+        deps = self.service_dependencies.get(client_id, {})
+        if server_id in deps.values():
+            return True
+        # Dynamic campus fallback: if client is an end-user device or host and server is a registered DNS/DHCP server
+        server_node = self.nodes.get(server_id)
+        if server_node and server_node.type == "server":
+            client_node = self.nodes.get(client_id)
+            if client_node and client_node.type in ("end_device", "access_point"):
+                return True
+        return False
 
     def get_upstream_path(self, device_id: str) -> List[str]:
         """Return list of ancestor IDs from immediate parent up to the root Core Switch."""

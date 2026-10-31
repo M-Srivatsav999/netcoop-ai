@@ -72,7 +72,7 @@ The system operates **entirely without external LLM APIs**, utilizing strict mat
 4. **Untrusted Label Reconciliation**: Generator-supplied status labels (e.g. `reported_status: "HEALTHY"`) are validated against computed telemetry. If contradictory anomalies exist, the label is formally overridden with an audit record in `contradictory_evidence`.
 5. **IIT Bhubaneswar Campus Topology & Blast Radius**: Hierarchical tree modeling from `IITBBS-CORE-SW-01` through Distribution, Building (Mahanadi Hostel, Subarnarekha Hostel, School of Electrical Sciences, Lecture Hall Complex), Access Point, and Client tiers calculates cascading dependencies, lowest common ancestors (LCA), and downstream impact.
 6. **Deterministic Conflict Resolution**: Resolves ambiguous physical vs transport indicators (e.g., Congestion vs Hardware Physical Link Failure vs RF Signal Degradation vs DNS Outage).
-7. **Production Engineering Quality**: Fully typed, tested with `pytest` (26/26 tests passing in 1.2s), complete coverage of edge cases, structured logging, and an interactive Rich terminal dashboard.
+7. **Production Engineering Quality**: Fully typed, tested with `pytest` (47/47 tests passing in 1.06s), complete coverage of edge cases, structured logging, an independent 700-case scientific benchmark (94.0% accuracy, 0.9384 Macro-F1), and an interactive Rich terminal & Web NOC dashboard.
 
 ---
 
@@ -203,8 +203,10 @@ The system was evaluated against all 6 organizer scenarios plus 6 real-world edg
 | **`SCENARIO_ORGANIZER_HARDWARE_FAILURE`** | V1 | `HARDWARE_FAILURE` | 65.6% | 1 | Yes | **PASS** |
 | **`SCENARIO_ORGANIZER_LATENCY_SPIKE`** | V1 | `LINK_CONGESTION` | 73.8% | 1 | Yes | **PASS** |
 
-- **Unit Test Suite**: `33/33 PASSED` (`pytest -v` across all specialized agents, schemas, and clustering tests).
+- **Unit Test Suite**: `47/47 PASSED` (`pytest -v` covering agents, schemas, multi-incident clustering, service dependencies, equivalence, and 10 adversarial robustness tests).
 - **Benchmark Suite**: `15/15 PASSED` with 100% deterministic reproducibility (`pass_rate: 100.0%`).
+- **Scientific 700-Case Evaluation Lab**: `94.0% Accuracy` | `0.9384 Macro-F1` | `1.15ms Latency` across 7 fault domains and 3 schema specifications.
+- **Organizer Telemetry Generator Check**: `150/150 PASSED` with 0 dropped fields and 0 unhandled exceptions.
 
 ---
 
@@ -215,22 +217,23 @@ The system was evaluated against all 6 organizer scenarios plus 6 real-world edg
 pip install -r requirements.txt
 ```
 
-### Running the Live Interactive Dashboard
+### Running the Live Interactive Web NOC Dashboard
 ```bash
-python main.py --scenario data/scenarios/scenario_2_congestion.json --dashboard
+python web_ui.py
+# Open http://localhost:8000 in your browser
 ```
 
-### Running Automated Remediation Simulation & Exporting HTML Report
+### Running the 700-Case Scientific Benchmark Laboratory
 ```bash
-python main.py --scenario data/scenarios/scenario_2_congestion.json --simulate-remediation --export-html report.html
+python evaluation/benchmark_runner.py
 ```
 
-### Running the Full Evaluation Benchmark
+### Running the 15-Scenario Reproducibility Suite
 ```bash
-python main.py --evaluate
+python evaluation/run_evaluation.py
 ```
 
-### Running the Pytest Suite
+### Running the Pytest Suite (47 Tests)
 ```bash
 pytest -v
 ```

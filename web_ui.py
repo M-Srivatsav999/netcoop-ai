@@ -98,13 +98,18 @@ async def diagnose(request: Request):
             telemetry_records=result.canonical_telemetry
         )
 
-        # Statistically Calibrated Campus Network Health Score (0-100)
+        # Composite Network Health Index (Heuristic Calibration)
         # Formula: H_campus = sum(w_i * H_i) / sum(w_i)
-        # Weights reflect device criticality: Core = 3.0, Dist = 2.0, Bldg = 1.5, AP/Server = 1.0, Client = 0.5
+        # Criticality weights: Core = 3.0, Dist = 2.0, Bldg = 1.5, AP/Server = 1.0, Client = 0.5
         device_health_list: List[Dict[str, Any]] = []
-        zone_scores: Dict[str, List[float]] = {"Academic": [], "Hostels": [], "Core_Datacenter": []}
+        zone_weighted: Dict[str, float] = {"Academic": 0.0, "Hostels": 0.0, "Core_Datacenter": 0.0}
+        zone_weights: Dict[str, float] = {"Academic": 0.0, "Hostels": 0.0, "Core_Datacenter": 0.0}
         total_weighted_health = 0.0
         total_weight = 0.0
+
+        # Calculate telemetry completeness & freshness factor
+        completeness = result.arbitration_result.evidence_completeness
+        completeness_pct = round(completeness * 100.0, 1)
 
         for rec in result.canonical_telemetry:
             dev_id = rec.device_id
@@ -142,18 +147,39 @@ async def diagnose(request: Request):
             if m.dhcp_lease_success is False or (m.dns_resolution_ms and m.dns_resolution_ms > 100.0):
                 h_i -= 35.0
 
+            # If telemetry completeness is critically sparse, penalize unmonitored certainty
+            if completeness < 0.20:
+                h_i = min(h_i, 50.0)  # Cannot assert 100% health from missing data
+
             h_i = max(5.0, min(100.0, h_i))
             total_weighted_health += (w_i * h_i)
             total_weight += w_i
-            zone_scores[zone].append(h_i)
-            device_health_list.append({"device_id": dev_id, "health": round(h_i, 1), "weight": w_i})
+            zone_weighted[zone] += (w_i * h_i)
+            zone_weights[zone] += w_i
+            device_health_list.append({"device_id": dev_id, "health": round(h_i, 1), "weight": w_i, "zone": zone})
 
-        campus_health_score = round(total_weighted_health / total_weight, 1) if total_weight > 0 else 100.0
+        # If telemetry completeness is critically sparse (<20%) or absent, do not report misleading 100% health
+        if not result.canonical_telemetry or completeness < 0.20 or total_weight == 0:
+            campus_health_score = None
+        else:
+            campus_health_score = round(total_weighted_health / total_weight, 1)
 
-        # Zone breakdowns
-        zone_breakdown = {}
-        for z_name, scores in zone_scores.items():
-            zone_breakdown[z_name] = round(sum(scores) / len(scores), 1) if scores else 100.0
+        # Weighted zone aggregations (returns None for unmonitored zones rather than false 100%)
+        zone_breakdown: Dict[str, Optional[float]] = {}
+        zone_coverage: Dict[str, float] = {}
+        for z_name in zone_weighted:
+            w_sum = zone_weights[z_name]
+            if w_sum > 0:
+                zone_breakdown[z_name] = round(zone_weighted[z_name] / w_sum, 1)
+                zone_coverage[z_name] = round((w_sum / total_weight) * 100.0, 1) if total_weight > 0 else 0.0
+            else:
+                zone_breakdown[z_name] = None
+                zone_coverage[z_name] = 0.0
+
+        # Localized root-cause origin device
+        localized_root_cause_device = None
+        if result.report.incidents:
+            localized_root_cause_device = result.report.incidents[0].root_cause_device
 
         return JSONResponse(content={
             "report": result.report.model_dump(mode="json"),
@@ -167,7 +193,15 @@ async def diagnose(request: Request):
             "duration_ms": result.total_duration_ms,
             "campus_health_score": campus_health_score,
             "zone_health_breakdown": zone_breakdown,
-            "device_health": device_health_list
+            "zone_coverage": zone_coverage,
+            "device_health": device_health_list,
+            "telemetry_completeness_pct": completeness_pct,
+            "localized_root_cause_device": localized_root_cause_device,
+            "interoperability_report": result.interoperability_report.model_dump(mode="json") if result.interoperability_report else None,
+            "investigation_plan": [c.model_dump(mode="json") for c in result.investigation_plan],
+            "safe_remediation_actions": [a.model_dump(mode="json") for a in result.safe_remediation_actions],
+            "hypothesis_evaluations": [h.model_dump(mode="json") for h in result.hypothesis_evaluations],
+            "evidence_ledger_summary": result.evidence_ledger_summary
         })
     except Exception as exc:
         import traceback
@@ -194,6 +228,16 @@ async def get_topology():
 async def blast_radius(device_id: str):
     """Get blast radius for a device."""
     return JSONResponse(content=topology.get_blast_radius(device_id))
+
+
+@app.get("/api/benchmark")
+async def get_benchmark():
+    """Retrieve 700-case scientific benchmark report."""
+    b_path = PROJECT_ROOT / "evaluation" / "benchmark_report.json"
+    if b_path.exists():
+        with open(b_path, "r", encoding="utf-8") as f:
+            return JSONResponse(content=json.load(f))
+    return JSONResponse(status_code=404, content={"error": "Benchmark report not generated."})
 
 
 @app.get("/api/device-cli/{device_id}")

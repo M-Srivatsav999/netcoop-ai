@@ -302,14 +302,13 @@ class CorrelationAgent:
             for dev_id, (fault_type, ev_list) in dev_fault_map.items():
                 upstream_path = self.topology.get_upstream_path(dev_id)
                 merged = False
-                # Step B: Topology & Logical Service-Dependency Clustering
+                # Step B: Topology & Explicit Service-Dependency Clustering
                 # Devices merge if:
                 # 1. They have identical fault_type AND
                 # 2. EITHER:
                 #    a) Direct physical hierarchy (Building Switch -> AP/Host)
                 #    b) Immediate building distribution parent (not campus core)
-                #    c) Centralized Service Dependency (e.g. DNS_DHCP_FAILURE where a client
-                #       experiences resolution failure caused by a centralized DNS/DHCP server)
+                #    c) Explicit Service Dependency mapping (Client mapped directly to designated Server)
                 for cluster_key, cluster_data in clusters.items():
                     if cluster_data["fault_type"] == fault_type:
                         existing_devs = cluster_data["devices"]
@@ -322,10 +321,10 @@ class CorrelationAgent:
                         lca = self.topology.find_common_ancestor([dev_id] + existing_devs)
                         lca_is_local = lca is not None and not lca.startswith("CORE-") and not lca.startswith("IITBBS-CORE")
 
-                        # Logical Service Dependency: DNS/DHCP failure on clients is a propagation of server failure
-                        is_service_dependency = (
-                            fault_type == HypothesisType.DNS_DHCP_FAILURE.value and
-                            any(ed.startswith("SRV-") or dev_id.startswith("SRV-") for ed in existing_devs)
+                        # Explicit Logical Service Dependency: Client is explicitly mapped to the server in this cluster
+                        is_service_dependency = any(
+                            self.topology.is_service_dependent(dev_id, ed) or self.topology.is_service_dependent(ed, dev_id)
+                            for ed in existing_devs
                         )
 
                         if is_direct_hierarchy or lca_is_local or is_service_dependency:
@@ -364,14 +363,34 @@ class CorrelationAgent:
                     staleness_seconds=staleness_seconds
                 )
 
-                # Root-Cause Origin vs Downstream Affected Localization:
-                # Upstream switches or dedicated servers (SRV-*) take precedence as the origin device
-                root_cause_dev = None
-                if any(d.startswith("SRV-") for d in c_devs):
-                    root_cause_dev = next(d for d in c_devs if d.startswith("SRV-"))
-                else:
-                    # Find highest node in hierarchy (shortest upstream path to core)
-                    root_cause_dev = min(c_devs, key=lambda d: len(self.topology.get_upstream_path(d)))
+                # AIOps Root-Cause vs Symptom-Receiver Localization:
+                # Upstream switches causing downstream symptom cascades MUST be ranked higher than the edge devices
+                # receiving the propagated symptoms. Distinguishes causal origins (queue drops, link saturation,
+                # service authority) from downstream symptom receivers (propagated latency/jitter).
+                def score_origin_candidate(candidate_id: str) -> Tuple[int, int, float, int]:
+                    # 1. Downstream devices explained (causal tree propagation or service dependency)
+                    downstream_explained = sum(
+                        1 for other_id in c_devs
+                        if other_id != candidate_id and (
+                            candidate_id in self.topology.get_upstream_path(other_id) or
+                            self.topology.is_service_dependent(other_id, candidate_id)
+                        )
+                    )
+                    # 2. Causal metric indicators (buffer saturation, queue drops, saturated link vs propagated latency)
+                    candidate_records = [r for r in c_records if r.device_id == candidate_id]
+                    has_causal_symptom = 0
+                    for r in candidate_records:
+                        m = r.metrics
+                        if (m.queue_drops and m.queue_drops > 100) or (m.link_utilization_pct and m.link_utilization_pct > 80.0) or (m.interface_errors and m.interface_errors > 50):
+                            has_causal_symptom = 1
+                            break
+                    # 3. Direct evidence weight on this device:
+                    direct_ev_weight = sum(e.weight for e in c["evidence"] if e.device_id == candidate_id)
+                    # 4. Topological seniority: shorter path to core breaks tie
+                    seniority = -len(self.topology.get_upstream_path(candidate_id))
+                    return (downstream_explained, has_causal_symptom, direct_ev_weight, seniority)
+
+                root_cause_dev = max(c_devs, key=score_origin_candidate)
 
                 c_ev_struct = [
                     (e.device_id, StructuredEvidence(metric=e.metric_name, value=e.observed_value, interpretation=e.description))

@@ -19,6 +19,10 @@ from agents.telemetry_agent import TelemetryAgent
 from core.confidence_engine import ConfidenceConfig
 from core.rules import MetricThresholds
 from core.topology import TopologyEngine
+from core.hypothesis_engine import HypothesisEngine, HypothesisScore
+from core.evidence_ledger import EvidenceLedger
+from core.investigation_engine import InvestigationEngine, DiagnosticCheck, OperationalAction
+from protocol.interop_gateway import InteroperabilityGateway, InteroperabilityReport
 from protocol.models import (
     AgentFinding,
     AgentMessage,
@@ -40,6 +44,11 @@ class OrchestrationResult(BaseModel):
     arbitration_result: ArbitrationResult
     execution_trace: List[Dict[str, Any]]
     total_duration_ms: float
+    interoperability_report: Optional[InteroperabilityReport] = None
+    investigation_plan: List[DiagnosticCheck] = Field(default_factory=list)
+    safe_remediation_actions: List[OperationalAction] = Field(default_factory=list)
+    hypothesis_evaluations: List[HypothesisScore] = Field(default_factory=list)
+    evidence_ledger_summary: Dict[str, Any] = Field(default_factory=dict)
 
 
 class NetworkIntelligenceOrchestrator:
@@ -98,17 +107,22 @@ class NetworkIntelligenceOrchestrator:
         else:
             parsed_input = raw_input
 
-        # 2. Schema Normalization & CIM Creation
-        log_trace("NORMALIZATION", "Invoking TelemetryNormalizer across raw payload.")
-        canonical_records = TelemetryNormalizer.normalize_batch(parsed_input, explicit_version=explicit_version)
+        # 2. Schema Normalization & Interoperability Gateway
+        log_trace("INTEROP_GATEWAY", "Invoking InteroperabilityGateway and SchemaFingerprinter across raw payload.")
+        canonical_records, interop_report = InteroperabilityGateway.process_and_audit(
+            parsed_input, explicit_version=explicit_version
+        )
         detected_versions = list({r.schema_version_detected.value for r in canonical_records})
         total_warnings = sum(len(r.normalization_warnings) for r in canonical_records)
 
         log_trace(
             "CIM_GENERATION",
-            f"Normalized {len(canonical_records)} devices. Detected schema versions: {detected_versions}.",
-            {"schema_versions": detected_versions, "warnings_count": total_warnings}
+            f"Normalized {len(canonical_records)} devices. Detected schema: {interop_report.schema_detected} (valid={interop_report.schema_valid}).",
+            {"schema_detected": interop_report.schema_detected, "unit_conversions": interop_report.unit_conversions, "warnings_count": total_warnings}
         )
+
+        # Initialize Central Diagnostic Evidence Ledger
+        ledger = EvidenceLedger(correlation_id=f"CORR-{incident_id}")
 
         # 3. Staleness Calculation
         now = reference_time or datetime.now(timezone.utc)
@@ -196,6 +210,11 @@ class NetworkIntelligenceOrchestrator:
                 "blast_radius_devices": [f.device_id for f in conn_anomalous]
             }
         ))
+
+        # Record structured agent findings in central Diagnostic Evidence Ledger
+        ledger.record_agent_findings("TelemetryAgent", tel_findings)
+        ledger.record_agent_findings("InfrastructureAgent", infra_findings)
+        ledger.record_agent_findings("ConnectivityAgent", conn_findings)
 
         # 5a. Label-vs-Metrics Conflict Negotiation (REQUEST_CLARIFICATION pattern)
         # If any device reports HEALTHY label but has anomalous telemetry/infra findings,
@@ -299,7 +318,23 @@ class NetworkIntelligenceOrchestrator:
             }
         ))
 
-        # 6. Report Generation
+        # 6. Active Investigation & Multi-Signal Hypothesis Evaluation
+        log_trace("ACTIVE_INVESTIGATION", "Generating ranked diagnostic follow-up checks and safe remediation plan.")
+        investigation_plan = InvestigationEngine.generate_investigation_plan(
+            root_cause=arbitration.primary_root_cause,
+            competing_hypotheses=arbitration.alternative_hypotheses,
+            affected_devices=arbitration.affected_devices
+        )
+        safe_actions = InvestigationEngine.generate_safe_remediation_actions(
+            root_cause=arbitration.primary_root_cause,
+            affected_devices=arbitration.affected_devices
+        )
+        hypothesis_evaluations = HypothesisEngine.evaluate_hypotheses(
+            telemetry_records=canonical_records,
+            completeness=arbitration.evidence_completeness
+        )
+
+        # 7. Report Generation
         log_trace("REPORTING", "Generating UnifiedIncidentReport and Executive Markdown Summary.")
         report = self.reporter_agent.generate_json_report(arbitration, incident_id=incident_id)
         md_summary = self.reporter_agent.generate_markdown_summary(
@@ -319,5 +354,10 @@ class NetworkIntelligenceOrchestrator:
             agent_messages=messages,
             arbitration_result=arbitration,
             execution_trace=trace,
-            total_duration_ms=duration_ms
+            total_duration_ms=duration_ms,
+            interoperability_report=interop_report,
+            investigation_plan=investigation_plan,
+            safe_remediation_actions=safe_actions,
+            hypothesis_evaluations=hypothesis_evaluations,
+            evidence_ledger_summary=ledger.get_ledger_summary()
         )
