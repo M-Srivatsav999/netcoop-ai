@@ -98,6 +98,63 @@ async def diagnose(request: Request):
             telemetry_records=result.canonical_telemetry
         )
 
+        # Statistically Calibrated Campus Network Health Score (0-100)
+        # Formula: H_campus = sum(w_i * H_i) / sum(w_i)
+        # Weights reflect device criticality: Core = 3.0, Dist = 2.0, Bldg = 1.5, AP/Server = 1.0, Client = 0.5
+        device_health_list: List[Dict[str, Any]] = []
+        zone_scores: Dict[str, List[float]] = {"Academic": [], "Hostels": [], "Core_Datacenter": []}
+        total_weighted_health = 0.0
+        total_weight = 0.0
+
+        for rec in result.canonical_telemetry:
+            dev_id = rec.device_id
+            m = rec.metrics
+
+            # Assign criticality weight
+            if "CORE" in dev_id:
+                w_i = 3.0
+                zone = "Core_Datacenter"
+            elif "DIST" in dev_id:
+                w_i = 2.0
+                zone = "Academic" if "ACAD" in dev_id or "NORTH" in dev_id else "Hostels"
+            elif "BLDG" in dev_id or "SW-" in dev_id:
+                w_i = 1.5
+                zone = "Academic" if "ENG" in dev_id or "SCI" in dev_id or "SES" in dev_id or "LHC" in dev_id else "Hostels"
+            elif "CLIENT" in dev_id or "PC" in dev_id:
+                w_i = 0.5
+                zone = "Hostels" if "HA" in dev_id or "HB" in dev_id or "MHR" in dev_id else "Academic"
+            else:
+                w_i = 1.0  # APs, Servers
+                zone = "Academic" if "ENG" in dev_id or "SCI" in dev_id else "Hostels"
+
+            # Compute individual device health H_i (0 to 100)
+            h_i = 100.0
+            if m.packet_loss_pct is not None and m.packet_loss_pct > 0.0:
+                h_i -= min(40.0, m.packet_loss_pct * 2.5)
+            if m.latency_ms is not None and m.latency_ms > 35.0:
+                h_i -= min(25.0, (m.latency_ms - 35.0) * 0.15)
+            if m.queue_drops is not None and m.queue_drops > 0:
+                h_i -= min(25.0, m.queue_drops * 0.20)
+            if m.interface_errors is not None and m.interface_errors > 0:
+                h_i -= min(35.0, (m.interface_errors * 0.10) + 5.0)
+            if m.signal_strength_dbm is not None and m.signal_strength_dbm < -72.0:
+                h_i -= min(30.0, abs(m.signal_strength_dbm - (-72.0)) * 2.0)
+            if m.dhcp_lease_success is False or (m.dns_resolution_ms and m.dns_resolution_ms > 100.0):
+                h_i -= 35.0
+
+            h_i = max(5.0, min(100.0, h_i))
+            total_weighted_health += (w_i * h_i)
+            total_weight += w_i
+            zone_scores[zone].append(h_i)
+            device_health_list.append({"device_id": dev_id, "health": round(h_i, 1), "weight": w_i})
+
+        campus_health_score = round(total_weighted_health / total_weight, 1) if total_weight > 0 else 100.0
+
+        # Zone breakdowns
+        zone_breakdown = {}
+        for z_name, scores in zone_scores.items():
+            zone_breakdown[z_name] = round(sum(scores) / len(scores), 1) if scores else 100.0
+
         return JSONResponse(content={
             "report": result.report.model_dump(mode="json"),
             "markdown_summary": result.markdown_summary,
@@ -107,7 +164,10 @@ async def diagnose(request: Request):
             "remediation_simulation": remediation.model_dump(mode="json"),
             "canonical_telemetry": [t.model_dump(mode="json") for t in result.canonical_telemetry],
             "execution_trace": result.execution_trace,
-            "duration_ms": result.total_duration_ms
+            "duration_ms": result.total_duration_ms,
+            "campus_health_score": campus_health_score,
+            "zone_health_breakdown": zone_breakdown,
+            "device_health": device_health_list
         })
     except Exception as exc:
         import traceback

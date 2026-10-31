@@ -192,16 +192,19 @@ The system was evaluated against all 6 organizer scenarios plus 6 real-world edg
 | **`SCENARIO_3_HARDWARE_FAILURE`** | V1 | `HARDWARE_FAILURE` | 94.8% | 2 | Yes | **PASS** |
 | **`SCENARIO_4_WEAK_WIFI`** | V3 | `WEAK_WIFI` | 69.2% | 2 | Yes | **PASS** |
 | **`SCENARIO_5_DNS_DHCP_FAILURE`** | V1 | `DNS_DHCP_FAILURE` | 77.4% | 2 | Yes | **PASS** |
-| **`SCENARIO_6_SCHEMA_INTEROP_FAILURE`** | V3 | `LINK_CONGESTION` | 69.2% | 2 | Yes | **PASS** |
-| **`SCENARIO_EDGE_CONFLICTING_LABELS`** | V1 | `HARDWARE_FAILURE` | 69.2% | 1 | Yes | **PASS** |
-| **`SCENARIO_EDGE_MALFORMED_PAYLOAD`** | V3 | `INSUFFICIENT_EVIDENCE` | 26.5% | 1 | Yes | **PASS** |
-| **`SCENARIO_EDGE_MISSING_TELEMETRY`** | V1 | `NORMAL_OPERATION` | 36.4% | 0 | Yes | **PASS** |
-| **`SCENARIO_EDGE_MULTIPLE_INCIDENTS`** | V1 | `WEAK_WIFI` | 64.2% | 2 | Yes | **PASS** |
-| **`SCENARIO_EDGE_STALE_TIMESTAMPS`** | V1 | `NORMAL_OPERATION` | 46.5% | 0 | Yes | **PASS** |
-| **`SCENARIO_EDGE_UNKNOWN_DEVICES`** | V1 | `WEAK_WIFI` | 57.0% | 1 | Yes | **PASS** |
+| **`SCENARIO_6_SCHEMA_INTEROP_FAILURE`** | V3 | `LINK_CONGESTION` | 69.4% | 2 | Yes | **PASS** |
+| **`SCENARIO_EDGE_CONFLICTING_LABELS`** | V1 | `HARDWARE_FAILURE` | 69.1% | 1 | Yes | **PASS** |
+| **`SCENARIO_EDGE_MALFORMED_PAYLOAD`** | V3 | `INSUFFICIENT_EVIDENCE` | 0.0% | 1 | Yes | **PASS** |
+| **`SCENARIO_EDGE_MISSING_TELEMETRY`** | V1 | `INSUFFICIENT_EVIDENCE` | 0.0% | 1 | Yes | **PASS** |
+| **`SCENARIO_EDGE_MULTIPLE_INCIDENTS`** | V1 | `WEAK_WIFI` (Multi-Domain) | 64.5% | 2 | Yes | **PASS** |
+| **`SCENARIO_EDGE_STALE_TIMESTAMPS`** | V1 | `INSUFFICIENT_EVIDENCE` | 0.0% | 1 | Yes | **PASS** |
+| **`SCENARIO_EDGE_UNKNOWN_DEVICES`** | V1 | `WEAK_WIFI` | 57.9% | 1 | Yes | **PASS** |
+| **`SCENARIO_ORGANIZER_BATCH_10_DEVICES`** | V1 | `HARDWARE_FAILURE` | 55.3% | 1 | Yes | **PASS** |
+| **`SCENARIO_ORGANIZER_HARDWARE_FAILURE`** | V1 | `HARDWARE_FAILURE` | 65.6% | 1 | Yes | **PASS** |
+| **`SCENARIO_ORGANIZER_LATENCY_SPIKE`** | V1 | `LINK_CONGESTION` | 73.8% | 1 | Yes | **PASS** |
 
-- **Unit Test Suite**: `26/26 PASSED` (`pytest -v` executed in 1.2s).
-- **Benchmark Suite**: `12/12 PASSED` (`pass_rate: 100.0%`).
+- **Unit Test Suite**: `33/33 PASSED` (`pytest -v` across all specialized agents, schemas, and clustering tests).
+- **Benchmark Suite**: `15/15 PASSED` with 100% deterministic reproducibility (`pass_rate: 100.0%`).
 
 ---
 

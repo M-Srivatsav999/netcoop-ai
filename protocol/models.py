@@ -206,6 +206,7 @@ class IncidentSummary(BaseModel):
     """Summary of a single diagnosed incident within a multi-incident report."""
     root_cause: str
     confidence: float = Field(ge=0.0, le=1.0)
+    root_cause_device: Optional[str] = None
     affected_devices: List[str] = Field(default_factory=list)
     supporting_evidence: List[StructuredEvidence] = Field(default_factory=list)
 

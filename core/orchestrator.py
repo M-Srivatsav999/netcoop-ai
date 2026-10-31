@@ -212,31 +212,45 @@ class NetworkIntelligenceOrchestrator:
                 conflicted_devices.append(record.device_id)
 
         if conflicted_devices:
-            # Emit structured AgentDisagreement message to document explicit inter-agent conflict
-            messages.append(AgentMessage(
-                sender="CorrelationAgent",
-                recipient="TelemetryAgent",
-                message_type="AGENT_DISAGREEMENT",
-                payload={
-                    "disagreement_type": "REPORTED_LABEL_VS_EMPIRICAL_METRICS",
-                    "conflicted_devices": conflicted_devices,
-                    "competing_hypotheses": {
-                        "generator_claim": "HEALTHY",
-                        "telemetry_claim": "ANOMALOUS_TRANSPORT",
-                        "infrastructure_claim": "HARDWARE_OR_QUEUE_SATURATION"
-                    },
-                    "resolution_strategy": "EMPIRICAL_EVIDENCE_SUPREMACY",
-                    "status": "OPEN"
-                }
-            ))
+            # Emit dynamic structured AgentDisagreement messages capturing actual findings per device
+            for c_dev in conflicted_devices:
+                tel_f = next((f for f in tel_findings if f.device_id == c_dev), None)
+                infra_f = next((f for f in infra_findings if f.device_id == c_dev), None)
+                record = next((r for r in canonical_records if r.device_id == c_dev), None)
+                rep_label = record.reported_status if record else "HEALTHY"
+                
+                tel_issues = tel_f.suspected_issues if tel_f else []
+                infra_issues = infra_f.suspected_issues if infra_f else []
+                supporting_ev = [
+                    {"metric": e.metric_name, "value": e.observed_value, "desc": e.description}
+                    for f in (tel_f, infra_f) if f for e in f.evidence if e.polarity == "SUPPORTS"
+                ]
+
+                messages.append(AgentMessage(
+                    sender="CorrelationAgent",
+                    recipient="TelemetryAgent",
+                    message_type="AGENT_DISAGREEMENT",
+                    payload={
+                        "disagreement_id": f"DISAGREE-{c_dev}",
+                        "device_id": c_dev,
+                        "reported_generator_claim": rep_label,
+                        "telemetry_agent_findings": tel_issues,
+                        "infrastructure_agent_findings": infra_issues,
+                        "competing_evidence": supporting_ev[:4],
+                        "resolution_strategy": "DETERMINISTIC_METRIC_SUPREMACY",
+                        "resolution_rule": "Physical telemetry signals override untrusted status labels",
+                        "status": "OPEN"
+                    }
+                ))
+
             messages.append(AgentMessage(
                 sender="CorrelationAgent",
                 recipient="TelemetryAgent",
                 message_type="REQUEST_CLARIFICATION",
                 payload={
-                    "reason": "Status label reports HEALTHY but metric evidence is anomalous",
+                    "reason": "Status label contradicts empirical metric observations",
                     "devices": conflicted_devices,
-                    "action": "Metrics override label — untrusted label reconciliation active"
+                    "action": "Empirical metrics override label — untrusted label reconciliation active"
                 }
             ))
             messages.append(AgentMessage(

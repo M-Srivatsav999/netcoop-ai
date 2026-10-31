@@ -257,42 +257,144 @@ class CorrelationAgent:
         )
 
         # Multi-Incident Partitioning (Topology & Fault Domain Grouping)
-        # When multiple distinct devices exhibit anomalous telemetry across different fault domains,
-        # produce separate incident records in co_occurring_incidents.
+        # Groups anomalous devices by independent root causes and topology domains.
+        # Downstream cascades sharing the same fault are MERGED into a single incident.
+        # Only truly independent faults across distinct zones produce multiple co-occurring incidents.
         co_occurring: List[IncidentSummary] = []
-        if len(all_anomalous_devices) > 1 and primary_root_cause != HypothesisType.NORMAL_OPERATION.value:
+        if len(all_anomalous_devices) > 0 and primary_root_cause != HypothesisType.NORMAL_OPERATION.value:
             from protocol.models import IncidentSummary
-            # Identify which device caused which specific hypothesis
-            for dev_id in sorted(list(all_anomalous_devices)):
+
+            # Step A: Determine dominant fault hypothesis for each anomalous device
+            dev_fault_map: Dict[str, Tuple[str, List[EvidenceItem]]] = {}
+            for dev_id in all_anomalous_devices:
                 dev_findings = [f for f in agent_findings if f.device_id == dev_id]
-                dev_ev_items = [item for f in dev_findings for item in f.evidence if item.polarity == EvidencePolarity.SUPPORTS and item.hypothesis_target != HypothesisType.NORMAL_OPERATION.value]
-                # Include cross-metric conflict resolution items for this device
-                conflict_for_dev = [item for item in conflict_items if item.device_id == dev_id and item.polarity == EvidencePolarity.SUPPORTS]
+                dev_ev_items = [
+                    item for f in dev_findings
+                    for item in f.evidence
+                    if item.polarity == EvidencePolarity.SUPPORTS and item.hypothesis_target != HypothesisType.NORMAL_OPERATION.value
+                ]
+                conflict_for_dev = [
+                    item for item in conflict_items
+                    if item.device_id == dev_id and item.polarity == EvidencePolarity.SUPPORTS
+                ]
                 dev_ev_items.extend(conflict_for_dev)
 
-                # Check dominant hypothesis for this individual device
-                target_counts: Dict[str, float] = {}
+                target_weights: Dict[str, float] = {}
                 for item in dev_ev_items:
-                    target_counts[item.hypothesis_target] = target_counts.get(item.hypothesis_target, 0.0) + item.weight
-                if target_counts:
-                    # Give precedence to high-weight specific faults over general transport degradation
-                    best_dev_target = max(target_counts.items(), key=lambda x: x[1])[0]
-                    # Find matching confidence
-                    matched_conf = next((conf for t, _, conf, _ in ranked_hypotheses if t == best_dev_target), confidence)
-                    dev_structured = [
-                        StructuredEvidence(
-                            metric=item.metric_name,
-                            value=item.observed_value,
-                            interpretation=item.description
+                    target_weights[item.hypothesis_target] = target_weights.get(item.hypothesis_target, 0.0) + item.weight
+
+                if target_weights:
+                    # Specific root-causes (HARDWARE_FAILURE, WEAK_WIFI, DNS_DHCP_FAILURE) take precedence over generic LINK_CONGESTION
+                    def fault_priority(target_pair: Tuple[str, float]) -> Tuple[int, float]:
+                        target, weight = target_pair
+                        priority = 2 if target in (HypothesisType.HARDWARE_FAILURE.value,
+                                                   HypothesisType.WEAK_WIFI.value,
+                                                   HypothesisType.DNS_DHCP_FAILURE.value) else 1
+                        return (priority, weight)
+
+                    best_target = max(target_weights.items(), key=fault_priority)[0]
+                    dev_fault_map[dev_id] = (best_target, [e for e in dev_ev_items if e.hypothesis_target == best_target])
+                else:
+                    dev_fault_map[dev_id] = (primary_root_cause, [])
+
+            # Step B: Group devices by (fault_type, topology_domain)
+            clusters: Dict[str, Dict[str, Any]] = {}
+            for dev_id, (fault_type, ev_list) in dev_fault_map.items():
+                upstream_path = self.topology.get_upstream_path(dev_id)
+                merged = False
+                # Step B: Topology & Logical Service-Dependency Clustering
+                # Devices merge if:
+                # 1. They have identical fault_type AND
+                # 2. EITHER:
+                #    a) Direct physical hierarchy (Building Switch -> AP/Host)
+                #    b) Immediate building distribution parent (not campus core)
+                #    c) Centralized Service Dependency (e.g. DNS_DHCP_FAILURE where a client
+                #       experiences resolution failure caused by a centralized DNS/DHCP server)
+                for cluster_key, cluster_data in clusters.items():
+                    if cluster_data["fault_type"] == fault_type:
+                        existing_devs = cluster_data["devices"]
+                        # Direct physical hierarchy check:
+                        is_direct_hierarchy = any(
+                            ed in upstream_path or dev_id in self.topology.get_upstream_path(ed)
+                            for ed in existing_devs
                         )
-                        for item in dev_ev_items if item.hypothesis_target == best_dev_target
-                    ]
-                    co_occurring.append(IncidentSummary(
-                        root_cause=best_dev_target,
-                        confidence=round(matched_conf, 3),
-                        affected_devices=[dev_id],
-                        supporting_evidence=dev_structured
-                    ))
+                        # Immediate common ancestor (exclude root core switches from merging disconnected buildings)
+                        lca = self.topology.find_common_ancestor([dev_id] + existing_devs)
+                        lca_is_local = lca is not None and not lca.startswith("CORE-") and not lca.startswith("IITBBS-CORE")
+
+                        # Logical Service Dependency: DNS/DHCP failure on clients is a propagation of server failure
+                        is_service_dependency = (
+                            fault_type == HypothesisType.DNS_DHCP_FAILURE.value and
+                            any(ed.startswith("SRV-") or dev_id.startswith("SRV-") for ed in existing_devs)
+                        )
+
+                        if is_direct_hierarchy or lca_is_local or is_service_dependency:
+                            cluster_data["devices"].append(dev_id)
+                            cluster_data["evidence"].extend(ev_list)
+                            merged = True
+                            break
+
+                if not merged:
+                    clusters[f"{fault_type}_{dev_id}"] = {
+                        "fault_type": fault_type,
+                        "devices": [dev_id],
+                        "evidence": list(ev_list),
+                    }
+
+            # Step C: Each distinct topology cluster generates its own IncidentSummary
+            # If there is truly only 1 cluster, it matches the primary incident exactly.
+            # If multiple clusters exist (even with the same fault type in separate locations),
+            # they are faithfully preserved as separate independent incidents!
+            for c in clusters.values():
+                c_fault = c["fault_type"]
+                c_devs = sorted(list(set(c["devices"])))
+                c_records = [r for r in telemetry_records if r.device_id in c_devs]
+
+                # Compute incident-level calibrated confidence from this specific cluster's evidence
+                cluster_hyp_data = {
+                    "support_weight": sum(e.weight for e in c["evidence"]),
+                    "contra_weight": 0.0,
+                    "supporting_agents": list({e.source_agent for e in c["evidence"]}),
+                }
+                c_topo_score, _ = self.topology.calculate_topology_consistency(c_devs)
+                c_conf, _, _ = self.confidence_engine.calculate_confidence(
+                    hypothesis_data=cluster_hyp_data,
+                    telemetry_records=c_records,
+                    topology_consistency=c_topo_score,
+                    staleness_seconds=staleness_seconds
+                )
+
+                # Root-Cause Origin vs Downstream Affected Localization:
+                # Upstream switches or dedicated servers (SRV-*) take precedence as the origin device
+                root_cause_dev = None
+                if any(d.startswith("SRV-") for d in c_devs):
+                    root_cause_dev = next(d for d in c_devs if d.startswith("SRV-"))
+                else:
+                    # Find highest node in hierarchy (shortest upstream path to core)
+                    root_cause_dev = min(c_devs, key=lambda d: len(self.topology.get_upstream_path(d)))
+
+                c_ev_struct = [
+                    (e.device_id, StructuredEvidence(metric=e.metric_name, value=e.observed_value, interpretation=e.description))
+                    for e in c["evidence"]
+                ]
+                seen_ev = set()
+                unique_ev = []
+                for dev_src, ev in c_ev_struct:
+                    # Deduplicate with full device identity so separate devices are preserved
+                    k = (dev_src, ev.metric, str(ev.value))
+                    if k not in seen_ev:
+                        seen_ev.add(k)
+                        unique_ev.append(ev)
+
+                co_occurring.append(
+                    IncidentSummary(
+                        root_cause=c_fault,
+                        confidence=round(c_conf, 3),
+                        root_cause_device=root_cause_dev,
+                        affected_devices=c_devs,
+                        supporting_evidence=unique_ev[:8]
+                    )
+                )
 
         return ArbitrationResult(
             primary_root_cause=primary_root_cause,

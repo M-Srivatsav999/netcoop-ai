@@ -639,6 +639,10 @@
             <!-- Executive KPI Cards -->
             <div class="metric-cards">
                 <div class="m-card">
+                    <span class="m-card-label">Campus Health Index</span>
+                    <span class="m-card-val" id="res-health-score" style="color:#22c55e; font-size:1.35rem;">100 / 100</span>
+                </div>
+                <div class="m-card">
                     <span class="m-card-label">Diagnosed Root Cause</span>
                     <span class="m-card-val" id="res-root-cause" style="color:var(--accent-red); font-size:1.15rem;">Awaiting Ingestion</span>
                 </div>
@@ -792,42 +796,43 @@
                 <div class="topo-box" id="topology-viewer">
                     <!-- Tier 1: Core -->
                     <div class="topo-tier">
-                        <div class="topo-node root-core" id="node-IITBBS-CORE-SW-01" onclick="openCiscoTerminal('IITBBS-CORE-SW-01')">
-                            IITBBS-CORE-SW-01<br><span style="font-size:0.65rem; color:#93c5fd;">Datacenter Core (100G)</span>
+                        <div class="topo-node root-core" id="node-CORE-SW-01" onclick="openCiscoTerminal('CORE-SW-01')">
+                            CORE-SW-01 / IITBBS-CORE<br><span style="font-size:0.65rem; color:#93c5fd;">Datacenter Core (100G)</span>
                         </div>
                     </div>
                     <!-- Tier 2: Distribution -->
                     <div class="topo-tier">
-                        <div class="topo-node" id="node-IITBBS-DIST-ACADEMIC" onclick="openCiscoTerminal('IITBBS-DIST-ACADEMIC')">
-                            IITBBS-DIST-ACADEMIC<br><span style="font-size:0.65rem; color:#94a3b8;">Academic Dist (40G)</span>
+                        <div class="topo-node" id="node-DIST-SW-NORTH" onclick="openCiscoTerminal('DIST-SW-NORTH')">
+                            DIST-SW-NORTH / ACADEMIC<br><span style="font-size:0.65rem; color:#94a3b8;">Academic Dist (40G)</span>
                         </div>
-                        <div class="topo-node" id="node-IITBBS-DIST-HOSTELS" onclick="openCiscoTerminal('IITBBS-DIST-HOSTELS')">
-                            IITBBS-DIST-HOSTELS<br><span style="font-size:0.65rem; color:#94a3b8;">Hostels Dist (40G)</span>
+                        <div class="topo-node" id="node-DIST-SW-SOUTH" onclick="openCiscoTerminal('DIST-SW-SOUTH')">
+                            DIST-SW-SOUTH / HOSTELS<br><span style="font-size:0.65rem; color:#94a3b8;">Hostels Dist (40G)</span>
                         </div>
                     </div>
                     <!-- Tier 3: Building Switches -->
                     <div class="topo-tier">
-                        <div class="topo-node" id="node-IITBBS-SW-SES" onclick="openCiscoTerminal('IITBBS-SW-SES')">
-                            IITBBS-SW-SES<br><span style="font-size:0.65rem; color:#94a3b8;">Electrical Sciences</span>
+                        <div class="topo-node" id="node-BLDG-SW-ENG" onclick="openCiscoTerminal('BLDG-SW-ENG')">
+                            BLDG-SW-ENG / SES<br><span style="font-size:0.65rem; color:#94a3b8;">Engineering / SES</span>
                         </div>
-                        <div class="topo-node" id="node-IITBBS-SW-LHC" onclick="openCiscoTerminal('IITBBS-SW-LHC')">
-                            IITBBS-SW-LHC<br><span style="font-size:0.65rem; color:#94a3b8;">Lecture Halls</span>
+                        <div class="topo-node" id="node-BLDG-SW-SCI" onclick="openCiscoTerminal('BLDG-SW-SCI')">
+                            BLDG-SW-SCI / LHC<br><span style="font-size:0.65rem; color:#94a3b8;">Basic Sciences / LHC</span>
                         </div>
-                        <div class="topo-node" id="node-IITBBS-SW-MHR" onclick="openCiscoTerminal('IITBBS-SW-MHR')">
-                            IITBBS-SW-MHR<br><span style="font-size:0.65rem; color:#94a3b8;">Mahanadi Hostel</span>
+                        <div class="topo-node" id="node-BLDG-SW-HOSTEL-A" onclick="openCiscoTerminal('BLDG-SW-HOSTEL-A')">
+                            BLDG-SW-HOSTEL-A / MHR<br><span style="font-size:0.65rem; color:#94a3b8;">Mahanadi Hostel A</span>
                         </div>
-                        <div class="topo-node" id="node-IITBBS-SW-SHR" onclick="openCiscoTerminal('IITBBS-SW-SHR')">
-                            IITBBS-SW-SHR<br><span style="font-size:0.65rem; color:#94a3b8;">Subarnarekha Hostel</span>
+                        <div class="topo-node" id="node-BLDG-SW-HOSTEL-B" onclick="openCiscoTerminal('BLDG-SW-HOSTEL-B')">
+                            BLDG-SW-HOSTEL-B / SHR<br><span style="font-size:0.65rem; color:#94a3b8;">Subarnarekha Hostel B</span>
                         </div>
                     </div>
-                    <!-- Tier 4: Access Points -->
+                    <!-- Tier 4: Access Points & Servers -->
                     <div class="topo-tier">
-                        <div class="topo-node" id="node-AP-SES-01" onclick="openCiscoTerminal('AP-SES-01')">AP-SES-01</div>
-                        <div class="topo-node" id="node-AP-LHC-01" onclick="openCiscoTerminal('AP-LHC-01')">AP-LHC-01</div>
-                        <div class="topo-node" id="node-AP-MHR-W1" onclick="openCiscoTerminal('AP-MHR-W1')">AP-MHR-W1</div>
-                        <div class="topo-node" id="node-AP-SHR-W1" onclick="openCiscoTerminal('AP-SHR-W1')">AP-SHR-W1</div>
+                        <div class="topo-node" id="node-AP-ENG-01" onclick="openCiscoTerminal('AP-ENG-01')">AP-ENG-01</div>
+                        <div class="topo-node" id="node-AP-SCI-01" onclick="openCiscoTerminal('AP-SCI-01')">AP-SCI-01</div>
                         <div class="topo-node" id="node-AP-HOSTEL-A1" onclick="openCiscoTerminal('AP-HOSTEL-A1')">AP-HOSTEL-A1</div>
+                        <div class="topo-node" id="node-AP-HOSTEL-A2" onclick="openCiscoTerminal('AP-HOSTEL-A2')">AP-HOSTEL-A2</div>
+                        <div class="topo-node" id="node-AP-HOSTEL-B1" onclick="openCiscoTerminal('AP-HOSTEL-B1')">AP-HOSTEL-B1</div>
                         <div class="topo-node" id="node-AP-HOSTEL-B2" onclick="openCiscoTerminal('AP-HOSTEL-B2')">AP-HOSTEL-B2</div>
+                        <div class="topo-node" id="node-SRV-DNS-01" onclick="openCiscoTerminal('SRV-DNS-01')">SRV-DNS-01</div>
                     </div>
                 </div>
             </div>
@@ -984,6 +989,14 @@
             document.getElementById('res-confidence').innerText = `${Math.round(rep.confidence * 100)}%`;
             document.getElementById('res-affected-count').innerText = rep.affected_devices ? rep.affected_devices.length : 0;
             document.getElementById('res-duration').innerText = `${data.duration_ms} ms`;
+
+            // Render Campus Health Index
+            const hScore = data.campus_health_score !== undefined ? data.campus_health_score : 100;
+            const hEl = document.getElementById('res-health-score');
+            if (hEl) {
+                hEl.innerText = `${hScore} / 100`;
+                hEl.style.color = hScore >= 80 ? '#22c55e' : (hScore >= 50 ? '#f59e0b' : '#ef4444');
+            }
 
             // Render JSON viewer
             document.getElementById('json-viewer').innerText = JSON.stringify(rep, null, 2);
